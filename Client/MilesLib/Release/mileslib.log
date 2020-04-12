@@ -1,0 +1,13 @@
+﻿  Stdafx.cpp
+  SoundBase.cpp
+  SoundData.cpp
+  SoundInstance2D.cpp
+  SoundInstance3D.cpp
+  SoundInstanceStream.cpp
+  SoundManager.cpp
+  SoundManager2D.cpp
+  SoundManager3D.cpp
+  SoundManagerStream.cpp
+  Type.cpp
+  Code wird generiert...
+  mileslib.vcxproj -> C:\Games\Metin2\Metin2 Files\Marty Samer Files unbearbeitet\Marty Samer Files unbearbeitet\Client Source\Client Source\Srcs\Client\MilesLib\Release\mileslib.lib

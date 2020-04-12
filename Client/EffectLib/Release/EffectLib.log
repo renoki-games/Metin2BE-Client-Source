@@ -1,0 +1,20 @@
+﻿  StdAfx.cpp
+  EffectData.cpp
+  EffectElementBase.cpp
+  EffectElementBaseInstance.cpp
+  EffectInstance.cpp
+  EffectManager.cpp
+  EffectMesh.cpp
+  EffectMeshInstance.cpp
+  EffectUpdateDecorator.cpp
+  EmitterProperty.cpp
+  FrameController.cpp
+  ParticleInstance.cpp
+  ParticleProperty.cpp
+  ParticleSystemData.cpp
+  ParticleSystemInstance.cpp
+  SimpleLightData.cpp
+  SimpleLightInstance.cpp
+  Type.cpp
+  Code wird generiert...
+  EffectLib.vcxproj -> C:\Games\Metin2\Metin2 Files\Marty Samer Files unbearbeitet\Marty Samer Files unbearbeitet\Client Source\Client Source\Srcs\Client\EffectLib\Release\EffectLib.lib

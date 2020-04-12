@@ -1,0 +1,15 @@
+﻿  StdAfx.cpp
+  PythonGridSlotWindow.cpp
+  PythonSlotWindow.cpp
+  PythonWindow.cpp
+  PythonWindowManager.cpp
+  PythonWindowManagerModule.cpp
+  PythonGraphic.cpp
+C:\Games\Metin2\Metin2 Files\Marty Samer Files unbearbeitet\Marty Samer Files unbearbeitet\Client Source\Client Source\Srcs\Client\eterPythonLib\PythonWindow.cpp(1517,47): warning C4267:  "=": Konvertierung von "size_t" nach "unsigned char", Datenverlust möglich
+  PythonGraphicImageModule.cpp
+  PythonGraphicModule.cpp
+  PythonGraphicTextModule.cpp
+  PythonGraphicThingModule.cpp
+  Code wird generiert...
+C:\Games\Metin2\Metin2 Files\Marty Samer Files unbearbeitet\Marty Samer Files unbearbeitet\Client Source\Client Source\Srcs\Client\eterPythonLib\PythonGraphic.cpp(352,5): warning C4838:  Konvertierung von "int" zu "unsigned char" erfordert eine einschränkende Konvertierung
+  eterPythonLib.vcxproj -> C:\Games\Metin2\Metin2 Files\Marty Samer Files unbearbeitet\Marty Samer Files unbearbeitet\Client Source\Client Source\Srcs\Client\eterPythonLib\Release\eterPythonLib.lib
