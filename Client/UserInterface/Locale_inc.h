@@ -16,7 +16,7 @@
 #define ENABLE_CANSEEHIDDENTHING_FOR_GM
 #define ENABLE_PROTOSTRUCT_AUTODETECT
 
-#define ENABLE_PLAYER_PER_ACCOUNT5
+// #define ENABLE_PLAYER_PER_ACCOUNT5
 #define ENABLE_LEVEL_IN_TRADE
 #define ENABLE_DICE_SYSTEM
 #define ENABLE_EXTEND_INVEN_SYSTEM
@@ -35,10 +35,10 @@
 
 //////////////////////////////////////////////////////////////////////////
 // ### From GameLib ###
-#define ENABLE_WOLFMAN_CHARACTER
+// #define ENABLE_WOLFMAN_CHARACTER
 
 // #define ENABLE_MAGIC_REDUCTION_SYSTEM
-#define ENABLE_MOUNT_COSTUME_SYSTEM
+// #define ENABLE_MOUNT_COSTUME_SYSTEM
 #define ENABLE_WEAPON_COSTUME_SYSTEM
 // ### From GameLib ###
 //////////////////////////////////////////////////////////////////////////
