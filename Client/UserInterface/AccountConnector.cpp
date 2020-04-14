@@ -9,6 +9,8 @@
 #include "WiseLogicXTrap.h"
 
 // CHINA_CRYPT_KEY
+extern DWORD g_adwEncryptKey[4];
+extern DWORD g_adwDecryptKey[4];
 // END_OF_CHINA_CRYPT_KEY
 
 #ifdef USE_OPENID
