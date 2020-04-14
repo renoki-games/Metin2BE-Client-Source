@@ -5,7 +5,6 @@
 #define LOCALE_SERVICE_EUROPE
 #define ENABLE_COSTUME_SYSTEM
 #define ENABLE_ENERGY_SYSTEM
-#define ENABLE_NEW_EQUIPMENT_SYSTEM
 // ### Default Ymir Macros ###
 //////////////////////////////////////////////////////////////////////////
 

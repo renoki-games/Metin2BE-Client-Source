@@ -879,13 +879,6 @@ void CPythonPlayer::MoveQuickSlot(int Source, int Target)
 	std::swap(rkSrcSlot, rkDstSlot);
 }
 
-#ifdef ENABLE_NEW_EQUIPMENT_SYSTEM
-bool CPythonPlayer::IsBeltInventorySlot(TItemPos Cell)
-{
-	return Cell.IsBeltInventoryCell();
-}
-#endif
-
 bool CPythonPlayer::IsInventorySlot(TItemPos Cell)
 {
 	return !Cell.IsEquipCell() && Cell.IsValidCell();

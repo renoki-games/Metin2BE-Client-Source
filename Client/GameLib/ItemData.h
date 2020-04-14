@@ -104,7 +104,7 @@ class CItemData
 			ITEM_TYPE_EXTRACT,					//31 추출도구.
 			ITEM_TYPE_SECONDARY_COIN,			//32 명도전.
 			ITEM_TYPE_RING,						//33 반지 (유니크 슬롯이 아닌 순수 반지 슬롯)
-			ITEM_TYPE_BELT,						//34 벨트
+			ITEM_TYPE_UNUSED3,
 
 #ifdef __UNIMPLEMENTED__
 			ITEM_TYPE_PET,						//35
@@ -239,7 +239,7 @@ class CItemData
 			USE_UNBIND,
 			USE_TIME_CHARGE_PER,
 			USE_TIME_CHARGE_FIX,				// 28
-			USE_PUT_INTO_BELT_SOCKET,			// 29 벨트 소켓에 사용할 수 있는 아이템
+			USE_UNUSED1,
 			USE_PUT_INTO_RING_SOCKET,			// 30 반지 소켓에 사용할 수 있는 아이템 (유니크 반지 말고, 새로 추가된 반지 슬롯)
 #ifdef ENABLE_USE_COSTUME_ATTR
 			USE_CHANGE_COSTUME_ATTR,			// 31
@@ -358,10 +358,8 @@ class CItemData
 			WEAR_COSTUME_ACCE = WEAR_RING2, // costume_acce == ring2
 #endif
 
-			WEAR_BELT,			// 23	: 신규 벨트슬롯
-
 #ifdef ENABLE_WEAPON_COSTUME_SYSTEM
-			WEAR_COSTUME_WEAPON,// 24
+			WEAR_COSTUME_WEAPON,// 23
 #endif
 
 			WEAR_MAX_NUM = 32,

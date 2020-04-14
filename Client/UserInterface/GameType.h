@@ -62,20 +62,6 @@ const DWORD c_Equipment_Unique2	= c_Equipment_Start + 8;
 const DWORD c_Equipment_Arrow	= c_Equipment_Start + 9;
 const DWORD c_Equipment_Shield	= c_Equipment_Start + 10;
 
-// 새로 추가된 신규 반지 & 벨트
-// 장착형 아이템에 할당할 수 있는 위치가 기존 장비, 채기랍 퀘스트 보상, 코스튬 시스템 등으로 인해서 공간이 잘려있다.
-// 이게 다 채기랍 보상 버프를 장착아이템처럼 구현한 ㅅㄲ 때문에 난리났따... ㅆㅂ
-//
-// 정리하면, 기존 장비창들은 서버DB상 아이템 포지션이 90 ~ 102 이고,
-// 2013년 초에 새로 추가되는 슬롯들은 111 ~ 부터 시작한다. 착용 장비에서 최대로 사용할 수 있는 값은 121 까지이고, 122부터는 용혼석에서 사용한다.
-#ifdef ENABLE_NEW_EQUIPMENT_SYSTEM
-	const DWORD c_New_Equipment_Start = c_Equipment_Start + 21;
-	const DWORD c_New_Equipment_Count = 3;
-	const DWORD c_Equipment_Ring1 = c_New_Equipment_Start + 0;
-	const DWORD c_Equipment_Ring2 = c_New_Equipment_Start + 1;
-	const DWORD c_Equipment_Belt  = c_New_Equipment_Start + 2;
-#endif
-
 #ifdef ENABLE_COSTUME_SYSTEM
 	const DWORD c_Costume_Slot_Start	= c_Equipment_Start + 19;	// [주의] 숫자(19) 하드코딩 주의. 현재 서버에서 코스츔 슬롯은 19부터임. 서버 common/length.h 파일의 EWearPositions 열거형 참고.
 	const DWORD	c_Costume_Slot_Body		= c_Costume_Slot_Start + 0;
@@ -102,18 +88,7 @@ const DWORD c_Equipment_Shield	= c_Equipment_Start + 10;
 #endif
 #endif
 
-#ifdef ENABLE_NEW_EQUIPMENT_SYSTEM
-	// 벨트 아이템이 제공하는 인벤토리
-	const DWORD c_Belt_Inventory_Slot_Start = c_ItemSlot_Count;
-	const DWORD c_Belt_Inventory_Width = 4;
-	const DWORD c_Belt_Inventory_Height= 4;
-	const DWORD c_Belt_Inventory_Slot_Count = c_Belt_Inventory_Width * c_Belt_Inventory_Height;
-	const DWORD c_Belt_Inventory_Slot_End = c_Belt_Inventory_Slot_Start + c_Belt_Inventory_Slot_Count;
-
-	const DWORD c_Inventory_Count	= c_Belt_Inventory_Slot_End;
-#else
-	const DWORD c_Inventory_Count	= c_ItemSlot_Count;
-#endif
+const DWORD c_Inventory_Count	= c_ItemSlot_Count;
 
 enum ESlotType
 {
@@ -134,12 +109,11 @@ enum ESlotType
 enum EWindows
 {
 	RESERVED_WINDOW,
-	INVENTORY,				// 기본 인벤토리. (45칸 짜리가 2페이지 존재 = 90칸)
+	INVENTORY,
 	EQUIPMENT,
 	SAFEBOX,
 	MALL,
-	GROUND,					// NOTE: 2013년 2월5일 현재까지 unused.. 왜 있는거지???
-	BELT_INVENTORY,			// NOTE: W2.1 버전에 새로 추가되는 벨트 슬롯 아이템이 제공하는 벨트 인벤토리
+	GROUND,
 
 	WINDOW_TYPE_MAX,
 };
@@ -191,23 +165,12 @@ typedef struct SItemPos
 		{
 		case INVENTORY:
 		case EQUIPMENT:
-			return (c_Equipment_Start + 32 > cell) && (c_Equipment_Start <= cell);
-
-		case BELT_INVENTORY:
-			return false;
+			return (c_Equipment_Start + CItemData::WEAR_MAX_NUM > cell) && (c_Equipment_Start <= cell);
 
 		default:
 			return false;
 		}
 	}
-
-#ifdef ENABLE_NEW_EQUIPMENT_SYSTEM
-	bool IsBeltInventoryCell()
-	{
-		bool bResult = c_Belt_Inventory_Slot_Start <= cell && c_Belt_Inventory_Slot_End > cell;
-		return bResult;
-	}
-#endif
 
 	bool operator==(const struct SItemPos& rhs) const
 	{

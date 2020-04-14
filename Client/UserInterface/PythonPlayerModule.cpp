@@ -47,70 +47,6 @@ std::map<int, CGraphicImage *> m_kMap_iEmotionIndex_pkIconImage;
 
 extern int TWOHANDED_WEWAPON_ATT_SPEED_DECREASE_VALUE;
 
-
-#ifdef ENABLE_NEW_EQUIPMENT_SYSTEM
-class CBeltInventoryHelper
-{
-public:
-	typedef BYTE	TGradeUnit;
-
-	static TGradeUnit GetBeltGradeByRefineLevel(int refineLevel)
-	{
-		static TGradeUnit beltGradeByLevelTable[] =
-		{
-			0,			// 벨트+0
-			1,			// +1
-			1,			// +2
-			2,			// +3
-			2,			// +4,
-			3,			// +5
-			4,			// +6,
-			5,			// +7,
-			6,			// +8,
-			7,			// +9
-		};
-
-		return beltGradeByLevelTable[refineLevel];
-	}
-
-	// 현재 벨트 레벨을 기준으로, 어떤 셀들을 이용할 수 있는지 리턴
-	static const TGradeUnit* GetAvailableRuleTableByGrade()
-	{
-		/**
-			벨트는 총 +0 ~ +9 레벨을 가질 수 있으며, 레벨에 따라 7단계 등급으로 구분되어 인벤토리가 활성 화 된다.
-			벨트 레벨에 따른 사용 가능한 셀은 아래 그림과 같음. 현재 등급 >= 활성가능 등급이면 사용 가능.
-			(단, 현재 레벨이 0이면 무조건 사용 불가, 괄호 안의 숫자는 등급)
-
-				2(1)  4(2)  6(4)  8(6)
-				5(3)  5(3)  6(4)  8(6)
-				7(5)  7(5)  7(5)  8(6)
-				9(7)  9(7)  9(7)  9(7)
-
-			벨트 인벤토리의 크기는 4x4 (16칸)
-		*/
-
-		static TGradeUnit availableRuleByGrade[c_Belt_Inventory_Slot_Count] = {
-			1, 2, 4, 6,
-			3, 3, 4, 6,
-			5, 5, 5, 6,
-			7, 7, 7, 7
-		};
-
-		return availableRuleByGrade;
-	}
-
-	static bool IsAvailableCell(WORD cell, int beltGrade /*int beltLevel*/)
-	{
-		// 기획 또 바뀜.. 아놔...
-		//const TGradeUnit beltGrade = GetBeltGradeByRefineLevel(beltLevel);
-		const TGradeUnit* ruleTable = GetAvailableRuleTableByGrade();
-
-		return ruleTable[cell] <= beltGrade;
-	}
-
-};
-#endif
-
 PyObject * playerPickCloseItem(PyObject* poSelf, PyObject* poArgs)
 {
 	CPythonPlayer::Instance().PickCloseItem();
@@ -1264,19 +1200,6 @@ PyObject * playerisItem(PyObject* poSelf, PyObject* poArgs)
 	return Py_BuildValue("i", Flag);
 }
 
-#ifdef ENABLE_NEW_EQUIPMENT_SYSTEM
-PyObject * playerIsBeltInventorySlot(PyObject* poSelf, PyObject* poArgs)
-{
-	int iSlotIndex;
-	if (!PyTuple_GetInteger(poArgs, 0, &iSlotIndex))
-		return Py_BuildException();
-
-	char Flag = CPythonPlayer::Instance().IsBeltInventorySlot(TItemPos(INVENTORY, iSlotIndex));
-
-	return Py_BuildValue("i", Flag);
-}
-#endif
-
 PyObject * playerIsEquipmentSlot(PyObject* poSelf, PyObject* poArgs)
 {
 	int iSlotIndex;
@@ -2065,45 +1988,6 @@ PyObject * playerSlotTypeToInvenType(PyObject* poSelf, PyObject* poArgs)
 	return Py_BuildValue("i", SlotTypeToInvenType((BYTE)slotType));
 }
 
-#ifdef ENABLE_NEW_EQUIPMENT_SYSTEM
-// 플레이어가 벨트를 착용 중인지?
-PyObject * playerIsEquippingBelt(PyObject* poSelf, PyObject* poArgs)
-{
-	const CPythonPlayer* player = CPythonPlayer::InstancePtr();
-	bool bEquipping = false;
-
-	const TItemData* data = player->GetItemData(TItemPos(EQUIPMENT, c_Equipment_Belt));
-
-	if (NULL != data)
-		bEquipping = 0 < data->count;
-
-	return Py_BuildValue("b", bEquipping);
-
-}
-
-// 검사하려는 벨트 인벤토리 Cell이 사용 가능한 칸인지? (사용가능 여부는 착용 중인 벨트의 강화 정도에 따라 달라짐)
-PyObject * playerIsAvailableBeltInventoryCell(PyObject* poSelf, PyObject* poArgs)
-{
-	const CPythonPlayer* player = CPythonPlayer::InstancePtr();
-	const TItemData* pData = player->GetItemData(TItemPos(EQUIPMENT, c_Equipment_Belt));
-
-	if (NULL == pData || 0 == pData->count)
-		return Py_BuildValue("b", false);
-
-	CItemManager::Instance().SelectItemData(pData->vnum);
-	CItemData * pItem = CItemManager::Instance().GetSelectedItemDataPointer();
-
-	long beltGrade = pItem->GetValue(0);
-
-	int pos = 0;
-	if (!PyTuple_GetInteger(poArgs, 0, &pos))
-		return Py_BadArgument();
-
-	//return Py_BuildValue("b", CBeltInventoryHelper::IsAvailableCell(pos - c_Belt_Inventory_Slot_Start, GetItemGrade(pItem->GetName())));
-	return Py_BuildValue("b", CBeltInventoryHelper::IsAvailableCell(pos - c_Belt_Inventory_Slot_Start, beltGrade));
-}
-#endif
-
 void initPlayer()
 {
 	static PyMethodDef s_methods[] =
@@ -2216,12 +2100,6 @@ void initPlayer()
 		{ "IsCostumeSlot",				playerIsCostumeSlot,				METH_VARARGS },
 		{ "IsValuableItem",				playerIsValuableItem,				METH_VARARGS },
 		{ "IsOpenPrivateShop",			playerIsOpenPrivateShop,			METH_VARARGS },
-
-#ifdef ENABLE_NEW_EQUIPMENT_SYSTEM
-		{ "IsBeltInventorySlot",			playerIsBeltInventorySlot,			METH_VARARGS },
-		{ "IsEquippingBelt",				playerIsEquippingBelt,				METH_VARARGS },
-		{ "IsAvailableBeltInventoryCell",	playerIsAvailableBeltInventoryCell,	METH_VARARGS },
-#endif
 
 		// Refine
 		{ "GetItemGrade",				playerGetItemGrade,					METH_VARARGS },
@@ -2360,11 +2238,6 @@ void initPlayer()
 	PyModule_AddIntConstant(poModule, "INVENTORY_SLOT_COUNT",	c_Inventory_Count);
 	PyModule_AddIntConstant(poModule, "EQUIPMENT_SLOT_START",	c_Equipment_Start);
 	PyModule_AddIntConstant(poModule, "EQUIPMENT_PAGE_COUNT",	c_Equipment_Count);
-
-#ifdef ENABLE_NEW_EQUIPMENT_SYSTEM
-	PyModule_AddIntConstant(poModule, "NEW_EQUIPMENT_SLOT_START",	c_New_Equipment_Start);
-	PyModule_AddIntConstant(poModule, "NEW_EQUIPMENT_SLOT_COUNT",	c_New_Equipment_Count);
-#endif
 
 	PyModule_AddIntConstant(poModule, "MBF_SKILL",	CPythonPlayer::MBF_SKILL);
 	PyModule_AddIntConstant(poModule, "MBF_ATTACK",	CPythonPlayer::MBF_ATTACK);

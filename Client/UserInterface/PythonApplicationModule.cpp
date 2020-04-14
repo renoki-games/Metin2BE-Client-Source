@@ -1507,12 +1507,6 @@ void initapp()
 	PyModule_AddIntConstant(poModule, "ENABLE_ENERGY_SYSTEM",	0);
 #endif
 
-#ifdef ENABLE_NEW_EQUIPMENT_SYSTEM
-	PyModule_AddIntConstant(poModule, "ENABLE_NEW_EQUIPMENT_SYSTEM",	1);
-#else
-	PyModule_AddIntConstant(poModule, "ENABLE_NEW_EQUIPMENT_SYSTEM",	0);
-#endif
-
 #ifdef ENABLE_SOULBIND_SYSTEM
 	PyModule_AddIntConstant(poModule, "ENABLE_SOULBIND_SYSTEM",	1);
 #else

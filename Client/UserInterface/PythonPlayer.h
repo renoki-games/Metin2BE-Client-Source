@@ -303,9 +303,6 @@ class CPythonPlayer : public CSingleton<CPythonPlayer>, public IAbstractPlayer
 
 		char	IsItem(TItemPos SlotIndex);
 
-#ifdef ENABLE_NEW_EQUIPMENT_SYSTEM
-		bool    IsBeltInventorySlot(TItemPos Cell);
-#endif
 		bool	IsInventorySlot(TItemPos SlotIndex);
 		bool	IsEquipmentSlot(TItemPos SlotIndex);
 
