@@ -257,9 +257,6 @@ class CPythonNetworkStream : public CNetworkStream, public CSingleton<CPythonNet
 		// CRC Report
 		bool __SendCRCReportPacket();
 
-		// 용홍석 강화
-		bool SendDragonSoulRefinePacket(BYTE bRefineType, TItemPos* pos);
-
 		// Handshake
 		bool RecvHandshakePacket();
 		bool RecvHandshakeOKPacket();
@@ -535,9 +532,6 @@ class CPythonNetworkStream : public CNetworkStream, public CSingleton<CPythonNet
 
 		// 서버에서 지정한 이팩트 발동 패킷.
 		bool RecvSpecificEffect();
-
-		// 용혼석 관련
-		bool RecvDragonSoulRefine();
 
 		// MiniMap Info
 		bool RecvNPCList();

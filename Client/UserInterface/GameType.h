@@ -76,34 +76,6 @@ const DWORD c_Equipment_Shield	= c_Equipment_Start + 10;
 	const DWORD c_Equipment_Belt  = c_New_Equipment_Start + 2;
 #endif
 
-enum EDragonSoulDeckType
-{
-	DS_DECK_1,
-	DS_DECK_2,
-	DS_DECK_MAX_NUM = 2,
-};
-
-enum EDragonSoulGradeTypes
-{
-	DRAGON_SOUL_GRADE_NORMAL,
-	DRAGON_SOUL_GRADE_BRILLIANT,
-	DRAGON_SOUL_GRADE_RARE,
-	DRAGON_SOUL_GRADE_ANCIENT,
-	DRAGON_SOUL_GRADE_LEGENDARY,
-	DRAGON_SOUL_GRADE_MAX,
-
-};
-
-enum EDragonSoulStepTypes
-{
-	DRAGON_SOUL_STEP_LOWEST,
-	DRAGON_SOUL_STEP_LOW,
-	DRAGON_SOUL_STEP_MID,
-	DRAGON_SOUL_STEP_HIGH,
-	DRAGON_SOUL_STEP_HIGHEST,
-	DRAGON_SOUL_STEP_MAX,
-};
-
 #ifdef ENABLE_COSTUME_SYSTEM
 	const DWORD c_Costume_Slot_Start	= c_Equipment_Start + 19;	// [주의] 숫자(19) 하드코딩 주의. 현재 서버에서 코스츔 슬롯은 19부터임. 서버 common/length.h 파일의 EWearPositions 열거형 참고.
 	const DWORD	c_Costume_Slot_Body		= c_Costume_Slot_Start + 0;
@@ -128,24 +100,11 @@ enum EDragonSoulStepTypes
 #ifdef ENABLE_WEAPON_COSTUME_SYSTEM
 	const DWORD	c_Costume_Slot_Weapon	= c_Costume_Slot_End + 1;
 #endif
-
 #endif
-
-
-// [주의] 숫자(32) 하드코딩 주의. 현재 서버에서 용혼석 슬롯은 32부터임.
-// 서버 common/length.h 파일의 EWearPositions 열거형이 32까지 확장될 것을 염두하고(32 이상은 확장 하기 힘들게 되어있음.),
-// 그 이후부터를 용혼석 장착 슬롯으로 사용.
-const DWORD c_Wear_Max = 32;
-const DWORD c_DragonSoul_Equip_Start = c_ItemSlot_Count + c_Wear_Max;
-const DWORD c_DragonSoul_Equip_Slot_Max = 6;
-const DWORD c_DragonSoul_Equip_End = c_DragonSoul_Equip_Start + c_DragonSoul_Equip_Slot_Max * DS_DECK_MAX_NUM;
-
-// NOTE: 2013년 2월 5일 현재... 용혼석 데크는 2개가 존재하는데, 향후 확장 가능성이 있어서 3개 데크 여유분을 할당 해 둠. 그 뒤 공간은 벨트 인벤토리로 사용
-const DWORD c_DragonSoul_Equip_Reserved_Count = c_DragonSoul_Equip_Slot_Max * 3;
 
 #ifdef ENABLE_NEW_EQUIPMENT_SYSTEM
 	// 벨트 아이템이 제공하는 인벤토리
-	const DWORD c_Belt_Inventory_Slot_Start = c_DragonSoul_Equip_End + c_DragonSoul_Equip_Reserved_Count;
+	const DWORD c_Belt_Inventory_Slot_Start = c_ItemSlot_Count;
 	const DWORD c_Belt_Inventory_Width = 4;
 	const DWORD c_Belt_Inventory_Height= 4;
 	const DWORD c_Belt_Inventory_Slot_Count = c_Belt_Inventory_Width * c_Belt_Inventory_Height;
@@ -153,14 +112,8 @@ const DWORD c_DragonSoul_Equip_Reserved_Count = c_DragonSoul_Equip_Slot_Max * 3;
 
 	const DWORD c_Inventory_Count	= c_Belt_Inventory_Slot_End;
 #else
-	const DWORD c_Inventory_Count	= c_DragonSoul_Equip_End;
+	const DWORD c_Inventory_Count	= c_ItemSlot_Count;
 #endif
-
-// 용혼석 전용 인벤토리
-const DWORD c_DragonSoul_Inventory_Start = 0;
-const DWORD c_DragonSoul_Inventory_Box_Size = 32;
-const DWORD c_DragonSoul_Inventory_Count = CItemData::DS_SLOT_NUM_TYPES * DRAGON_SOUL_GRADE_MAX * c_DragonSoul_Inventory_Box_Size;
-const DWORD c_DragonSoul_Inventory_End = c_DragonSoul_Inventory_Start + c_DragonSoul_Inventory_Count;
 
 enum ESlotType
 {
@@ -175,7 +128,6 @@ enum ESlotType
 	SLOT_TYPE_SAFEBOX,
 	SLOT_TYPE_PRIVATE_SHOP,
 	SLOT_TYPE_MALL,
-	SLOT_TYPE_DRAGON_SOUL_INVENTORY,
 	SLOT_TYPE_MAX,
 };
 
@@ -186,17 +138,10 @@ enum EWindows
 	EQUIPMENT,
 	SAFEBOX,
 	MALL,
-	DRAGON_SOUL_INVENTORY,
 	GROUND,					// NOTE: 2013년 2월5일 현재까지 unused.. 왜 있는거지???
 	BELT_INVENTORY,			// NOTE: W2.1 버전에 새로 추가되는 벨트 슬롯 아이템이 제공하는 벨트 인벤토리
 
 	WINDOW_TYPE_MAX,
-};
-
-enum EDSInventoryMaxNum
-{
-	DS_INVENTORY_MAX_NUM = c_DragonSoul_Inventory_Count,
-	DS_REFINE_WINDOW_MAX_NUM = 15,
 };
 
 #pragma pack (push, 1)
@@ -234,10 +179,7 @@ typedef struct SItemPos
 			return cell < c_Inventory_Count;
 			break;
 		case EQUIPMENT:
-			return cell < c_DragonSoul_Equip_End;
-			break;
-		case DRAGON_SOUL_INVENTORY:
-			return cell < (DS_INVENTORY_MAX_NUM);
+			return cell < c_ItemSlot_Count;
 			break;
 		default:
 			return false;
@@ -249,13 +191,10 @@ typedef struct SItemPos
 		{
 		case INVENTORY:
 		case EQUIPMENT:
-			return (c_Equipment_Start + c_Wear_Max > cell) && (c_Equipment_Start <= cell);
-			break;
+			return (c_Equipment_Start + 32 > cell) && (c_Equipment_Start <= cell);
 
 		case BELT_INVENTORY:
-		case DRAGON_SOUL_INVENTORY:
 			return false;
-			break;
 
 		default:
 			return false;

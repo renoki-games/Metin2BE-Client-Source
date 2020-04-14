@@ -1284,28 +1284,10 @@ PyObject * playerIsEquipmentSlot(PyObject* poSelf, PyObject* poArgs)
 		return Py_BuildException();
 
 	if (iSlotIndex >= c_Equipment_Start)
-	if (iSlotIndex <= c_DragonSoul_Equip_End)
+	if (iSlotIndex <= c_ItemSlot_Count)
 		return Py_BuildValue("i", 1);
 
 	return Py_BuildValue("i", 0);
-}
-
-PyObject * playerIsDSEquipmentSlot(PyObject* poSelf, PyObject* poArgs)
-{
-	BYTE bWindowType;
-	if (!PyTuple_GetInteger(poArgs, 0, &bWindowType))
-		return Py_BuildException();
-	int iSlotIndex;
-	if (!PyTuple_GetInteger(poArgs, 1, &iSlotIndex))
-		return Py_BuildException();
-
-	if (INVENTORY == bWindowType)
-	if (iSlotIndex >= c_DragonSoul_Equip_Start)
-	if (iSlotIndex <= c_DragonSoul_Equip_End)
-		return Py_BuildValue("i", 1);
-
-	return Py_BuildValue("i", 0);
-
 }
 
 PyObject * playerIsCostumeSlot(PyObject* poSelf, PyObject* poArgs)
@@ -2122,51 +2104,6 @@ PyObject * playerIsAvailableBeltInventoryCell(PyObject* poSelf, PyObject* poArgs
 }
 #endif
 
-
-// 용혼석 강화
-PyObject* playerSendDragonSoulRefine(PyObject* poSelf, PyObject* poArgs)
-{
-	BYTE bSubHeader;
-	PyObject* pDic;
-	TItemPos RefineItemPoses[DS_REFINE_WINDOW_MAX_NUM];
-	if (!PyTuple_GetByte(poArgs, 0, &bSubHeader))
-		return Py_BuildException();
-	switch (bSubHeader)
-	{
-	case DS_SUB_HEADER_CLOSE:
-		break;
-	case DS_SUB_HEADER_DO_UPGRADE:
-	case DS_SUB_HEADER_DO_IMPROVEMENT:
-	case DS_SUB_HEADER_DO_REFINE:
-		{
-			if (!PyTuple_GetObject(poArgs, 1, &pDic))
-				return Py_BuildException();
-			int pos = 0;
-			PyObject* key, *value;
-			int size = PyDict_Size(pDic);
-
-			while (PyDict_Next(pDic, &pos, &key, &value))
-			{
-				int i = PyInt_AsLong(key);
-				if (i > DS_REFINE_WINDOW_MAX_NUM)
-					return Py_BuildException();
-
-				if (!PyTuple_GetByte(value, 0, &RefineItemPoses[i].window_type)
-					|| !PyTuple_GetInteger(value, 1, &RefineItemPoses[i].cell))
-				{
-					return Py_BuildException();
-				}
-			}
-		}
-		break;
-	}
-
-	CPythonNetworkStream& rns=CPythonNetworkStream::Instance();
-	rns.SendDragonSoulRefinePacket(bSubHeader, RefineItemPoses);
-
-	return Py_BuildNone();
-}
-
 void initPlayer()
 {
 	static PyMethodDef s_methods[] =
@@ -2276,7 +2213,6 @@ void initPlayer()
 
 		{ "isItem",						playerisItem,						METH_VARARGS },
 		{ "IsEquipmentSlot",			playerIsEquipmentSlot,				METH_VARARGS },
-		{ "IsDSEquipmentSlot",			playerIsDSEquipmentSlot,			METH_VARARGS },
 		{ "IsCostumeSlot",				playerIsCostumeSlot,				METH_VARARGS },
 		{ "IsValuableItem",				playerIsValuableItem,				METH_VARARGS },
 		{ "IsOpenPrivateShop",			playerIsOpenPrivateShop,			METH_VARARGS },
@@ -2336,7 +2272,6 @@ void initPlayer()
 
 		{ "GetItemLink",				playerGetItemLink,					METH_VARARGS },
 		{ "SlotTypeToInvenType",		playerSlotTypeToInvenType,			METH_VARARGS },
-		{ "SendDragonSoulRefine",		playerSendDragonSoulRefine,			METH_VARARGS },
 
 #ifdef ENABLE_SEALBIND_SYSTEM
 		{ "CanSealItem",				playerCanSealItem,					METH_VARARGS },
@@ -2455,14 +2390,12 @@ void initPlayer()
 	PyModule_AddIntConstant(poModule, "SLOT_TYPE_PRIVATE_SHOP",				SLOT_TYPE_PRIVATE_SHOP);
 	PyModule_AddIntConstant(poModule, "SLOT_TYPE_MALL",						SLOT_TYPE_MALL);
 	PyModule_AddIntConstant(poModule, "SLOT_TYPE_EMOTION",					SLOT_TYPE_EMOTION);
-	PyModule_AddIntConstant(poModule, "SLOT_TYPE_DRAGON_SOUL_INVENTORY",	SLOT_TYPE_DRAGON_SOUL_INVENTORY);
 
 	PyModule_AddIntConstant(poModule, "RESERVED_WINDOW",					RESERVED_WINDOW);
 	PyModule_AddIntConstant(poModule, "INVENTORY",							INVENTORY);
 	PyModule_AddIntConstant(poModule, "EQUIPMENT",							EQUIPMENT);
 	PyModule_AddIntConstant(poModule, "SAFEBOX",							SAFEBOX);
 	PyModule_AddIntConstant(poModule, "MALL",								MALL);
-	PyModule_AddIntConstant(poModule, "DRAGON_SOUL_INVENTORY",				DRAGON_SOUL_INVENTORY);
 	PyModule_AddIntConstant(poModule, "GROUND",								GROUND);
 
 	PyModule_AddIntConstant(poModule, "ITEM_MONEY",					-1);
@@ -2570,22 +2503,7 @@ void initPlayer()
 	PyModule_AddIntConstant(poModule, "EMOTION_FRENCH_KISS",	EMOTION_FRENCH_KISS);
 	PyModule_AddIntConstant(poModule, "EMOTION_SLAP",			EMOTION_SLAP);
 
-	//// 자동물약 타입
 	PyModule_AddIntConstant(poModule, "AUTO_POTION_TYPE_HP",	CPythonPlayer::AUTO_POTION_TYPE_HP);
 	PyModule_AddIntConstant(poModule, "AUTO_POTION_TYPE_SP",	CPythonPlayer::AUTO_POTION_TYPE_SP);
-
-	// 용혼석
-	PyModule_AddIntConstant(poModule, "DRAGON_SOUL_PAGE_SIZE",	c_DragonSoul_Inventory_Box_Size);
-	PyModule_AddIntConstant(poModule, "DRAGON_SOUL_PAGE_COUNT",	DRAGON_SOUL_GRADE_MAX);
-	PyModule_AddIntConstant(poModule, "DRAGON_SOUL_SLOT_COUNT",	c_DragonSoul_Inventory_Count);
-	PyModule_AddIntConstant(poModule, "DRAGON_SOUL_EQUIPMENT_SLOT_START",	c_DragonSoul_Equip_Start);
-	PyModule_AddIntConstant(poModule, "DRAGON_SOUL_EQUIPMENT_PAGE_COUNT",	DS_DECK_MAX_NUM);
-	PyModule_AddIntConstant(poModule, "DRAGON_SOUL_EQUIPMENT_FIRST_SIZE",	c_DragonSoul_Equip_Slot_Max);
-
-	// 용혼석 개량창
-	PyModule_AddIntConstant(poModule, "DRAGON_SOUL_REFINE_CLOSE",	DS_SUB_HEADER_CLOSE);
-	PyModule_AddIntConstant(poModule, "DS_SUB_HEADER_DO_UPGRADE",	DS_SUB_HEADER_DO_UPGRADE);
-	PyModule_AddIntConstant(poModule, "DS_SUB_HEADER_DO_IMPROVEMENT",	DS_SUB_HEADER_DO_IMPROVEMENT);
-	PyModule_AddIntConstant(poModule, "DS_SUB_HEADER_DO_REFINE",	DS_SUB_HEADER_DO_REFINE);
 
 }

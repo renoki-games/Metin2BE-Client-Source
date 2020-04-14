@@ -1507,12 +1507,6 @@ void initapp()
 	PyModule_AddIntConstant(poModule, "ENABLE_ENERGY_SYSTEM",	0);
 #endif
 
-#ifdef ENABLE_DRAGON_SOUL_SYSTEM
-	PyModule_AddIntConstant(poModule, "ENABLE_DRAGON_SOUL_SYSTEM",	1);
-#else
-	PyModule_AddIntConstant(poModule, "ENABLE_DRAGON_SOUL_SYSTEM",	0);
-#endif
-
 #ifdef ENABLE_NEW_EQUIPMENT_SYSTEM
 	PyModule_AddIntConstant(poModule, "ENABLE_NEW_EQUIPMENT_SYSTEM",	1);
 #else

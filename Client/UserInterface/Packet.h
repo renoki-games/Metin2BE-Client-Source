@@ -154,7 +154,6 @@ enum
 	HEADER_CG_HS_ACK							= 203,
 	HEADER_CG_XTRAP_ACK							= 204,
 
-	HEADER_CG_DRAGON_SOUL_REFINE			= 205,
 	HEADER_CG_STATE_CHECKER					= 206,
 
 #ifdef __AUCTION__
@@ -358,7 +357,6 @@ enum
 #endif
 
 	HEADER_GC_SPECIFIC_EFFECT					= 208,
-	HEADER_GC_DRAGON_SOUL_REFINE						= 209,
 	HEADER_GC_RESPOND_CHANNELSTATUS				= 210,
 
 	// @fixme007
@@ -2785,48 +2783,6 @@ typedef struct SPacketGCSpecificEffect
 	DWORD vid;
 	char effect_file[128];
 } TPacketGCSpecificEffect;
-
-// ¿ëÈ¥¼®
-enum EDragonSoulRefineWindowRefineType
-{
-	DragonSoulRefineWindow_UPGRADE,
-	DragonSoulRefineWindow_IMPROVEMENT,
-	DragonSoulRefineWindow_REFINE,
-};
-
-enum EPacketCGDragonSoulSubHeaderType
-{
-	DS_SUB_HEADER_OPEN,
-	DS_SUB_HEADER_CLOSE,
-	DS_SUB_HEADER_DO_UPGRADE,
-	DS_SUB_HEADER_DO_IMPROVEMENT,
-	DS_SUB_HEADER_DO_REFINE,
-	DS_SUB_HEADER_REFINE_FAIL,
-	DS_SUB_HEADER_REFINE_FAIL_MAX_REFINE,
-	DS_SUB_HEADER_REFINE_FAIL_INVALID_MATERIAL,
-	DS_SUB_HEADER_REFINE_FAIL_NOT_ENOUGH_MONEY,
-	DS_SUB_HEADER_REFINE_FAIL_NOT_ENOUGH_MATERIAL,
-	DS_SUB_HEADER_REFINE_FAIL_TOO_MUCH_MATERIAL,
-	DS_SUB_HEADER_REFINE_SUCCEED,
-};
-
-typedef struct SPacketCGDragonSoulRefine
-{
-	SPacketCGDragonSoulRefine() : header (HEADER_CG_DRAGON_SOUL_REFINE)
-	{}
-	BYTE header;
-	BYTE bSubType;
-	TItemPos ItemGrid[DS_REFINE_WINDOW_MAX_NUM];
-} TPacketCGDragonSoulRefine;
-
-typedef struct SPacketGCDragonSoulRefine
-{
-	SPacketGCDragonSoulRefine() : header(HEADER_GC_DRAGON_SOUL_REFINE)
-	{}
-	BYTE header;
-	BYTE bSubType;
-	TItemPos Pos;
-} TPacketGCDragonSoulRefine;
 
 typedef struct SChannelStatus
 {

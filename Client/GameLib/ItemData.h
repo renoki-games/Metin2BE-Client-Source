@@ -99,8 +99,8 @@ class CItemData
 			ITEM_TYPE_TOTEM,				//26//토템
 			ITEM_TYPE_BLEND,				//27//생성될때 랜덤하게 속성이 붙는 약물
 			ITEM_TYPE_COSTUME,				//28//코스츔 아이템 (2011년 8월 추가된 코스츔 시스템용 아이템)
-			ITEM_TYPE_DS,					//29 //용혼석
-			ITEM_TYPE_SPECIAL_DS,			//30 // 특수한 용혼석 (DS_SLOT에 착용하는 UNIQUE 아이템이라 생각하면 됨)
+			ITEM_TYPE_UNUSED1,					//29
+			ITEM_TYPE_UNUSED2,					//30
 			ITEM_TYPE_EXTRACT,					//31 추출도구.
 			ITEM_TYPE_SECONDARY_COIN,			//32 명도전.
 			ITEM_TYPE_RING,						//33 반지 (유니크 슬롯이 아닌 순수 반지 슬롯)
@@ -178,9 +178,6 @@ class CItemData
 			MATERIAL_ROOT,
 			MATERIAL_NEEDLE,
 			MATERIAL_JEWEL,
-			MATERIAL_DS_REFINE_NORMAL,
-			MATERIAL_DS_REFINE_BLESSED,
-			MATERIAL_DS_REFINE_HOLLY,
 		};
 
 		enum EArmorSubTypes
@@ -248,17 +245,6 @@ class CItemData
 			USE_CHANGE_COSTUME_ATTR,			// 31
 			USE_RESET_COSTUME_ATTR,				// 32
 #endif
-		};
-
-		enum EDragonSoulSubType
-		{
-			DS_SLOT1,
-			DS_SLOT2,
-			DS_SLOT3,
-			DS_SLOT4,
-			DS_SLOT5,
-			DS_SLOT6,
-			DS_SLOT_NUM_TYPES = 6,
 		};
 
 		enum EMetinSubTypes

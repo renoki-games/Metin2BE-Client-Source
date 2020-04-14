@@ -1505,9 +1505,4 @@ void initchr()
 	PyModule_AddIntConstant(poModule, "NEW_AFFECT_AUTO_HP_RECOVERY",		CInstanceBase::NEW_AFFECT_AUTO_HP_RECOVERY);
 	PyModule_AddIntConstant(poModule, "NEW_AFFECT_AUTO_SP_RECOVERY",		CInstanceBase::NEW_AFFECT_AUTO_SP_RECOVERY);
 
-	PyModule_AddIntConstant(poModule, "NEW_AFFECT_DRAGON_SOUL_QUALIFIED",		CInstanceBase::NEW_AFFECT_DRAGON_SOUL_QUALIFIED);
-
-	PyModule_AddIntConstant(poModule, "NEW_AFFECT_DRAGON_SOUL_DECK1",		CInstanceBase::NEW_AFFECT_DRAGON_SOUL_DECK1);
-	PyModule_AddIntConstant(poModule, "NEW_AFFECT_DRAGON_SOUL_DECK2",		CInstanceBase::NEW_AFFECT_DRAGON_SOUL_DECK2);
-
 }

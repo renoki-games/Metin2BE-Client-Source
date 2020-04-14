@@ -565,8 +565,6 @@ const TItemData * CPythonPlayer::GetItemData(TItemPos Cell) const
 	case INVENTORY:
 	case EQUIPMENT:
 		return &m_playerStatus.aItem[Cell.cell];
-	case DRAGON_SOUL_INVENTORY:
-		return &m_playerStatus.aDSItem[Cell.cell];
 	default:
 		return NULL;
 	}
@@ -592,9 +590,6 @@ void CPythonPlayer::SetItemData(TItemPos Cell, const TItemData & c_rkItemInst)
 	case INVENTORY:
 	case EQUIPMENT:
 		m_playerStatus.aItem[Cell.cell] = c_rkItemInst;
-		break;
-	case DRAGON_SOUL_INVENTORY:
-		m_playerStatus.aDSItem[Cell.cell] = c_rkItemInst;
 		break;
 	}
 }

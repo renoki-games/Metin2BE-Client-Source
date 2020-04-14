@@ -626,9 +626,6 @@ void CPythonNetworkStream::GamePhase()
 				ret = RecvSpecificEffect();
 				break;
 
-			case HEADER_GC_DRAGON_SOUL_REFINE:
-				ret = RecvDragonSoulRefine();
-				break;
 			case HEADER_GC_UNK_213: // @fixme007
 				ret = RecvUnk213();
 				break;
@@ -4457,20 +4454,5 @@ bool CPythonNetworkStream::RecvDigMotionPacket()
 	for (int i = 0; i < kDigMotion.count; ++i)
 		pkInstMain->PushOnceMotion(CRaceMotionData::NAME_DIG);
 
-	return true;
-}
-
-
-// ¿ëÈ¥¼® °­È­
-bool CPythonNetworkStream::SendDragonSoulRefinePacket(BYTE bRefineType, TItemPos* pos)
-{
-	TPacketCGDragonSoulRefine pk;
-	pk.header = HEADER_CG_DRAGON_SOUL_REFINE;
-	pk.bSubType = bRefineType;
-	memcpy (pk.ItemGrid, pos, sizeof (TItemPos) * DS_REFINE_WINDOW_MAX_NUM);
-	if (!Send(sizeof (pk), &pk))
-	{
-		return false;
-	}
 	return true;
 }

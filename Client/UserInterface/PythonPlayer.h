@@ -118,7 +118,6 @@ class CPythonPlayer : public CSingleton<CPythonPlayer>, public IAbstractPlayer
 		typedef struct SPlayerStatus
 		{
 			TItemData			aItem[c_Inventory_Count];
-			TItemData			aDSItem[c_DragonSoul_Inventory_Count];
 			TQuickSlot			aQuickSlot[QUICKSLOT_MAX_NUM];
 			TSkillInstance		aSkill[SKILL_MAX_NUM];
 			long				m_alPoint[POINT_MAX_NUM];
