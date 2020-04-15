@@ -2220,9 +2220,6 @@ void initPlayer()
 	PyModule_AddIntConstant(poModule, "POINT_PC_BANG_EXP_BONUS",		POINT_PC_BANG_EXP_BONUS);
 	PyModule_AddIntConstant(poModule, "POINT_PC_BANG_DROP_BONUS",		POINT_PC_BANG_DROP_BONUS);
 
-	PyModule_AddIntConstant(poModule, "ENERGY",		POINT_ENERGY);
-	PyModule_AddIntConstant(poModule, "ENERGY_END_TIME",		POINT_ENERGY_END_TIME);
-
     PyModule_AddIntConstant(poModule, "SKILL_GRADE_NORMAL",			CPythonPlayer::SKILL_NORMAL);
     PyModule_AddIntConstant(poModule, "SKILL_GRADE_MASTER",			CPythonPlayer::SKILL_MASTER);
     PyModule_AddIntConstant(poModule, "SKILL_GRADE_GRAND_MASTER",	CPythonPlayer::SKILL_GRAND_MASTER);

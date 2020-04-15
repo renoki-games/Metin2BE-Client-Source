@@ -1678,16 +1678,6 @@ enum EPointTypes
     POINT_PC_BANG_EXP_BONUS,        // 125
 	POINT_PC_BANG_DROP_BONUS,       // 126 PC방 전용 드롭률 보너스
 
-	POINT_ENERGY = 128,				// 128 기력
-
-	// 기력 ui 용.
-	// 이렇게 하고 싶지 않았지만,
-	// uiTaskBar에서는 affect에 접근할 수 없고,
-	// 더구나 클라리언트에서는 blend_affect는 관리하지 않아,
-	// 임시로 이렇게 둔다.
-	POINT_ENERGY_END_TIME = 129,	// 129 기력 종료 시간
-
-	// 클라이언트 포인트
 	POINT_MIN_WEP = 200,
 	POINT_MAX_WEP,
 	POINT_MIN_MAGIC_WEP,

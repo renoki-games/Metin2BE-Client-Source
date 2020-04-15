@@ -463,7 +463,7 @@ class CItemData
 			APPLY_RESIST_ASSASSIN ,			//79
 			APPLY_RESIST_SURA,				//80
 			APPLY_RESIST_SHAMAN,			//81
-			APPLY_ENERGY,					//82
+			APPLY_UNUSED1,
 			APPLY_DEF_GRADE,				// 83 방어력. DEF_GRADE_BONUS는 클라에서 두배로 보여지는 의도된 버그(...)가 있다.
 			APPLY_COSTUME_ATTR_BONUS,		// 84 코스튬 아이템에 붙은 속성치 보너스
 			APPLY_MAGIC_ATTBONUS_PER,		// 85 마법 공격력 +x%

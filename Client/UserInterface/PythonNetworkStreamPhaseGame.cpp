@@ -1528,13 +1528,6 @@ bool CPythonNetworkStream::RecvPointChange()
 			case POINT_HORSE_SKILL:
 				__RefreshSkillWindow();
 				break;
-			case POINT_ENERGY:
-				if (PointChange.value == 0)
-				{
-					rkPlayer.SetStatus(POINT_ENERGY_END_TIME, 0);
-				}
-				__RefreshStatus();
-				break;
 			default:
 				__RefreshStatus();
 				break;
@@ -4213,11 +4206,6 @@ bool CPythonNetworkStream::RecvAffectAddPacket()
 		return false;
 
 	TPacketAffectElement & rkElement = kAffectAdd.elem;
-	if (rkElement.bPointIdxApplyOn == POINT_ENERGY)
-	{
-		CPythonPlayer::instance().SetStatus (POINT_ENERGY_END_TIME, CPythonApplication::Instance().GetServerTimeStamp() + rkElement.lDuration);
-		__RefreshStatus();
-	}
 	PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "BINARY_NEW_AddAffect", Py_BuildValue("(iiii)", rkElement.dwType, rkElement.bPointIdxApplyOn, rkElement.lApplyValue, rkElement.lDuration));
 
 	return true;
