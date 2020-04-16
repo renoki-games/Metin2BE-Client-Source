@@ -66,29 +66,25 @@ const DWORD c_Equipment_Shield	= c_Equipment_Start + 10;
 	const DWORD c_Costume_Slot_Start	= c_Equipment_Start + 19;	// [주의] 숫자(19) 하드코딩 주의. 현재 서버에서 코스츔 슬롯은 19부터임. 서버 common/length.h 파일의 EWearPositions 열거형 참고.
 	const DWORD	c_Costume_Slot_Body		= c_Costume_Slot_Start + 0;
 	const DWORD	c_Costume_Slot_Hair		= c_Costume_Slot_Start + 1;
-#ifdef ENABLE_MOUNT_COSTUME_SYSTEM
-	const DWORD	c_Costume_Slot_Mount	= c_Costume_Slot_Start + 2;
-#endif
-#ifdef ENABLE_ACCE_COSTUME_SYSTEM
-	const DWORD	c_Costume_Slot_Acce		= c_Costume_Slot_Start + 3;
-#endif
 
-#if defined(ENABLE_WEAPON_COSTUME_SYSTEM) || defined(ENABLE_ACCE_COSTUME_SYSTEM)
-	const DWORD c_Costume_Slot_Count	= 4;
-#elif defined(ENABLE_MOUNT_COSTUME_SYSTEM)
+	#ifdef ENABLE_WEAPON_COSTUME_SYSTEM
+	const DWORD	c_Costume_Slot_Weapon = c_Costume_Slot_Start + 2;
+	#endif
+
+	#ifdef ENABLE_MOUNT_COSTUME_SYSTEM
+	const DWORD	c_Costume_Slot_Mount = c_Costume_Slot_Start + 2;
+	#endif
+
+#if defined(ENABLE_WEAPON_COSTUME_SYSTEM)
 	const DWORD c_Costume_Slot_Count	= 3;
 #else
 	const DWORD c_Costume_Slot_Count	= 2;
 #endif
 
 	const DWORD c_Costume_Slot_End		= c_Costume_Slot_Start + c_Costume_Slot_Count;
-
-#ifdef ENABLE_WEAPON_COSTUME_SYSTEM
-	const DWORD	c_Costume_Slot_Weapon	= c_Costume_Slot_End + 1;
-#endif
 #endif
 
-const DWORD c_Inventory_Count	= c_ItemSlot_Count;
+const DWORD c_Inventory_Count = c_ItemSlot_Count + CItemData::WEAR_MAX_NUM;
 
 enum ESlotType
 {
@@ -150,11 +146,8 @@ typedef struct SItemPos
 		switch (window_type)
 		{
 		case INVENTORY:
-			return cell < c_Inventory_Count;
-			break;
 		case EQUIPMENT:
-			return cell < c_ItemSlot_Count;
-			break;
+			return cell < c_Inventory_Count;
 		default:
 			return false;
 		}
