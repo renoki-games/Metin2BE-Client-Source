@@ -184,6 +184,8 @@ class CInstanceBase
 
 			NEW_AFFECT_NOG_POCKET_ABILITY = 302,
 
+			AFFECT_ANTI_EXP = 309,
+
 			NEW_AFFECT_QUEST_START_IDX   = 1000,
 		};
 

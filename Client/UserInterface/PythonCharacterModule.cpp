@@ -1504,5 +1504,5 @@ void initchr()
 	PyModule_AddIntConstant(poModule, "NEW_AFFECT_GOLD_BONUS",				CInstanceBase::NEW_AFFECT_GOLD_BONUS);
 	PyModule_AddIntConstant(poModule, "NEW_AFFECT_AUTO_HP_RECOVERY",		CInstanceBase::NEW_AFFECT_AUTO_HP_RECOVERY);
 	PyModule_AddIntConstant(poModule, "NEW_AFFECT_AUTO_SP_RECOVERY",		CInstanceBase::NEW_AFFECT_AUTO_SP_RECOVERY);
-
+	PyModule_AddIntConstant(poModule, "AFFECT_ANTI_EXP", CInstanceBase::AFFECT_ANTI_EXP);
 }
