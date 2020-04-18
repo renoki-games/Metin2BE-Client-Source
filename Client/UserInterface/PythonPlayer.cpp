@@ -1018,12 +1018,6 @@ void CPythonPlayer::SetSkillLevel_(DWORD dwSkillIndex, DWORD dwSkillGrade, DWORD
 			break;
 	}
 
-	const DWORD SKILL_MAX_LEVEL = 40;
-
-
-
-
-
 	if (dwSkillLevel>SKILL_MAX_LEVEL)
 	{
 		m_playerStatus.aSkill[dwSlotIndex].fcurEfficientPercentage = 0.0f;

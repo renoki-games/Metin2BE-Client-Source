@@ -438,6 +438,9 @@ enum
 
 	SHOP_TAB_NAME_MAX = 32,
 	SHOP_TAB_COUNT_MAX = 3,
+
+	SKILL_MAX_LEVEL = 40,
+	TOGGLE_SKILL_P_DURATION = 600,
 };
 
 #pragma pack(push)

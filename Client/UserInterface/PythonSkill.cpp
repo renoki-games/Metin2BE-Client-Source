@@ -2268,4 +2268,6 @@ void initskill()
 	PyModule_AddIntConstant(poModule, "SKILL_GRADE_STEP_COUNT",	CPythonSkill::SKILL_GRADE_STEP_COUNT);
 	PyModule_AddIntConstant(poModule, "SKILL_GRADEGAP",			CPythonSkill::SKILL_GRADEGAP);
 	PyModule_AddIntConstant(poModule, "SKILL_EFFECT_COUNT",		CPythonSkill::SKILL_EFFECT_COUNT);
+	PyModule_AddIntConstant(poModule, "SKILL_MAX_LEVEL",		SKILL_MAX_LEVEL);
+	PyModule_AddIntConstant(poModule, "TOGGLE_SKILL_P_DURATION",		TOGGLE_SKILL_P_DURATION);
 }
