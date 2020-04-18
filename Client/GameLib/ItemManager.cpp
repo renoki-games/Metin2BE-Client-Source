@@ -374,6 +374,95 @@ bool CItemManager::LoadItemTable(const char* c_szFileName)
 	return true;
 }
 
+#ifdef ENABLE_SHINING_SYSTEM
+bool CItemManager::LoadShiningTable(const char* szShiningTable)
+{
+    CMappedFile File;
+    LPCVOID pData;
+
+
+    if (!CEterPackManager::Instance().Get(File, szShiningTable, &pData))
+        return false;
+
+
+    CMemoryTextFileLoader textFileLoader;
+    textFileLoader.Bind(File.Size(), pData);
+
+
+    CTokenVector TokenVector;
+    for (DWORD i = 0; i < textFileLoader.GetLineCount(); ++i)
+    {
+        if (!textFileLoader.SplitLine(i, &TokenVector, "\t"))
+            continue;
+
+
+        if (TokenVector.size() > (1 + CItemData::ITEM_SHINING_MAX_COUNT))
+		{
+            TraceError("CItemManager::LoadShiningTable(%s) - LoadShiningTable in %d\n - RowSize: %d MaxRowSize: %d", szShiningTable, i, TokenVector.size(), CItemData::ITEM_SHINING_MAX_COUNT);
+		}
+
+        const std::string & c_rstrID = TokenVector[0];
+
+        int pos = c_rstrID.find("~");
+
+        if (std::string::npos == pos)
+        {
+            DWORD dwItemVNum = atoi(c_rstrID.c_str());
+
+            CItemData * pItemData = MakeItemData(dwItemVNum);
+            if (pItemData)
+            {
+                for (BYTE i = 0; i < CItemData::ITEM_SHINING_MAX_COUNT; i++)
+                {
+                    if (i < (TokenVector.size() - 1))
+                    {
+                        const std::string & c_rstrEffectPath = TokenVector[i + 1];
+                        pItemData->SetItemShiningTableData(i, c_rstrEffectPath.c_str());
+                    }
+                    else
+                    {
+                        pItemData->SetItemShiningTableData(i, "");
+                    }
+                }
+            }
+        }
+        else
+        {
+            std::string s_start_vnum(c_rstrID.substr(0, pos));
+            std::string s_end_vnum(c_rstrID.substr(pos + 1));
+
+            int start_vnum = atoi(s_start_vnum.c_str());
+            int end_vnum = atoi(s_end_vnum.c_str());
+            DWORD vnum = start_vnum;
+
+            while (vnum <= end_vnum)
+            {
+                CItemData * pItemData = MakeItemData(vnum);
+                if (pItemData)
+                {
+                    for (BYTE i = 0; i < CItemData::ITEM_SHINING_MAX_COUNT; i++)
+                    {
+                        if (i < (TokenVector.size() - 1))
+                        {
+                            const std::string & c_rstrEffectPath = TokenVector[i + 1];
+                            pItemData->SetItemShiningTableData(i, c_rstrEffectPath.c_str());
+                        }
+                        else
+                        {
+                            pItemData->SetItemShiningTableData(i, "");
+                        }
+                    }
+                }
+
+                ++vnum;
+            }
+        }
+    }
+
+    return true;
+}
+#endif
+
 void CItemManager::Destroy()
 {
 	TItemMap::iterator i;

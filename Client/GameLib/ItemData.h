@@ -23,6 +23,9 @@ class CItemData
 			ITEM_PICK_MAX_LEVEL = 9,
 			ITEM_ROD_MAX_LEVEL = 20,
 #endif
+#ifdef ENABLE_SHINING_SYSTEM
+			ITEM_SHINING_MAX_COUNT = 3,
+#endif
 		};
 
 #ifdef ENABLE_SOULBIND_SYSTEM
@@ -764,6 +767,28 @@ class CItemData
 		void SetDefaultItemData(const char * c_szIconFileName, const char * c_szModelFileName  = NULL);
 		void SetItemTableData(TItemTable * pItemTable);
 
+#ifdef ENABLE_SHINING_SYSTEM
+    struct TItemShiningTable 
+	{
+        char szShinings[ITEM_SHINING_MAX_COUNT][256];
+    public:
+        bool Any() const
+        {
+            for (int i = 0; i < CItemData::ITEM_SHINING_MAX_COUNT; i++)
+            {
+                if (strcmp(szShinings[i], ""))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    };
+	
+    void SetItemShiningTableData(BYTE bIndex, const char* szEffectname);
+    CItemData::TItemShiningTable GetItemShiningTable() { return m_ItemShiningTable; }
+#endif
+
 	protected:
 		void __LoadFiles();
 		void __SetIconImage(const char * c_szFileName);
@@ -786,6 +811,9 @@ class CItemData
 		NRaceData::TAttachingDataVector m_AttachingDataVector;
 		DWORD		m_dwVnum;
 		TItemTable m_ItemTable;
+#ifdef ENABLE_SHINING_SYSTEM
+		TItemShiningTable m_ItemShiningTable;
+#endif
 
 	public:
 		static void DestroySystem();

@@ -450,6 +450,13 @@ BOOL CItemData::IsEquipment() const
 	return FALSE;
 }
 
+#ifdef ENABLE_SHINING_SYSTEM
+void CItemData::SetItemShiningTableData(BYTE bIndex, const char* szEffectname)
+{
+    sprintf(m_ItemShiningTable.szShinings[bIndex], szEffectname);
+}
+#endif
+
 void CItemData::Clear()
 {
 	m_strSummary = "";
@@ -466,6 +473,14 @@ void CItemData::Clear()
 	m_pLODModelThingVector.clear();
 
 	memset(&m_ItemTable, 0, sizeof(m_ItemTable));
+
+#ifdef ENABLE_SHINING_SYSTEM
+#ifdef __cplusplus < 199711L
+    memset(&m_ItemShiningTable, 0, sizeof(m_ItemShiningTable));
+#else
+	m_ItemShiningTable = {};
+#endif
+#endif
 }
 
 CItemData::CItemData()

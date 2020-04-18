@@ -33,6 +33,9 @@ class CItemManager : public CSingleton<CItemManager>
 		bool			LoadItemDesc(const char* c_szFileName);
 		bool			LoadItemList(const char* c_szFileName);
 		bool			LoadItemTable(const char* c_szFileName);
+#ifdef ENABLE_SHINING_SYSTEM
+		bool			LoadShiningTable(const char* szShiningTable);
+#endif
 		CItemData *		MakeItemData(DWORD dwIndex);
 
 	protected:

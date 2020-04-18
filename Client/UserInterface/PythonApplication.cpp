@@ -802,7 +802,7 @@ bool CPythonApplication::Process()
 						}
 
 						// 일정 프레임 속도에 맞추어주는쪽에 눈에 편하다
-						// 아래에서 한번 하면 됬다.
+						// 아래에서 한번 하면 됬�?
 						//if (m_dwCurRenderTime<dwBufRenderTime)
 						//	Sleep(dwBufRenderTime-m_dwCurRenderTime);
 
@@ -1008,6 +1008,9 @@ bool LoadLocaleData(const char* localePath)
 	char szItemList[256];
 	char szItemProto[256];
 	char szItemDesc[256];
+#ifdef ENABLE_SHINING_SYSTEM
+    char szShiningTable[256];
+#endif
 	char szMobProto[256];
 	char szSkillDescFileName[256];
 	char szSkillTableFileName[256];
@@ -1015,6 +1018,9 @@ bool LoadLocaleData(const char* localePath)
 	snprintf(szItemList,	sizeof(szItemList) ,	"%s/item_list.txt",	localePath);
 	snprintf(szItemProto,	sizeof(szItemProto),	"%s/item_proto",	localePath);
 	snprintf(szItemDesc,	sizeof(szItemDesc),	"%s/itemdesc.txt",	localePath);
+#ifdef ENABLE_SHINING_SYSTEM
+    snprintf(szShiningTable, sizeof(szShiningTable), "%s/shiningtable.txt", localePath);
+#endif
 	snprintf(szMobProto,	sizeof(szMobProto),	"%s/mob_proto",		localePath);
 	snprintf(szSkillDescFileName, sizeof(szSkillDescFileName),	"%s/SkillDesc.txt", localePath);
 	snprintf(szSkillTableFileName, sizeof(szSkillTableFileName),	"%s/SkillTable.txt", localePath);
@@ -1039,6 +1045,13 @@ bool LoadLocaleData(const char* localePath)
 	{
 		Tracenf("LoadLocaleData - LoadItemDesc(%s) Error", szItemDesc);
 	}
+
+#ifdef ENABLE_SHINING_SYSTEM
+	if (!rkItemMgr.LoadShiningTable(szShiningTable))
+	{
+		Tracenf("LoadLocaleData - LoadShiningTable(%s) Error", szShiningTable);
+	}
+#endif
 
 	if (!rkNPCMgr.LoadNonPlayerData(szMobProto))
 	{

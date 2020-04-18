@@ -2745,10 +2745,18 @@ void CInstanceBase::SetArmor(DWORD dwArmor)
 			float fSpecularPower=pItemData->GetSpecularPowerf();
 			SetShape(dwShape, fSpecularPower);
 			__GetRefinedEffect(pItemData);
+#ifdef ENABLE_SHINING_SYSTEM
+            __GetShiningEffect(pItemData);
+#endif
 			return;
 		}
 		else
+		{
 			__ClearArmorRefineEffect();
+#ifdef ENABLE_SHINING_SYSTEM
+            __ClearArmorShiningEffect();
+#endif
+		}
 	}
 
 	SetShape(dwArmor);
@@ -2991,9 +2999,19 @@ bool CInstanceBase::SetWeapon(DWORD eWeapon)
 	//Weapon Effect
 	CItemData * pItemData;
 	if (CItemManager::Instance().GetItemDataPointer(eWeapon, &pItemData))
+	{
 		__GetRefinedEffect(pItemData);
+#ifdef ENABLE_SHINING_SYSTEM
+        __GetShiningEffect(pItemData);
+#endif
+	}
 	else
+	{
 		__ClearWeaponRefineEffect();
+#ifdef ENABLE_SHINING_SYSTEM
+        __ClearWeaponShiningEffect();
+#endif
+	}
 
 	return true;
 }
@@ -3316,6 +3334,11 @@ void CInstanceBase::__Initialize()
 	m_swordRefineEffectLeft = 0;
 	m_armorRefineEffect = 0;
 
+#ifdef ENABLE_SHINING_SYSTEM
+    __ClearWeaponShiningEffect(false);
+    __ClearArmorShiningEffect(false);
+#endif
+
 	m_sAlignment = 0;
 	m_byPKMode = 0;
 	m_isKiller = false;
@@ -3351,3 +3374,181 @@ void CInstanceBase::GetBoundBox(D3DXVECTOR3 * vtMin, D3DXVECTOR3 * vtMax)
 	m_GraphicThingInstance.GetBoundBox(vtMin, vtMax);
 }
 
+#ifdef ENABLE_SHINING_SYSTEM
+void CInstanceBase::__GetShiningEffect(CItemData* pItem)
+{
+    bool removeRefineEffect = false;
+
+    CItemData::TItemShiningTable shiningTable = pItem->GetItemShiningTable();
+
+#if defined(ENABLE_COSTUME_SYSTEM) && defined(ENABLE_WEAPON_COSTUME_SYSTEM)
+    if (pItem->GetType() == CItemData::ITEM_TYPE_WEAPON || (pItem->GetType() == CItemData::ITEM_TYPE_COSTUME && pItem->GetSubType() == CItemData::COSTUME_WEAPON))
+    {
+        BYTE bSubType = pItem->GetType() == CItemData::ITEM_TYPE_COSTUME && pItem->GetSubType() == CItemData::COSTUME_WEAPON ? pItem->GetValue(3) : pItem->GetSubType();
+#else
+    if (pItem->GetType() == CItemData::ITEM_TYPE_WEAPON)
+    {
+        BYTE bSubType = pItem->GetSubType();
+#endif
+
+        __ClearWeaponShiningEffect();
+
+        if (shiningTable.Any() && removeRefineEffect)
+        {
+            __ClearWeaponRefineEffect();
+        }
+
+        for (int i = 0; i < CItemData::ITEM_SHINING_MAX_COUNT; i++)
+        {
+            if (strcmp(shiningTable.szShinings[i], ""))
+            {
+                if (bSubType == CItemData::WEAPON_BOW)
+                {
+                    __AttachWeaponShiningEffect(i, shiningTable.szShinings[i], "PART_WEAPON_LEFT");
+                }
+                else
+                {
+#ifdef ENABLE_WOLFMAN
+                    bool twoSidedWeapon = bSubType == CItemData::WEAPON_DAGGER || (IsMountingHorse() && bSubType == CItemData::WEAPON_FAN) || bSubType == CItemData::WEAPON_CLAW;
+#else
+                    bool twoSidedWeapon = bSubType == CItemData::WEAPON_DAGGER || (IsMountingHorse() && bSubType == CItemData::WEAPON_FAN);
+#endif
+                    if (twoSidedWeapon)
+                    {
+                        __AttachWeaponShiningEffect(i, shiningTable.szShinings[i], "PART_WEAPON_LEFT");
+                    }
+
+
+                    __AttachWeaponShiningEffect(i, shiningTable.szShinings[i], "PART_WEAPON");
+                }
+            }
+        }
+    }
+
+#if defined(ENABLE_COSTUME_SYSTEM)
+    if ((pItem->GetType() == CItemData::ITEM_TYPE_ARMOR && pItem->GetSubType() == CItemData::ARMOR_BODY) || (pItem->GetType() == CItemData::ITEM_TYPE_COSTUME && pItem->GetSubType() == CItemData::COSTUME_BODY))
+#else
+    if (pItem->GetType() == CItemData::ITEM_TYPE_ARMOR && pItem->GetSubType() == CItemData::ARMOR_BODY)
+#endif
+    {
+        __ClearArmorShiningEffect();
+
+        if (shiningTable.Any() && removeRefineEffect)
+        {
+            __ClearArmorRefineEffect();
+        }
+
+        for (int i = 0; i < CItemData::ITEM_SHINING_MAX_COUNT; i++)
+        {
+            if (strcmp(shiningTable.szShinings[i], ""))
+            {
+                __AttachArmorShiningEffect(i, shiningTable.szShinings[i]);
+            }
+        }
+    }
+}
+
+void CInstanceBase::__AttachWeaponShiningEffect(int effectIndex, const char* effectFileName, const char* boneName)
+{
+    if (IsAffect(AFFECT_INVISIBILITY))
+    {
+        return;
+    }
+
+    if (effectIndex >= CItemData::ITEM_SHINING_MAX_COUNT)
+    {
+        return;
+    }
+
+    CEffectManager::Instance().RegisterEffect(effectFileName, false, false);
+
+    if (!strcmp(boneName, "PART_WEAPON"))
+    {
+        const char* c_szRightBoneName;
+        m_GraphicThingInstance.GetAttachingBoneName(CRaceData::PART_WEAPON, &c_szRightBoneName);
+
+        if (strcmp(c_szRightBoneName, ""))
+        {
+            m_weaponShiningEffects[0][effectIndex] = m_GraphicThingInstance.AttachEffectByName(0, c_szRightBoneName, effectFileName);
+        }
+    }
+    else if (!strcmp(boneName, "PART_WEAPON_LEFT"))
+    {
+        const char* c_szLeftBoneName;
+        m_GraphicThingInstance.GetAttachingBoneName(CRaceData::PART_WEAPON_LEFT, &c_szLeftBoneName);
+
+        if (strcmp(c_szLeftBoneName, ""))
+        {
+            m_weaponShiningEffects[1][effectIndex] = m_GraphicThingInstance.AttachEffectByName(0, c_szLeftBoneName, effectFileName);
+        }
+    }
+    else
+    {
+        Tracef("Invalid partname for getting attaching bone name. %s - %s", effectFileName, boneName);
+    }
+}
+
+void CInstanceBase::__AttachArmorShiningEffect(int effectIndex, const char* effectFileName, const char* boneName)
+{
+    if (IsAffect(AFFECT_INVISIBILITY))
+    {
+        return;
+    }
+
+    if (effectIndex >= CItemData::ITEM_SHINING_MAX_COUNT)
+    {
+        return;
+    }
+
+    if (!strcmp(boneName, ""))
+    {
+        Tracef("Empty bone name for attaching armor shining. Effect Index: %i, EffectFileName: %s", effectIndex, effectFileName);
+        return;
+    }
+
+    CEffectManager::Instance().RegisterEffect(effectFileName, false, false);
+    m_armorShiningEffects[effectIndex] = m_GraphicThingInstance.AttachEffectByName(0, boneName, effectFileName);
+}
+
+void CInstanceBase::__ClearWeaponShiningEffect(bool detaching)
+{
+    if (detaching)
+    {
+        for (int i = 0; i < CItemData::ITEM_SHINING_MAX_COUNT; i++)
+        {
+            if (m_weaponShiningEffects[0][i])
+            {
+                __DetachEffect(m_weaponShiningEffects[0][i]);
+            }
+
+            if (m_weaponShiningEffects[1][i])
+            {
+                __DetachEffect(m_weaponShiningEffects[1][i]);
+            }
+        }
+    }
+	
+#ifdef __cplusplus < 199711L
+	memset(&m_weaponShiningEffects, 0, sizeof(m_weaponShiningEffects));
+#else
+	m_weaponShiningEffects = {};
+#endif
+}
+
+void CInstanceBase::__ClearArmorShiningEffect(bool detaching)
+{
+    if (detaching)
+    {
+        for (int i = 0; i < CItemData::ITEM_SHINING_MAX_COUNT; i++)
+        {
+            __DetachEffect(m_armorShiningEffects[i]);
+        }
+    }
+	
+#ifdef __cplusplus < 199711L
+    memset(&m_armorShiningEffects, 0, sizeof(m_armorShiningEffects));
+#else
+	m_armorShiningEffects = {};
+#endif
+}
+#endif

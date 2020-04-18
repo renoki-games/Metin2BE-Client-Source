@@ -922,6 +922,14 @@ class CInstanceBase
 		void	__ClearWeaponRefineEffect();
 		void	__ClearArmorRefineEffect();
 
+#ifdef ENABLE_SHINING_SYSTEM
+        void    __GetShiningEffect(CItemData* pItem);
+        void    __ClearWeaponShiningEffect(bool detaching = true);
+        void    __ClearArmorShiningEffect(bool detaching = true);
+        void    __AttachWeaponShiningEffect(int effectIndex, const char* effectFileName, const char* boneName = "Bip01");
+        void    __AttachArmorShiningEffect(int effectIndex, const char* effectFileName, const char* boneName = "Bip01");
+#endif
+
 	protected:
 		void __AttachSelectEffect();
 		void __DetachSelectEffect();
@@ -989,6 +997,10 @@ class CInstanceBase
 		DWORD					m_swordRefineEffectRight;
 		DWORD					m_swordRefineEffectLeft;
 		DWORD					m_armorRefineEffect;
+#ifdef ENABLE_SHINING_SYSTEM
+        DWORD					m_weaponShiningEffects[2][CItemData::ITEM_SHINING_MAX_COUNT];
+        DWORD					m_armorShiningEffects[CItemData::ITEM_SHINING_MAX_COUNT];
+#endif
 
 		struct SMoveAfterFunc
 		{
