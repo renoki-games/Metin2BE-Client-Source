@@ -2008,7 +2008,7 @@ bool CPythonNetworkStream::RecvQuestInfoPacket()
 	{
 		if (!rkQuest.IsQuest(QuestInfo.index))
 		{
-			rkQuest.MakeQuest(QuestInfo.index);
+			rkQuest.MakeQuest(QuestInfo.index, QuestInfo.szQuestName);
 		}
 
 		if (strlen(szTitle) > 0)
@@ -4443,4 +4443,19 @@ bool CPythonNetworkStream::RecvDigMotionPacket()
 		pkInstMain->PushOnceMotion(CRaceMotionData::NAME_DIG);
 
 	return true;
+}
+
+bool CPythonNetworkStream::SendScriptButtonPacketByName(const char* c_szQuestName)
+{
+	TPacketCGScriptButtonByName Packet;
+	Packet.byHeader = HEADER_CG_SCRIPT_BUTTON_BY_NAME;
+	strncpy(Packet.szQuestName, c_szQuestName, QUEST_NAME_MAX_LEN);
+	Packet.szQuestName[QUEST_NAME_MAX_LEN] = '\0';
+
+	if (!Send(sizeof(TPacketCGScriptButtonByName), &Packet)) {
+		Tracen("Send Script Button By Name Packet Error");
+		return false;
+	}
+
+	return SendSequence();
 }

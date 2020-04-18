@@ -37,7 +37,7 @@ bool CPythonQuest::IsQuest(DWORD dwIndex)
 	return itor != m_QuestInstanceContainer.end();
 }
 
-void CPythonQuest::MakeQuest(DWORD dwIndex)
+void CPythonQuest::MakeQuest(DWORD dwIndex, const char *c_szQuestName)
 {
 	DeleteQuestInstance(dwIndex);
 	m_QuestInstanceContainer.push_back(SQuestInstance());
@@ -46,6 +46,7 @@ void CPythonQuest::MakeQuest(DWORD dwIndex)
 
 	SQuestInstance & rQuestInstance = *m_QuestInstanceContainer.rbegin();
 	rQuestInstance.dwIndex = dwIndex;
+	strncpy(rQuestInstance.szQuestName, c_szQuestName, sizeof(rQuestInstance.szQuestName));
 	rQuestInstance.iStartTime = int(CTimer::Instance().GetCurrentSecond());
 }
 
@@ -221,6 +222,19 @@ PyObject * questGetQuestIndex(PyObject * poSelf, PyObject * poArgs)
 	return Py_BuildValue("i", pQuestInstance->dwIndex);
 }
 
+PyObject *questGetQuestName(PyObject *poSelf, PyObject *poArgs)
+{
+	int iIndex;
+	if (!PyTuple_GetInteger(poArgs, 0, &iIndex))
+		return Py_BadArgument();
+
+	CPythonQuest::SQuestInstance *pQuestInstance;
+	if (!CPythonQuest::Instance().GetQuestInstancePtr(iIndex, &pQuestInstance))
+		return Py_BuildException("Failed to find quest by index %d", iIndex);
+
+	return Py_BuildValue("s", pQuestInstance->szQuestName);
+}
+
 PyObject * questGetQuestLastTime(PyObject * poSelf, PyObject * poArgs)
 {
 	int iIndex;
@@ -261,6 +275,7 @@ void initquest()
 		{ "GetQuestData",				questGetQuestData,				METH_VARARGS },
 		{ "GetQuestIndex",				questGetQuestIndex,				METH_VARARGS },
 		{ "GetQuestLastTime",			questGetQuestLastTime,			METH_VARARGS },
+		{ "GetQuestName", questGetQuestName, METH_VARARGS },
 		{ "Clear",						questClear,						METH_VARARGS },
 		{ NULL,							NULL,							NULL },
 	};

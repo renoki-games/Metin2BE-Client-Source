@@ -83,6 +83,7 @@ enum
     HEADER_CG_ADD_FLY_TARGETING                 = 53,
 	HEADER_CG_SHOOT								= 54,
 	HEADER_CG_MYSHOP                            = 55,
+	HEADER_CG_SCRIPT_BUTTON_BY_NAME = 58,
 	//HEADER_BLANK56								= 56,
 	//HEADER_BLANK57								= 57,
 	//HEADER_BLANK58								= 58,
@@ -441,6 +442,8 @@ enum
 
 	SKILL_MAX_LEVEL = 40,
 	TOGGLE_SKILL_P_DURATION = 600,
+
+	QUEST_NAME_MAX_LEN = 32,
 };
 
 #pragma pack(push)
@@ -2008,6 +2011,7 @@ typedef struct packet_quest_info
 	BYTE header;
 	WORD size;
 	WORD index;
+	char szQuestName[QUEST_NAME_MAX_LEN + 1];
 	BYTE flag;
 } TPacketGCQuestInfo;
 
@@ -2789,5 +2793,11 @@ typedef struct packet_unk_213
 	BYTE bHeader;
 	BYTE bUnk2;
 } TPacketGCUnk213;
+
+typedef struct command_script_button_by_name
+{
+	BYTE byHeader;
+	char szQuestName[QUEST_NAME_MAX_LEN + 1];
+} TPacketCGScriptButtonByName;
 
 #pragma pack(pop)

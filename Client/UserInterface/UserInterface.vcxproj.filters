@@ -91,9 +91,6 @@
     <ClCompile Include="PythonEventManager.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="PythonEventManagerMoudle.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
     <ClCompile Include="PythonGameEventManagerModule.cpp">
       <Filter>Game</Filter>
     </ClCompile>
@@ -317,6 +314,7 @@
     <ClCompile Include="MovieMan.cpp" />
     <ClCompile Include="StdAfx.cpp" />
     <ClCompile Include="UserInterface.cpp" />
+    <ClCompile Include="PythonEventManagerModule.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AffectFlagContainer.h">

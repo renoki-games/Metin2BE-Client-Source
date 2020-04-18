@@ -1,4 +1,5 @@
 #pragma once
+#include "Packet.h"
 
 class CPythonQuest : public CSingleton<CPythonQuest>
 {
@@ -14,6 +15,7 @@ class CPythonQuest : public CSingleton<CPythonQuest>
 			}
 
 			DWORD			dwIndex;
+			char szQuestName[QUEST_NAME_MAX_LEN + 1];
 
 			std::string		strIconFileName;
 			std::string		strTitle;
@@ -38,7 +40,7 @@ class CPythonQuest : public CSingleton<CPythonQuest>
 		void DeleteQuestInstance(DWORD dwIndex);
 
 		bool IsQuest(DWORD dwIndex);
-		void MakeQuest(DWORD dwIndex);
+		void MakeQuest(DWORD dwIndex, const char *c_szQuestName);
 
 		void SetQuestTitle(DWORD dwIndex, const char * c_szTitle);
 		void SetQuestClockName(DWORD dwIndex, const char * c_szClockName);

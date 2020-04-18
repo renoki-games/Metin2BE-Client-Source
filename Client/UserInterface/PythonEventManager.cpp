@@ -583,20 +583,21 @@ void CPythonEventManager::ProcessEventSet(TEventSet * pEventSet)
 
 			int idx = atoi(GetArgument("idx", ScriptCommand.argList));
 			const char * name = GetArgument("name", ScriptCommand.argList);
+			const char *c_szQuestName = GetArgument("quest_name", ScriptCommand.argList);
 
 			// 퀘스트 UI 리뉴얼이 되면 해결 되므로 일단 용혼석만 땜빵 by chrislee
 			if (!strcmp(name, "조각난 용혼석?....")) {
-				PyCallClassMemberFunc(m_poInterface, "BINARY_RecvQuest", Py_BuildValue("(isss)", idx, name, "highlight", ""));
+				PyCallClassMemberFunc(m_poInterface, "BINARY_RecvQuest", Py_BuildValue("(issss)", idx, name, "highlight", "", c_szQuestName));
 			}
 			else {
 				if (c_rstFile.empty())
 				{
-					PyCallClassMemberFunc(m_poInterface, "RecvQuest", Py_BuildValue("(is)", idx, name));
+					PyCallClassMemberFunc(m_poInterface, "RecvQuest", Py_BuildValue("(iss)", idx, name, c_szQuestName));
 				}
 				else
 				{
 					PyCallClassMemberFunc(m_poInterface, "BINARY_RecvQuest",
-						Py_BuildValue("(isss)", idx, name, c_rstType.c_str(), c_rstFile.c_str()));
+						Py_BuildValue("(issss)", idx, name, c_rstType.c_str(), c_rstFile.c_str(), c_szQuestName));
 				}
 			}
 			break;

@@ -229,17 +229,6 @@ PyObject * eventGetVisibleStartLine(PyObject * poSelf, PyObject * poArgs)
 	return Py_BuildValue("i", CPythonEventManager::Instance().GetVisibleStartLine(iIndex));
 }
 
-PyObject * eventQuestButtonClick(PyObject * poSelf, PyObject * poArgs)
-{
-	int iIndex;
-	if (!PyTuple_GetInteger(poArgs, 0, &iIndex))
-		return Py_BuildException();
-
-	CPythonNetworkStream::Instance().SendScriptButtonPacket(iIndex);
-
-	return Py_BuildNone();
-}
-
 PyObject * eventSetInterfaceWindow(PyObject* poSelf, PyObject* poArgs)
 {
 	PyObject * pyHandle;
@@ -266,6 +255,16 @@ PyObject * eventDestroy(PyObject* poSelf, PyObject* poArgs)
 {
 	CPythonEventManager & rpem = CPythonEventManager::Instance();
 	rpem.Destroy();
+	return Py_BuildNone();
+}
+
+PyObject* eventQuestButtonClickByName(PyObject* poSelf, PyObject* poArgs)
+{
+	char* szQuestName;
+	if (!PyTuple_GetString(poArgs, 0, &szQuestName))
+		return Py_BuildException();
+
+	CPythonNetworkStream::Instance().SendScriptButtonPacketByName(szQuestName);
 	return Py_BuildNone();
 }
 
@@ -301,8 +300,10 @@ void initEvent()
 		{ "SetInterfaceWindow",			eventSetInterfaceWindow,			METH_VARARGS },
 		{ "SetLeftTimeString",			eventSetLeftTimeString,				METH_VARARGS },
 
-		{ "QuestButtonClick",			eventQuestButtonClick,				METH_VARARGS },
 		{ "Destroy",					eventDestroy,						METH_VARARGS },
+
+		{ "QuestButtonClickByName", eventQuestButtonClickByName, METH_VARARGS },
+
 		{ NULL,							NULL,								NULL         },
 	};
 
