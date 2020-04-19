@@ -630,6 +630,10 @@ void CPythonNetworkStream::GamePhase()
 				ret = RecvUnk213();
 				break;
 
+			case HEADER_GC_REFRESH_GM_STATE:
+				ret = RecvRefreshGMState();
+				break;
+
 			default:
 				ret = RecvDefaultPacket(header);
 				break;
@@ -4458,4 +4462,44 @@ bool CPythonNetworkStream::SendScriptButtonPacketByName(const char* c_szQuestNam
 	}
 
 	return SendSequence();
+}
+
+bool CPythonNetworkStream::RecvRefreshGMState()
+{
+	TPacketGCRefreshGMState kRefreshGMStatePacket;
+	if (!Recv(sizeof(kRefreshGMStatePacket), &kRefreshGMStatePacket))
+		return false;
+
+	std::vector<BYTE> tmpVec;
+
+	const WORD wSize = kRefreshGMStatePacket.wSize - sizeof(TPacketGCRefreshGMState);
+	tmpVec.resize(wSize);
+
+	if (!Recv(wSize, tmpVec.data()))
+		return false;
+
+	TSimpleGMState* pResult = (TSimpleGMState*)&tmpVec[0];
+
+	bool bClear = kRefreshGMStatePacket.bClear;
+
+
+	PyObject* py = PyList_New(0);
+
+	for(int i = 0; i < kRefreshGMStatePacket.byCount; ++i)
+	{
+		const char* c_szName = pResult[i].szName;
+		bool bState = pResult[i].bState;
+		DWORD dwLanguages = pResult[i].dwLanguages;
+
+		PyObject* pyResultDict = PyDict_New();
+
+		PyDict_SetItem(pyResultDict, Py_BuildValue("s", "name"), Py_BuildValue("s", c_szName));
+		PyDict_SetItem(pyResultDict, Py_BuildValue("s", "state"), Py_BuildValue("i", bState));
+		PyDict_SetItem(pyResultDict, Py_BuildValue("s", "languages"), Py_BuildValue("i", dwLanguages));
+
+		PyList_Append(py, pyResultDict);
+	}
+
+	PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "BINARY_UpdateTeamlist", Py_BuildValue("(Ob)", py, bClear));
+	return true;
 }

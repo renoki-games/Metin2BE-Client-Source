@@ -363,6 +363,8 @@ enum
 	// @fixme007
 	HEADER_GC_UNK_213							= 213,
 
+	HEADER_GC_REFRESH_GM_STATE = 214,
+
 	HEADER_GC_KEY_AGREEMENT_COMPLETED			= 0xfa, // _IMPROVED_PACKET_ENCRYPTION_
 	HEADER_GC_KEY_AGREEMENT						= 0xfb, // _IMPROVED_PACKET_ENCRYPTION_
 	HEADER_GC_HANDSHAKE_OK						= 0xfc, // 252
@@ -2799,5 +2801,25 @@ typedef struct command_script_button_by_name
 	BYTE byHeader;
 	char szQuestName[QUEST_NAME_MAX_LEN + 1];
 } TPacketCGScriptButtonByName;
+
+typedef struct TSimpleGMState
+{
+	TSimpleGMState()
+	{
+		memset(szName, 0, sizeof(szName));
+	}
+
+	char szName[CHARACTER_NAME_MAX_LEN + 1];
+	bool bState;
+	DWORD dwLanguages;
+} TSimpleGMState;
+
+typedef struct SPacketGCRefreshGMState
+{
+	BYTE byHeader;
+	WORD wSize;
+	BYTE byCount;
+	bool bClear;
+} TPacketGCRefreshGMState;
 
 #pragma pack(pop)

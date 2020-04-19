@@ -556,6 +556,8 @@ class CPythonNetworkStream : public CNetworkStream, public CSingleton<CPythonNet
 		// @fixme007
 		bool RecvUnk213();
 
+		bool RecvRefreshGMState();
+
 	protected:
 		// 이모티콘
 		bool ParseEmoticon(const char * pChatMsg, DWORD * pdwEmoticon);
