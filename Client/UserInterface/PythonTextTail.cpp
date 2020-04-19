@@ -249,7 +249,7 @@ void CPythonTextTail::ArrangeTextTail()
 				}
 				else
 				{
-					pTitle->SetPosition(pTextTail->x - (iNameWidth / 2), pTextTail->y, pTextTail->z);
+					pTitle->SetPosition(pTextTail->x - (iNameWidth / 2) + 4.0f, pTextTail->y, pTextTail->z);
 				}
 			}
 			else
