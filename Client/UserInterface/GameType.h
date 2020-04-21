@@ -31,6 +31,18 @@ struct SAffects
 	DWORD dwAffects;
 };
 
+enum enum_RefineScrolls
+{
+	CHUKBOK_SCROLL = 0,
+	HYUNIRON_CHN   = 1, // 중국에서만 사용
+	YONGSIN_SCROLL = 2,
+	MUSIN_SCROLL   = 3,
+	YAGONG_SCROLL  = 4,
+	MEMO_SCROLL	   = 5,
+	BDRAGON_SCROLL	= 6,
+	FAIL_SCROLL	= 7,
+};
+
 extern std::string g_strGuildSymbolPathName;
 
 const DWORD c_Name_Max_Length = 64;

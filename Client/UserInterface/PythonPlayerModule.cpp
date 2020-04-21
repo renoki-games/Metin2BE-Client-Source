@@ -1397,7 +1397,7 @@ PyObject * playerCanRefine(PyObject * poSelf, PyObject * poArgs)
 	if (CItemData::ITEM_TYPE_ROD == iTargetType)
 		return Py_BuildValue("i", REFINE_CANT_REFINE_ROD);
 
-	if (pTargetItemData->HasNextGrade())
+	if (pTargetItemData->HasNextGrade() || pScrollItemData->GetValue(0) == FAIL_SCROLL)
 	{
 		return Py_BuildValue("i", REFINE_OK);
 	}
