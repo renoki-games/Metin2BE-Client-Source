@@ -1207,7 +1207,7 @@ PyObject * playerIsEquipmentSlot(PyObject* poSelf, PyObject* poArgs)
 		return Py_BuildException();
 
 	if (iSlotIndex >= c_Equipment_Start)
-	if (iSlotIndex <= c_ItemSlot_Count)
+	if (iSlotIndex <= c_Inventory_Count)
 		return Py_BuildValue("i", 1);
 
 	return Py_BuildValue("i", 0);
