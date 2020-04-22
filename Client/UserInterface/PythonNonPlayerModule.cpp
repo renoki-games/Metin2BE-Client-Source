@@ -87,6 +87,25 @@ PyObject * nonplayerLoadNonPlayerData(PyObject * poSelf, PyObject * poArgs)
 	return Py_BuildNone();
 }
 
+PyObject *nonplayerGetRaceNumByVID(PyObject *poSelf, PyObject *poArgs)
+{
+	int iVirtualID;
+	if (!PyTuple_GetInteger(poArgs, 0, &iVirtualID))
+		return Py_BuildException();
+
+	CInstanceBase *pInstance = CPythonCharacterManager::Instance().GetInstancePtr(iVirtualID);
+
+	if (!pInstance)
+		return Py_BuildValue("i", -1);
+
+	const CPythonNonPlayer::TMobTable *pMobTable = CPythonNonPlayer::Instance().GetTable(pInstance->GetVirtualNumber());
+
+	if (!pMobTable)
+		return Py_BuildValue("i", -1);
+
+	return Py_BuildValue("i", pMobTable->dwVnum);
+}
+
 void initNonPlayer()
 {
 	static PyMethodDef s_methods[] =
@@ -96,6 +115,7 @@ void initNonPlayer()
 		{ "GetLevelByVID",				nonplayerGetLevelByVID,				METH_VARARGS },
 		{ "GetGradeByVID",				nonplayerGetGradeByVID,				METH_VARARGS },
 		{ "GetMonsterName",				nonplayerGetMonsterName,			METH_VARARGS },
+		{ "GetRaceNumByVID", nonplayerGetRaceNumByVID, METH_VARARGS },
 
 		{ "LoadNonPlayerData",			nonplayerLoadNonPlayerData,			METH_VARARGS },
 
