@@ -1912,6 +1912,9 @@ typedef struct packet_exchange
     DWORD       arg1;
     TItemPos       arg2;
     DWORD       arg3;
+#ifdef WJ_ENABLE_TRADABLE_ICON
+    TItemPos       arg4;
+#endif
 	long		alValues[ITEM_SOCKET_SLOT_MAX_NUM];
     TPlayerItemAttribute aAttr[ITEM_ATTRIBUTE_SLOT_MAX_NUM];
 } TPacketGCExchange;

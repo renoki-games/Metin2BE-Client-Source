@@ -43,6 +43,21 @@ enum enum_RefineScrolls
 	FAIL_SCROLL	= 7,
 };
 
+#ifdef WJ_ENABLE_TRADABLE_ICON
+enum ETopWindowTypes
+{
+	ON_TOP_WND_NONE,
+	ON_TOP_WND_SHOP,
+	ON_TOP_WND_EXCHANGE,
+	ON_TOP_WND_SAFEBOX,
+	ON_TOP_WND_PRIVATE_SHOP,
+	ON_TOP_WND_ITEM_COMB,
+	ON_TOP_WND_PET_FEED,
+
+	ON_TOP_WND_MAX,
+};
+#endif
+
 extern std::string g_strGuildSymbolPathName;
 
 const DWORD c_Name_Max_Length = 64;

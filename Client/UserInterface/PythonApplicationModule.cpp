@@ -1675,4 +1675,8 @@ void initapp()
 	PyModule_AddIntConstant(poModule, "USE_OPENID",	0);
 	PyModule_AddIntConstant(poModule, "OPENID_TEST",	0);
 #endif /* USE_OPENID */
+
+#ifdef WJ_ENABLE_TRADABLE_ICON
+	PyModule_AddIntConstant(poModule, "WJ_ENABLE_TRADABLE_ICON", 1);
+#endif
 }

@@ -8,6 +8,7 @@
 
 #include "PythonGraphic.h"
 #include "PythonWindowManager.h"
+#include "../UserInterface/Locale_inc.h"
 
 void initgrp();
 void initgrpImage();
