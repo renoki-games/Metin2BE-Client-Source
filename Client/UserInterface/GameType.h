@@ -286,7 +286,7 @@ typedef struct packet_item
 typedef struct packet_shop_item
 {
     DWORD       vnum;
-    DWORD       price;
+    GoldType       price;
     BYTE        count;
 	BYTE		display_pos;
 	long		alSockets[ITEM_SOCKET_SLOT_MAX_NUM];

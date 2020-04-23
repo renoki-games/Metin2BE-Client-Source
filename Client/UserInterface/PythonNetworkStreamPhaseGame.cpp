@@ -1541,7 +1541,9 @@ bool CPythonNetworkStream::RecvPointChange()
 		{
 			if (PointChange.amount > 0)
 			{
-				PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "OnPickMoney", Py_BuildValue("(i)", PointChange.amount));
+				PyObject *args = PyTuple_New(1);
+				PyTuple_SetItem(args, 0, PyLong_FromLongLong(PointChange.amount));
+				PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "OnPickMoney", args);
 			}
 		}
 	}
@@ -1767,8 +1769,12 @@ bool CPythonNetworkStream::RecvShopPacket()
 			break;
 
 		case SHOP_SUBHEADER_GC_UPDATE_PRICE:
-			PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "SetShopSellingPrice", Py_BuildValue("(i)", *(int *)&vecBuffer[0]));
-			break;
+		{
+			PyObject* args = PyTuple_New(1);
+			PyTuple_SetItem(args, 0, PyLong_FromLongLong(*(GoldType*)&vecBuffer[0]));
+			PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "SetShopSellingPrice", args);
+		}
+		break;
 
 		case SHOP_SUBHEADER_GC_NOT_ENOUGH_MONEY:
 			PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "OnShopError", Py_BuildValue("(s)", "NOT_ENOUGH_MONEY"));
@@ -2109,7 +2115,7 @@ bool CPythonNetworkStream::SendExchangeStartPacket(DWORD vid)
 	return SendSequence();
 }
 
-bool CPythonNetworkStream::SendExchangeElkAddPacket(DWORD elk)
+bool CPythonNetworkStream::SendExchangeElkAddPacket(GoldType elk)
 {
 	if (!__CanActMainInstance())
 		return true;
@@ -3771,7 +3777,7 @@ bool CPythonNetworkStream::RecvGuild()
 		}
 		case GUILD_SUBHEADER_GC_MONEY_CHANGE:
 		{
-			DWORD dwMoney;
+			GoldType dwMoney;
 			if (!Recv(sizeof(dwMoney), &dwMoney))
 				return false;
 

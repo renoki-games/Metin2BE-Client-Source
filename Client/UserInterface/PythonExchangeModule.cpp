@@ -12,14 +12,14 @@ PyObject * exchangeisTrading(PyObject * poSelf, PyObject * poArgs)
 	return Py_BuildValue("i", CPythonExchange::Instance().isTrading());
 }
 
-PyObject * exchangeGetElkFromSelf(PyObject * poSelf, PyObject * poArgs)
+PyObject *exchangeGetElkFromSelf(PyObject *poSelf, PyObject *poArgs)
 {
-	return Py_BuildValue("i", CPythonExchange::Instance().GetElkFromSelf());
+	return PyLong_FromLongLong(CPythonExchange::Instance().GetElkFromSelf());
 }
 
-PyObject * exchangeGetElkFromTarget(PyObject * poSelf, PyObject * poArgs)
+PyObject *exchangeGetElkFromTarget(PyObject *poSelf, PyObject *poArgs)
 {
-	return Py_BuildValue("i", CPythonExchange::Instance().GetElkFromTarget());
+	return PyLong_FromLongLong(CPythonExchange::Instance().GetElkFromTarget());
 }
 
 PyObject * exchangeGetAcceptFromSelf(PyObject * poSelf, PyObject * poArgs)

@@ -20,7 +20,7 @@ class CPythonGuild : public CSingleton<CPythonGuild>
 			DWORD dwCurrentExperience;
 			DWORD dwCurrentMemberCount;
 			DWORD dwMaxMemberCount;
-			DWORD dwGuildMoney;
+			GoldType dwGuildMoney;
 			BOOL bHasLand;
 		} TGuildInfo;
 
@@ -71,7 +71,7 @@ class CPythonGuild : public CSingleton<CPythonGuild>
 		void Destroy();
 
 		void EnableGuild();
-		void SetGuildMoney(DWORD dwMoney);
+		void SetGuildMoney(GoldType dwMoney);
 		void SetGuildEXP(BYTE byLevel, DWORD dwEXP);
 		void SetGradeData(BYTE byGradeNumber, TGuildGradeData & rGuildGradeData);
 		void SetGradeName(BYTE byGradeNumber, const char * c_szName);

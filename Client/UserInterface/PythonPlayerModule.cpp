@@ -524,7 +524,7 @@ PyObject * playerGetStatus(PyObject* poSelf, PyObject* poArgs)
 	if (!PyTuple_GetInteger(poArgs, 0, &iType))
 		return Py_BuildException();
 
-	long iValue = CPythonPlayer::Instance().GetStatus(iType);
+	GoldType iValue = CPythonPlayer::Instance().GetStatus(iType);
 
 	if (POINT_ATT_SPEED == iType)
 	{
@@ -535,7 +535,7 @@ PyObject * playerGetStatus(PyObject* poSelf, PyObject* poArgs)
 		}
 	}
 
-	return Py_BuildValue("i", iValue);
+	return PyLong_FromLongLong(iValue);
 }
 
 PyObject * playerSetStatus(PyObject* poSelf, PyObject* poArgs)
@@ -544,8 +544,8 @@ PyObject * playerSetStatus(PyObject* poSelf, PyObject* poArgs)
 	if (!PyTuple_GetInteger(poArgs, 0, &iType))
 		return Py_BuildException();
 
-	int iValue;
-	if (!PyTuple_GetInteger(poArgs, 1, &iValue))
+	GoldType iValue;
+	if (!PyTuple_GetLongLong(poArgs, 1, &iValue))
 		return Py_BuildException();
 
 	CPythonPlayer::Instance().SetStatus(iType, iValue);
@@ -554,7 +554,7 @@ PyObject * playerSetStatus(PyObject* poSelf, PyObject* poArgs)
 
 PyObject * playerGetElk(PyObject* poSelf, PyObject* poArgs)
 {
-	return Py_BuildValue("i", CPythonPlayer::Instance().GetStatus(POINT_GOLD));
+	return PyLong_FromLongLong(CPythonPlayer::Instance().GetStatus(POINT_GOLD));
 }
 
 PyObject * playerGetGuildID(PyObject* poSelf, PyObject* poArgs)
@@ -1031,7 +1031,7 @@ PyObject * playerGetISellItemPrice(PyObject * poSelf, PyObject * poArgs)
 	if (!CItemManager::Instance().GetItemDataPointer(CPythonPlayer::Instance().GetItemIndex(Cell), &pItemData))
 		return Py_BuildValue("i", 0);
 
-	int iPrice;
+	GoldType iPrice;
 
 	if (pItemData->IsFlag(CItemData::ITEM_FLAG_COUNT_PER_1GOLD))
 		iPrice = CPythonPlayer::Instance().GetItemCount(Cell) / pItemData->GetISellItemPrice();
@@ -1039,7 +1039,7 @@ PyObject * playerGetISellItemPrice(PyObject * poSelf, PyObject * poArgs)
 		iPrice = pItemData->GetISellItemPrice() * CPythonPlayer::Instance().GetItemCount(Cell);
 
 	iPrice /= 5;
-	return Py_BuildValue("i", iPrice);
+	return PyLong_FromLongLong(iPrice);
 }
 
 PyObject * playerGetQuickPage(PyObject* poSelf, PyObject* poArgs)

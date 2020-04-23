@@ -26,7 +26,7 @@ class CPythonExchange : public CSingleton<CPythonExchange>
 			TPlayerItemAttribute	item_attr[EXCHANGE_ITEM_MAX_NUM][ITEM_ATTRIBUTE_SLOT_MAX_NUM];
 
 			BYTE					accept;
-			DWORD					elk;
+			GoldType					elk;
 		} TExchangeData;
 
 	public:
@@ -55,11 +55,11 @@ class CPythonExchange : public CSingleton<CPythonExchange>
 		DWORD			GetLevelFromTarget();
 #endif
 
-		void			SetElkToTarget(DWORD elk);
-		void			SetElkToSelf(DWORD elk);
+		void			SetElkToTarget(GoldType elk);
+		void			SetElkToSelf(GoldType elk);
 
-		DWORD			GetElkFromTarget();
-		DWORD			GetElkFromSelf();
+		GoldType			GetElkFromTarget();
+		GoldType			GetElkFromSelf();
 
 		void			SetItemToTarget(DWORD pos, DWORD vnum, BYTE count);
 		void			SetItemToSelf(DWORD pos, DWORD vnum, BYTE count);

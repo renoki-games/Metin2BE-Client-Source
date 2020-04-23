@@ -10,6 +10,8 @@
 #define ENABLE_SHINING_SYSTEM
 #define WJ_ENABLE_TRADABLE_ICON
 
+typedef long long GoldType;
+
 //////////////////////////////////////////////////////////////////////////
 // ### New From LocaleInc ###
 #define ENABLE_PACK_GET_CHECK

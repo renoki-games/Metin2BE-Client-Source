@@ -739,7 +739,7 @@ typedef struct command_exchange
 {
 	BYTE		header;
 	BYTE		subheader;
-	DWORD		arg1;
+	GoldType		arg1;
 	BYTE		arg2;
 	TItemPos	Pos;
 } TPacketCGExchange;
@@ -1036,7 +1036,7 @@ typedef struct SShopItemTable
     BYTE		count;
 
     TItemPos	pos;			// PC 상점에만 이용
-    DWORD		price;			// PC 상점에만 이용
+    GoldType		price;			// PC 상점에만 이용
     BYTE		display_pos;	//	PC 상점에만 이용, 보일 위치.
 } TShopItemTable;
 
@@ -1699,7 +1699,7 @@ enum EPointTypes
 typedef struct packet_points
 {
     BYTE        header;
-    long        points[POINT_MAX_NUM];
+    GoldType        points[POINT_MAX_NUM];
 } TPacketGCPoints;
 
 typedef struct packet_point_change
@@ -1709,8 +1709,8 @@ typedef struct packet_point_change
 	DWORD		dwVID;
 	BYTE		Type;
 
-	long        amount; // 바뀐 값
-    long        value;  // 현재 값
+	GoldType        amount; // 바뀐 값
+    GoldType        value;  // 현재 값
 } TPacketGCPointChange;
 
 typedef struct packet_motion
@@ -1878,7 +1878,7 @@ typedef struct packet_shop_update_item
 
 typedef struct packet_shop_update_price
 {
-	int iElkAmount;
+	GoldType iElkAmount;
 } TPacketGCShopUpdatePrice;
 
 enum EPacketShopSubHeaders
@@ -1909,7 +1909,7 @@ typedef struct packet_exchange
     BYTE        header;
     BYTE        subheader;
     BYTE        is_me;
-    DWORD       arg1;
+    GoldType       arg1;
     TItemPos       arg2;
     DWORD       arg3;
 #ifdef WJ_ENABLE_TRADABLE_ICON
@@ -2285,7 +2285,7 @@ typedef struct packet_guild_sub_info
     DWORD exp;
     BYTE level;
     char name[GUILD_NAME_MAX_LEN+1];
-	DWORD gold;
+	GoldType gold;
 	BYTE hasLand;
 } TPacketGCGuildInfo;
 
@@ -2376,7 +2376,7 @@ typedef struct SRefineTable
     DWORD src_vnum;
     DWORD result_vnum;
     BYTE material_count;
-    int cost; // 소요 비용
+    GoldType cost; // 소요 비용
     int prob; // 확률
     TMaterial materials[REFINE_MATERIAL_MAX_NUM];
 } TRefineTable;

@@ -539,8 +539,8 @@ class CItemData
 			DWORD       dwWearFlags;
 			DWORD       dwImmuneFlag;
 
-			DWORD       dwIBuyItemPrice;
-			DWORD		dwISellItemPrice;
+			GoldType       dwIBuyItemPrice;
+			GoldType		dwISellItemPrice;
 
 			TItemLimit  aLimits[ITEM_LIMIT_MAX_NUM];
 			TItemApply  aApplies[ITEM_APPLY_MAX_NUM];
@@ -570,8 +570,8 @@ class CItemData
 			DWORD       dwWearFlags;
 			DWORD       dwImmuneFlag;
 
-			DWORD       dwIBuyItemPrice;
-			DWORD		dwISellItemPrice;
+			GoldType       dwIBuyItemPrice;
+			GoldType		dwISellItemPrice;
 
 			TItemLimit  aLimits[ITEM_LIMIT_MAX_NUM];
 			TItemApply  aApplies[ITEM_APPLY_MAX_NUM];
@@ -601,8 +601,8 @@ class CItemData
 			DWORD       dwWearFlags;
 			DWORD       dwImmuneFlag;
 
-			DWORD       dwIBuyItemPrice;
-			DWORD		dwISellItemPrice;
+			GoldType       dwIBuyItemPrice;
+			GoldType		dwISellItemPrice;
 
 			TItemLimit  aLimits[ITEM_LIMIT_MAX_NUM];
 			TItemApply  aApplies[ITEM_APPLY_MAX_NUM];
@@ -744,8 +744,8 @@ class CItemData
 		BOOL IsWearableFlag(DWORD dwFlag) const;
 		BOOL HasNextGrade() const;
 		DWORD GetWearFlags() const;
-		DWORD GetIBuyItemPrice() const;
-		DWORD GetISellItemPrice() const;
+		GoldType GetIBuyItemPrice() const;
+		GoldType GetISellItemPrice() const;
 		BOOL GetLimit(BYTE byIndex, TItemLimit * pItemLimit) const;
 		BOOL GetApply(BYTE byIndex, TItemApply * pItemApply) const;
 		long GetValue(BYTE byIndex) const;

@@ -14,7 +14,7 @@ class IAbstractPlayer : public TAbstractSingleton<IAbstractPlayer>
 		virtual void	SetMainCharacterIndex(int iIndex) = 0;
 		virtual bool	IsMainCharacterIndex(DWORD dwIndex) = 0;
 
-		virtual int		GetStatus(DWORD dwType) = 0;
+		virtual GoldType		GetStatus(DWORD dwType) = 0;
 
 		virtual const char *	GetName() = 0;
 

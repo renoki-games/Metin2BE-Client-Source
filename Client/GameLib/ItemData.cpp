@@ -334,12 +334,12 @@ DWORD CItemData::GetWearFlags() const
 	return m_ItemTable.dwWearFlags;
 }
 
-DWORD CItemData::GetIBuyItemPrice() const
+GoldType CItemData::GetIBuyItemPrice() const
 {
 	return m_ItemTable.dwIBuyItemPrice;
 }
 
-DWORD CItemData::GetISellItemPrice() const
+GoldType CItemData::GetISellItemPrice() const
 {
 	return m_ItemTable.dwISellItemPrice;
 }

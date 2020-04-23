@@ -43,22 +43,22 @@ DWORD CPythonExchange::GetLevelFromTarget()
 }
 #endif
 
-void CPythonExchange::SetElkToTarget(DWORD	elk)
+void CPythonExchange::SetElkToTarget(GoldType elk)
 {
 	m_victim.elk = elk;
 }
 
-void CPythonExchange::SetElkToSelf(DWORD elk)
+void CPythonExchange::SetElkToSelf(GoldType elk)
 {
 	m_self.elk = elk;
 }
 
-DWORD CPythonExchange::GetElkFromTarget()
+GoldType CPythonExchange::GetElkFromTarget()
 {
 	return m_victim.elk;
 }
 
-DWORD CPythonExchange::GetElkFromSelf()
+GoldType CPythonExchange::GetElkFromSelf()
 {
 	return m_self.elk;
 }
