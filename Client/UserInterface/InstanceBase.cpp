@@ -254,7 +254,7 @@ bool CInstanceBase::SHORSE::CanUseSkill()
 {
 	// 마상스킬은 말의 레벨이 3 이상이어야만 함.
 	if (IsMounting())
-		return 2 < GetLevel();
+		return GetLevel() >= 2;
 
 	return true;
 }
