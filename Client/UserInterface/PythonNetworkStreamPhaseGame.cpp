@@ -4075,7 +4075,7 @@ bool CPythonNetworkStream::RecvRefineInformationPacket()
 	TRefineTable & rkRefineTable = kRefineInfoPacket.refine_table;
 	PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME],
 		"OpenRefineDialog",
-		Py_BuildValue("(iiii)",
+		Py_BuildValue("(iiLi)",
 			kRefineInfoPacket.pos,
 			kRefineInfoPacket.refine_table.result_vnum,
 			rkRefineTable.cost,
@@ -4106,7 +4106,7 @@ bool CPythonNetworkStream::RecvRefineInformationPacketNew()
 	TRefineTable & rkRefineTable = kRefineInfoPacket.refine_table;
 	PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME],
 		"OpenRefineDialog",
-		Py_BuildValue("(iiiii)",
+		Py_BuildValue("(iiLii)",
 			kRefineInfoPacket.pos,
 			kRefineInfoPacket.refine_table.result_vnum,
 			rkRefineTable.cost,
