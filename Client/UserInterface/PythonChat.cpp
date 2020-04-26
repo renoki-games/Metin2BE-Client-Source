@@ -33,6 +33,7 @@ CPythonChat::SChatLine* CPythonChat::SChatLine::New()
 void CPythonChat::SChatLine::Delete(CPythonChat::SChatLine* pkChatLine)
 {
 	pkChatLine->Instance.Destroy();
+	pkChatLine->EmpireInstance.Destroy();
 	ms_kPool.Free(pkChatLine);
 }
 
@@ -78,6 +79,7 @@ CPythonChat::SChatLine::SChatLine()
 CPythonChat::SChatLine::~SChatLine()
 {
 	Instance.Destroy();
+	EmpireInstance.Destroy();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -137,6 +139,7 @@ void CPythonChat::UpdateViewMode(DWORD dwID)
 		pChatLine->Instance.SetPosition(pChatSet->m_ix, pChatSet->m_iy + iHeight);
 		pChatLine->Instance.SetColor(rColor);
 		pChatLine->Instance.Update();
+		pChatLine->EmpireInstance.SetPosition(pChatSet->m_ix - 37, pChatSet->m_iy + iHeight + 1);
 	}
 }
 
@@ -178,6 +181,7 @@ void CPythonChat::UpdateEditMode(DWORD dwID)
 		pChatLine->Instance.SetPosition(pChatSet->m_ix, pChatSet->m_iy + iHeight);
 		pChatLine->Instance.SetColor(rColor);
 		pChatLine->Instance.Update();
+		pChatLine->EmpireInstance.SetPosition(pChatSet->m_ix - 37, pChatSet->m_iy + iHeight + 1);
 	}
 }
 
@@ -198,6 +202,7 @@ void CPythonChat::UpdateLogMode(DWORD dwID)
 		pChatLine->Instance.SetPosition(pChatSet->m_ix, pChatSet->m_iy + iHeight);
 		pChatLine->Instance.SetColor(pChatLine->GetColorRef(dwID));
 		pChatLine->Instance.Update();
+		pChatLine->EmpireInstance.SetPosition(pChatSet->m_ix - 37, pChatSet->m_iy + iHeight + 1);
 	}
 }
 
@@ -248,6 +253,9 @@ void CPythonChat::Render(DWORD dwID)
 	{
 		CGraphicTextInstance & rInstance = (*itor)->Instance;
 		rInstance.Render();
+
+		CGraphicExpandedImageInstance &empireInstance = (*itor)->EmpireInstance;
+		empireInstance.Render();
 	}
 }
 
@@ -357,9 +365,9 @@ int CPythonChat::GetLineCount(DWORD dwID)
 		return 0;
 
 	int iCount = 0;
-	for (DWORD i = 0; i < m_ChatLineDeque.size(); ++i)
+	for (DWORD i = 0; i < m_ChatLineDeque[dwID].size(); ++i)
 	{
-		if (!pChatSet->CheckMode(m_ChatLineDeque[i]->iType))
+		if (!pChatSet->CheckMode(m_ChatLineDeque[dwID][i]->iType))
 			continue;
 
 		++iCount;
@@ -406,7 +414,7 @@ void CPythonChat::ArrangeShowingChat(DWORD dwID)
 	pChatSet->m_ShowingChatLineList.clear();
 
 	TChatLineDeque TempChatLineDeque;
-	for (TChatLineDeque::iterator itor = m_ChatLineDeque.begin(); itor != m_ChatLineDeque.end(); ++itor)
+	for (TChatLineDeque::iterator itor = m_ChatLineDeque[dwID].begin(); itor != m_ChatLineDeque[dwID].end(); ++itor)
 	{
 		TChatLine * pChatLine = *itor;
 		if (pChatSet->CheckMode(pChatLine->iType))
@@ -436,12 +444,12 @@ void CPythonChat::ArrangeShowingChat(DWORD dwID)
 	}
 }
 
-void CPythonChat::AppendChat(int iType, const char * c_szChat)
+void CPythonChat::AppendChat(int iType, const char *c_szChat)
 {
 	// DEFAULT_FONT
 	//static CResource * s_pResource = CResourceManager::Instance().GetResourcePointer(g_strDefaultFontName.c_str());
 
-	CGraphicText* pkDefaultFont = static_cast<CGraphicText*>(DefaultFont_GetResource());
+	CGraphicText *pkDefaultFont = static_cast<CGraphicText *>(DefaultFont_GetResource());
 	if (!pkDefaultFont)
 	{
 		TraceError("CPythonChat::AppendChat - CANNOT_FIND_DEFAULT_FONT");
@@ -449,37 +457,120 @@ void CPythonChat::AppendChat(int iType, const char * c_szChat)
 	}
 	// END_OF_DEFAULT_FONT
 
-	IAbstractApplication& rApp=IAbstractApplication::GetSingleton();
-	SChatLine * pChatLine = SChatLine::New();
-	pChatLine->iType = iType;
-	pChatLine->Instance.SetValue(c_szChat);
-
-	// DEFAULT_FONT
-	pChatLine->Instance.SetTextPointer(pkDefaultFont);
-	// END_OF_DEFAULT_FONT
-
-	pChatLine->fAppendedTime = rApp.GetGlobalTime();
-	pChatLine->SetColorAll(GetChatColor(iType));
-
-	m_ChatLineDeque.push_back(pChatLine);
-	if (m_ChatLineDeque.size() > CHAT_LINE_MAX_NUM)
+	for (std::map<DWORD, TChatLineDeque>::iterator iterator = m_ChatLineDeque.begin(); iterator != m_ChatLineDeque.end(); ++iterator)
 	{
-		SChatLine * pChatLine = m_ChatLineDeque.front();
-		SChatLine::Delete(pChatLine);
-		m_ChatLineDeque.pop_front();
-	}
 
-	for (TChatSetMap::iterator itor = m_ChatSetMap.begin(); itor != m_ChatSetMap.end(); ++itor)
-	{
-		TChatSet * pChatSet = &(itor->second);
+		IAbstractApplication &rApp = IAbstractApplication::GetSingleton();
+		SChatLine *pChatLine = SChatLine::New();
+		pChatLine->iType = iType;
+		pChatLine->Instance.SetValue(c_szChat);
+
+		// DEFAULT_FONT
+		pChatLine->Instance.SetTextPointer(pkDefaultFont);
+		// END_OF_DEFAULT_FONT
+
+		pChatLine->fAppendedTime = rApp.GetGlobalTime();
+		pChatLine->SetColorAll(GetChatColor(iType));
+
+		TChatLineDeque &queue = iterator->second;
+		queue.push_back(pChatLine);
+		if (queue.size() > CHAT_LINE_MAX_NUM)
+		{
+			SChatLine *pChatLine = queue.front();
+			SChatLine::Delete(pChatLine);
+			queue.pop_front();
+		}
+
+		TChatSet *pChatSet = &(m_ChatSetMap[iterator->first]);
+
 		//pChatLine->SetColor(itor->first, GetChatColor(iType));
 
 		// Edit Mode 를 억지로 끼워 맞추기 위해 추가
 		if (BOARD_STATE_EDIT == pChatSet->m_iBoardState)
 		{
-			ArrangeShowingChat(itor->first);
+			ArrangeShowingChat(iterator->first);
 		}
-		else// if (BOARD_STATE_VIEW == pChatSet->m_iBoardState)
+		else // if (BOARD_STATE_VIEW == pChatSet->m_iBoardState)
+		{
+			pChatSet->m_ShowingChatLineList.push_back(pChatLine);
+			if (pChatSet->m_ShowingChatLineList.size() > CHAT_LINE_MAX_NUM)
+			{
+				pChatSet->m_ShowingChatLineList.pop_front();
+			}
+		}
+	}
+}
+
+void CPythonChat::AppendPlayerChat(int iType, const char *c_szChat, int empire)
+{
+	// DEFAULT_FONT
+	//static CResource * s_pResource = CResourceManager::Instance().GetResourcePointer(g_strDefaultFontName.c_str());
+
+	CGraphicText *pkDefaultFont = static_cast<CGraphicText *>(DefaultFont_GetResource());
+	if (!pkDefaultFont)
+	{
+		TraceError("CPythonChat::AppendChat - CANNOT_FIND_DEFAULT_FONT");
+		return;
+	}
+	// END_OF_DEFAULT_FONT
+
+	for (std::map<DWORD, TChatLineDeque>::iterator iterator = m_ChatLineDeque.begin(); iterator != m_ChatLineDeque.end(); ++iterator)
+	{
+
+		IAbstractApplication &rApp = IAbstractApplication::GetSingleton();
+		SChatLine *pChatLine = SChatLine::New();
+		pChatLine->iType = iType;
+		pChatLine->Instance.SetValue(c_szChat);
+
+		// DEFAULT_FONT
+		pChatLine->Instance.SetTextPointer(pkDefaultFont);
+		// END_OF_DEFAULT_FONT
+
+		char empireFlagFileName[256];
+		sprintf(empireFlagFileName, "d:/ymir work/ui/assets/empireflag/empireflag_%c.png", 'a' + (empire - 1));
+
+		CResource *pEmpireResource = CResourceManager::Instance().GetResourcePointer(empireFlagFileName);
+
+		if (!pEmpireResource)
+		{
+			TraceError("AppendChat - [%s] NOT EXIST", empireFlagFileName);
+			return;
+		}
+
+		if (pEmpireResource->IsType(CGraphicImage::Type()))
+		{
+			CGraphicExpandedImageInstance &imgRef = pChatLine->EmpireInstance;
+			imgRef.SetRenderingMode(CGraphicExpandedImageInstance::RENDERING_MODE_SCREEN);
+			imgRef.SetImagePointer(static_cast<CGraphicSubImage *>(pEmpireResource));
+
+			float fScaleX = 28.0f / imgRef.GetWidth();
+			float fScaleY = 12.0f / imgRef.GetHeight();
+			pChatLine->EmpireInstance.SetScale(fScaleX, fScaleY);
+		}
+
+		pChatLine->fAppendedTime = rApp.GetGlobalTime();
+		pChatLine->SetColorAll(GetChatColor(iType));
+
+		TChatLineDeque &queue = iterator->second;
+		queue.push_back(pChatLine);
+		if (queue.size() > CHAT_LINE_MAX_NUM)
+		{
+			SChatLine *pChatLine = queue.front();
+			SChatLine::Delete(pChatLine);
+			queue.pop_front();
+		}
+
+		TChatSet *pChatSet = &(m_ChatSetMap[iterator->first]);
+
+		//pChatLine->SetColor(itor->first, GetChatColor(iType));
+
+		// Edit Mode 를 억지로 끼워 맞추기 위해 추가
+
+		if (BOARD_STATE_EDIT == pChatSet->m_iBoardState)
+		{
+			ArrangeShowingChat(iterator->first);
+		}
+		else // if (BOARD_STATE_VIEW == pChatSet->m_iBoardState)
 		{
 			pChatSet->m_ShowingChatLineList.push_back(pChatLine);
 			if (pChatSet->m_ShowingChatLineList.size() > CHAT_LINE_MAX_NUM)

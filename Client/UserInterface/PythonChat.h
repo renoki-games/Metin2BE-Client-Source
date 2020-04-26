@@ -95,6 +95,7 @@ class CPythonChat : public CSingleton<CPythonChat>, public IAbstractChat
 			float fAppendedTime;
 			D3DXCOLOR aColor[CHAT_LINE_COLOR_ARRAY_MAX_NUM];
 			CGraphicTextInstance Instance;
+			CGraphicExpandedImageInstance EmpireInstance;
 
 			SChatLine();
 			virtual ~SChatLine();
@@ -195,6 +196,7 @@ class CPythonChat : public CSingleton<CPythonChat>, public IAbstractChat
 
 		// Chat
 		void AppendChat(int iType, const char * c_szChat);
+		void AppendPlayerChat(int iType, const char *c_szChat, int empire);
 		void AppendChatWithDelay(int iType, const char * c_szChat, int iDelay);
 		void ArrangeShowingChat(DWORD dwID);
 
@@ -223,7 +225,7 @@ class CPythonChat : public CSingleton<CPythonChat>, public IAbstractChat
 		DWORD GetChatColor(int iType);
 
 	protected:
-		TChatLineDeque						m_ChatLineDeque;
+		std::map<DWORD, TChatLineDeque> m_ChatLineDeque;
 		TChatLineList						m_ShowingChatLineList;
 		TChatSetMap							m_ChatSetMap;
 		TWhisperMap							m_WhisperMap;

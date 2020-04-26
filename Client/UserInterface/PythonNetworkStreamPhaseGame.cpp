@@ -1392,7 +1392,7 @@ bool CPythonNetworkStream::RecvChatPacket()
 		}
 
 		if (pkInstChatter->IsPC())
-			CPythonChat::Instance().AppendChat(kChat.type, buf);
+			CPythonChat::Instance().AppendPlayerChat(kChat.type, buf, pkInstChatter->GetEmpireID());
 	}
 	else
 	{
@@ -1406,13 +1406,16 @@ bool CPythonNetworkStream::RecvChatPacket()
 		}
 		else if (CHAT_TYPE_SHOUT == kChat.type)
 		{
-			char * p = strchr(buf, ':');
+			char *p = strchr(buf, ':');
 
 			if (p)
 			{
 				if (m_isEnableChatInsultFilter)
 					__FilterInsult(p, strlen(p));
 			}
+
+			CPythonChat::Instance().AppendPlayerChat(kChat.type, buf, kChat.bEmpire);
+			return true;
 		}
 
 		CPythonChat::Instance().AppendChat(kChat.type, buf);
