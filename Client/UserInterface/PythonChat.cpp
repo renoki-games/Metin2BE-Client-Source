@@ -139,7 +139,7 @@ void CPythonChat::UpdateViewMode(DWORD dwID)
 		pChatLine->Instance.SetPosition(pChatSet->m_ix, pChatSet->m_iy + iHeight);
 		pChatLine->Instance.SetColor(rColor);
 		pChatLine->Instance.Update();
-		pChatLine->EmpireInstance.SetPosition(pChatSet->m_ix - 37, pChatSet->m_iy + iHeight + 1);
+		pChatLine->EmpireInstance.SetPosition(pChatSet->m_ix - 20, pChatSet->m_iy + iHeight + 1);
 	}
 }
 
@@ -181,7 +181,7 @@ void CPythonChat::UpdateEditMode(DWORD dwID)
 		pChatLine->Instance.SetPosition(pChatSet->m_ix, pChatSet->m_iy + iHeight);
 		pChatLine->Instance.SetColor(rColor);
 		pChatLine->Instance.Update();
-		pChatLine->EmpireInstance.SetPosition(pChatSet->m_ix - 37, pChatSet->m_iy + iHeight + 1);
+		pChatLine->EmpireInstance.SetPosition(pChatSet->m_ix - 20, pChatSet->m_iy + iHeight + 1);
 	}
 }
 
@@ -202,7 +202,7 @@ void CPythonChat::UpdateLogMode(DWORD dwID)
 		pChatLine->Instance.SetPosition(pChatSet->m_ix, pChatSet->m_iy + iHeight);
 		pChatLine->Instance.SetColor(pChatLine->GetColorRef(dwID));
 		pChatLine->Instance.Update();
-		pChatLine->EmpireInstance.SetPosition(pChatSet->m_ix - 37, pChatSet->m_iy + iHeight + 1);
+		pChatLine->EmpireInstance.SetPosition(pChatSet->m_ix - 20, pChatSet->m_iy + iHeight + 1);
 	}
 }
 
@@ -540,12 +540,8 @@ void CPythonChat::AppendPlayerChat(int iType, const char *c_szChat, int empire)
 		if (pEmpireResource->IsType(CGraphicImage::Type()))
 		{
 			CGraphicExpandedImageInstance &imgRef = pChatLine->EmpireInstance;
-			imgRef.SetRenderingMode(CGraphicExpandedImageInstance::RENDERING_MODE_SCREEN);
-			imgRef.SetImagePointer(static_cast<CGraphicSubImage *>(pEmpireResource));
-
-			float fScaleX = 28.0f / imgRef.GetWidth();
-			float fScaleY = 12.0f / imgRef.GetHeight();
-			pChatLine->EmpireInstance.SetScale(fScaleX, fScaleY);
+			imgRef.SetRenderingMode(CGraphicExpandedImageInstance::RENDERING_MODE_NORMAL);
+			imgRef.SetImagePointer(static_cast<CGraphicSubImage*>(pEmpireResource));
 		}
 
 		pChatLine->fAppendedTime = rApp.GetGlobalTime();
