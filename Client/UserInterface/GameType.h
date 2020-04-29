@@ -68,7 +68,7 @@ const DWORD c_Inventory_Page_Column = 5;
 const DWORD c_Inventory_Page_Row = 9;
 const DWORD c_Inventory_Page_Size = c_Inventory_Page_Column*c_Inventory_Page_Row; // x*y
 #ifdef ENABLE_EXTEND_INVEN_SYSTEM
-const DWORD c_Inventory_Page_Count = 4;
+const DWORD c_Inventory_Page_Count = 5;
 #else
 const DWORD c_Inventory_Page_Count = 2;
 #endif
