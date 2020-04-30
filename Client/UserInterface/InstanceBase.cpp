@@ -2889,22 +2889,21 @@ UINT CInstanceBase::__GetRefinedEffect(CItemData* pItem)
 		{
 			DWORD vnum = pItem->GetIndex();
 
-			if (
-				(12010 <= vnum && vnum <= 12049)
-#ifdef ENABLE_WOLFMAN_CHARACTER
-				|| (21080 <= vnum && vnum <= 21089)
-#endif
-			)
+			if (vnum >= 12010 && vnum <= 12019 || //Blaustahlpanzer
+				vnum >= 12020 && vnum <= 12029 || //Blauer Drachenanzug
+				vnum >= 12030 && vnum <= 12039 || //Auraplattenpanzer
+				vnum >= 12040 && vnum <= 12049)   //Kleidung des Drachen
 			{
-				__AttachEffect(EFFECT_REFINED+EFFECT_BODYARMOR_SPECIAL);
-				__AttachEffect(EFFECT_REFINED+EFFECT_BODYARMOR_SPECIAL2);
+				__AttachEffect(EFFECT_REFINED + EFFECT_BODYARMOR_SPECIAL); //effect 19 bubble
+				__AttachEffect(EFFECT_REFINED + EFFECT_BODYARMOR_SPECIAL2); //effect 20 blue shining
 			}
-#ifdef ENABLE_LVL115_ARMOR_EFFECT
-			else if (20760 <= vnum && vnum <= 20959)
+			if (vnum >= 11290 && vnum <= 11299 || //Krieger
+				vnum >= 11490 && vnum <= 11499 || //Ninja
+				vnum >= 11690 && vnum <= 11699 || //Sura
+				vnum >= 11890 && vnum <= 11899)   //Schamane
 			{
-				__AttachEffect(EFFECT_REFINED+EFFECT_BODYARMOR_SPECIAL3);
+				__AttachEffect(EFFECT_REFINED + EFFECT_BODYARMOR_70ER_ARMOR); //effect 21 NEW EFFECT
 			}
-#endif //ENABLE_LVL115_ARMOR_EFFECT
 		}
 
 		if (refine < 7)	//현재 제련도 7 이상만 이펙트가 있습니다.
