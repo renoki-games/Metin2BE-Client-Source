@@ -121,13 +121,23 @@ void CPythonNetworkStream::LoadingPhase()
 				return;
 			break;
 
-		case HEADER_GC_PLAYER_POINTS:
+		case HEADER_GC_CHARACTER_POINTS:
 			if (__RecvPlayerPoints())
 				return;
 			break;
 
-		case HEADER_GC_PLAYER_POINT_CHANGE:
+		case HEADER_GC_CHARACTER_GOLD:
+			if (__RecvPlayerGold())
+				return;
+			break;
+
+		case HEADER_GC_CHARACTER_POINT_CHANGE:
 			if (RecvPointChange())
+				return;
+			break;
+
+		case HEADER_GC_CHARACTER_GOLD_CHANGE:
+			if (RecvGoldChange())
 				return;
 			break;
 
@@ -357,5 +367,18 @@ bool CPythonNetworkStream::SendEnterGame()
 		return false;
 
 	__SendInternalBuffer();
+	return true;
+}
+
+bool CPythonNetworkStream::__RecvPlayerGold()
+{
+	TPacketGCGold GoldPacket;
+
+	if (!Recv(sizeof(TPacketGCGold), &GoldPacket))
+		return false;
+
+	CPythonPlayer::Instance().SetGold(GoldPacket.gold);
+
+	PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "RefreshStatus", Py_BuildValue("()"));
 	return true;
 }

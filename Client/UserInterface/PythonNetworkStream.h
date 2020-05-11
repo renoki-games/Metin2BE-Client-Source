@@ -410,6 +410,7 @@ class CPythonNetworkStream : public CNetworkStream, public CSingleton<CPythonNet
 		bool __RecvPlayerDestroyFailurePacket();
 		bool __RecvPreserveItemPacket();
 		bool __RecvPlayerPoints();
+		bool __RecvPlayerGold();
 		bool __RecvChangeName();
 
 		// Loading Phase
@@ -438,6 +439,7 @@ class CPythonNetworkStream : public CNetworkStream, public CSingleton<CPythonNet
 		bool RecvSyncPositionPacket();
 		bool RecvWhisperPacket();
 		bool RecvPointChange();					// Alarm to python
+		bool RecvGoldChange();
 		bool RecvChangeSpeedPacket();
 
 		bool RecvStunPacket();

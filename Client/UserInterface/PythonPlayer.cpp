@@ -25,12 +25,22 @@ enum
 
 const DWORD POINT_MAGIC_NUMBER = 0xe73ac1da;
 
-void CPythonPlayer::SPlayerStatus::SetPoint(UINT ePoint, GoldType lPoint)
+void CPythonPlayer::SPlayerStatus::SetGold(GoldType gold)
 {
-	m_alPoint[ePoint]=lPoint ^ POINT_MAGIC_NUMBER;
+	m_llGold = gold;
 }
 
-GoldType CPythonPlayer::SPlayerStatus::GetPoint(UINT ePoint)
+GoldType CPythonPlayer::SPlayerStatus::GetGold()
+{
+	return m_llGold;
+}
+
+void CPythonPlayer::SPlayerStatus::SetPoint(UINT ePoint, long lPoint)
+{
+	m_alPoint[ePoint] = lPoint ^ POINT_MAGIC_NUMBER;
+}
+
+long CPythonPlayer::SPlayerStatus::GetPoint(UINT ePoint)
 {
 	return m_alPoint[ePoint] ^ POINT_MAGIC_NUMBER;
 }
@@ -432,7 +442,7 @@ void CPythonPlayer::__UpdateBattleStatus()
 	m_playerStatus.SetPoint(POINT_MAX_ATK, __GetTotalAtk(m_dwWeaponMaxPower, m_dwWeaponAddPower));
 }
 
-void CPythonPlayer::SetStatus(DWORD dwType, GoldType lValue)
+void CPythonPlayer::SetStatus(DWORD dwType, long lValue)
 {
 	if (dwType >= POINT_MAX_NUM)
 	{
@@ -476,7 +486,7 @@ void CPythonPlayer::SetStatus(DWORD dwType, GoldType lValue)
 	}
 }
 
-GoldType CPythonPlayer::GetStatus(DWORD dwType)
+int CPythonPlayer::GetStatus(DWORD dwType)
 {
 	if (dwType >= POINT_MAX_NUM)
 	{
@@ -1762,6 +1772,16 @@ CPythonPlayer::CPythonPlayer(void)
 	m_iLastAlarmTime = 0;
 
 	Clear();
+}
+
+void CPythonPlayer::SetGold(GoldType value)
+{
+	m_playerStatus.SetGold(value);
+}
+
+GoldType CPythonPlayer::GetGold()
+{
+	return m_playerStatus.GetGold();
 }
 
 CPythonPlayer::~CPythonPlayer(void)

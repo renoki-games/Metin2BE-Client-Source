@@ -605,8 +605,8 @@ const char * GetRecvHeaderName(BYTE header)
 		stringList[13] = "HEADER_GC_STUN";
 		stringList[14] = "HEADER_GC_DEAD";
 		stringList[15] = "HEADER_GC_MAIN_CHARACTER";
-		stringList[16] = "HEADER_GC_PLAYER_POINTS";
-		stringList[17] = "HEADER_GC_PLAYER_POINT_CHANGE";
+		stringList[16] = "HEADER_GC_CHARACTER_POINTS";
+		stringList[17] = "HEADER_GC_CHARACTER_POINT_CHANGE";
 		stringList[18] = "HEADER_GC_CHANGE_SPEED";
 		stringList[19] = "HEADER_GC_CHARACTER_UPDATE";
 		stringList[20] = "HEADER_GC_ITEM_SET";

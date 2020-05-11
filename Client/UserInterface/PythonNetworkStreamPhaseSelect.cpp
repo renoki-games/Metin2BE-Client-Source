@@ -126,9 +126,15 @@ void CPythonNetworkStream::SelectPhase()
 			break;
 #endif
 
-		case HEADER_GC_PLAYER_POINT_CHANGE:
+		case HEADER_GC_CHARACTER_POINT_CHANGE:
 			TPacketGCPointChange PointChange;
 			Recv(sizeof(TPacketGCPointChange), &PointChange);
+			return;
+			break;
+
+		case HEADER_GC_CHARACTER_GOLD_CHANGE:
+			TPacketGCGoldChange GoldChange;
+			Recv(sizeof(TPacketGCGoldChange), &GoldChange);
 			return;
 			break;
 

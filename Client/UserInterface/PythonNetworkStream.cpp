@@ -66,8 +66,8 @@ class CMainPacketHeaderMap : public CNetworkPacketHeaderMap
 			Set(HEADER_GC_MAIN_CHARACTER4_BGM_VOL,	CNetworkPacketHeaderMap::TPacketType(sizeof(TPacketGCMainCharacter4_BGM_VOL), STATIC_SIZE_PACKET));
 			// END_OFSUPPORT_BGM
 
-			Set(HEADER_GC_PLAYER_POINTS,		CNetworkPacketHeaderMap::TPacketType(sizeof(TPacketGCPoints), STATIC_SIZE_PACKET));
-			Set(HEADER_GC_PLAYER_POINT_CHANGE,	CNetworkPacketHeaderMap::TPacketType(sizeof(TPacketGCPointChange), STATIC_SIZE_PACKET));
+			Set(HEADER_GC_CHARACTER_POINTS,		CNetworkPacketHeaderMap::TPacketType(sizeof(TPacketGCPoints), STATIC_SIZE_PACKET));
+			Set(HEADER_GC_CHARACTER_POINT_CHANGE,	CNetworkPacketHeaderMap::TPacketType(sizeof(TPacketGCPointChange), STATIC_SIZE_PACKET));
 
 			Set(HEADER_GC_ITEM_SET,				CNetworkPacketHeaderMap::TPacketType(sizeof(TPacketGCItemSet), STATIC_SIZE_PACKET));
 			Set(HEADER_GC_ITEM_SET2,			CNetworkPacketHeaderMap::TPacketType(sizeof(TPacketGCItemSet2), STATIC_SIZE_PACKET));
@@ -185,6 +185,8 @@ class CMainPacketHeaderMap : public CNetworkPacketHeaderMap
 			Set(HEADER_GC_SPECIFIC_EFFECT,	CNetworkPacketHeaderMap::TPacketType(sizeof(TPacketGCSpecificEffect), STATIC_SIZE_PACKET));
 			Set(HEADER_GC_UNK_213,			CNetworkPacketHeaderMap::TPacketType(sizeof(TPacketGCUnk213), STATIC_SIZE_PACKET)); // @fixme007
 			Set(HEADER_GC_REFRESH_GM_STATE, CNetworkPacketHeaderMap::TPacketType(sizeof(TPacketGCRefreshGMState), DYNAMIC_SIZE_PACKET));
+			Set(HEADER_GC_CHARACTER_GOLD, CNetworkPacketHeaderMap::TPacketType (sizeof (TPacketGCGold), STATIC_SIZE_PACKET));
+			Set(HEADER_GC_CHARACTER_GOLD_CHANGE, CNetworkPacketHeaderMap::TPacketType(sizeof(TPacketGCGoldChange), STATIC_SIZE_PACKET));
 		}
 };
 

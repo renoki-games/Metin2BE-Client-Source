@@ -186,8 +186,8 @@ enum
 	HEADER_GC_DEAD								= 14,
 
 	HEADER_GC_MAIN_CHARACTER					= 15,
-	HEADER_GC_PLAYER_POINTS						= 16,
-	HEADER_GC_PLAYER_POINT_CHANGE				= 17,
+	HEADER_GC_CHARACTER_POINTS						= 16,
+	HEADER_GC_CHARACTER_POINT_CHANGE				= 17,
 	HEADER_GC_CHANGE_SPEED						= 18,
 	HEADER_GC_CHARACTER_UPDATE                  = 19,
 #if defined(GAIDEN)
@@ -364,6 +364,9 @@ enum
 	HEADER_GC_UNK_213							= 213,
 
 	HEADER_GC_REFRESH_GM_STATE = 214,
+
+	HEADER_GC_CHARACTER_GOLD = 220,
+	HEADER_GC_CHARACTER_GOLD_CHANGE = 221,
 
 	HEADER_GC_KEY_AGREEMENT_COMPLETED			= 0xfa, // _IMPROVED_PACKET_ENCRYPTION_
 	HEADER_GC_KEY_AGREEMENT						= 0xfb, // _IMPROVED_PACKET_ENCRYPTION_
@@ -1699,8 +1702,14 @@ enum EPointTypes
 typedef struct packet_points
 {
     BYTE        header;
-    GoldType        points[POINT_MAX_NUM];
+    long        points[POINT_MAX_NUM];
 } TPacketGCPoints;
+
+typedef struct packet_gold
+{
+	BYTE	header;
+	GoldType	gold;
+} TPacketGCGold;
 
 typedef struct packet_point_change
 {
@@ -1709,9 +1718,17 @@ typedef struct packet_point_change
 	DWORD		dwVID;
 	BYTE		Type;
 
-	GoldType        amount; // 夥莎 高
-    GoldType        value;  // ⑷營 高
+	int        amount; // 夥莎 高
+    int        value;  // ⑷營 高
 } TPacketGCPointChange;
+
+typedef struct packet_gold_change
+{
+	BYTE header;
+	DWORD dwVID;
+	GoldType amount;
+	GoldType value;
+} TPacketGCGoldChange;
 
 typedef struct packet_motion
 {

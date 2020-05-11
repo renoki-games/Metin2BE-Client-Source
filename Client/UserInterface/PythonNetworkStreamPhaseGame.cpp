@@ -308,8 +308,13 @@ void CPythonNetworkStream::GamePhase()
 				ret = RecvDeadPacket();
 				break;
 
-			case HEADER_GC_PLAYER_POINT_CHANGE:
+			case HEADER_GC_CHARACTER_POINT_CHANGE:
 				ret = RecvPointChange();
+				break;
+
+			case HEADER_GC_CHARACTER_GOLD_CHANGE:
+				if (RecvGoldChange())
+					return;
 				break;
 
 			// item packet.
@@ -405,8 +410,12 @@ void CPythonNetworkStream::GamePhase()
 				ret = RecvChangeSpeedPacket();
 				break;
 
-			case HEADER_GC_PLAYER_POINTS:
+			case HEADER_GC_CHARACTER_POINTS:
 				ret = __RecvPlayerPoints();
+				break;
+
+			case HEADER_GC_CHARACTER_GOLD:
+				ret = __RecvPlayerGold();
 				break;
 
 			case HEADER_GC_CREATE_FLY:
@@ -1538,16 +1547,6 @@ bool CPythonNetworkStream::RecvPointChange()
 			default:
 				__RefreshStatus();
 				break;
-		}
-
-		if (POINT_GOLD == PointChange.Type)
-		{
-			if (PointChange.amount > 0)
-			{
-				PyObject *args = PyTuple_New(1);
-				PyTuple_SetItem(args, 0, PyLong_FromLongLong(PointChange.amount));
-				PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "OnPickMoney", args);
-			}
 		}
 	}
 #ifdef ENABLE_TEXT_LEVEL_REFRESH
@@ -4518,5 +4517,36 @@ bool CPythonNetworkStream::RecvRefreshGMState()
 	}
 
 	PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "BINARY_UpdateTeamlist", Py_BuildValue("(Ob)", py, bClear));
+	return true;
+}
+
+bool CPythonNetworkStream::RecvGoldChange()
+{
+	TPacketGCGoldChange GoldChange;
+
+	if (!Recv(sizeof(TPacketGCGoldChange), &GoldChange))
+	{
+		Tracen("Recv Gold Change Packet Error");
+		return false;
+	}
+
+	CInstanceBase * pInstance = CPythonCharacterManager::Instance().GetMainInstancePtr();
+
+	if (pInstance)
+	{
+		if (GoldChange.dwVID == pInstance->GetVirtualID())
+		{
+			CPythonPlayer & rkPlayer = CPythonPlayer::Instance();
+			rkPlayer.SetGold(GoldChange.value);
+
+			if (GoldChange.amount > 0)
+			{
+				PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "OnPickMoney", Py_BuildValue("(L)", GoldChange.amount));
+			}
+			
+		}
+	}
+
+	PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "RefreshStatus", Py_BuildValue("()"));
 	return true;
 }

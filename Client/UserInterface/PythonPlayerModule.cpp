@@ -554,7 +554,7 @@ PyObject * playerSetStatus(PyObject* poSelf, PyObject* poArgs)
 
 PyObject * playerGetElk(PyObject* poSelf, PyObject* poArgs)
 {
-	return PyLong_FromLongLong(CPythonPlayer::Instance().GetStatus(POINT_GOLD));
+	return PyLong_FromLongLong(CPythonPlayer::Instance().GetGold());
 }
 
 PyObject * playerGetGuildID(PyObject* poSelf, PyObject* poArgs)
