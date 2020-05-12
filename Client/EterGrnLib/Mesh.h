@@ -50,10 +50,10 @@ class CGrannyMesh
 		int						GetVertexCount() const;
 
 		// WORK
-#if GrannyProductMinorVersion==4
-		int *					GetDefaultBoneIndices() const;
-#elif GrannyProductMinorVersion==11 || GrannyProductMinorVersion==9 || GrannyProductMinorVersion==8 || GrannyProductMinorVersion==7
-		const granny_int32x *					GetDefaultBoneIndices() const;
+#if GrannyProductMinorVersion==7
+		int*					 GetDefaultBoneIndices() const;
+#elif GrannyProductMinorVersion==11 || GrannyProductMinorVersion==9 || GrannyProductMinorVersion==8
+		int*					GetDefaultBoneIndices() const;
 #else
 #error "unknown granny version"
 #endif

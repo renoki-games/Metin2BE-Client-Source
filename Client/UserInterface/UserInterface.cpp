@@ -275,7 +275,7 @@ bool checkPyLibDir(const string szDirName)
 
 bool __CheckPyLibFiles()
 {
-	PRINTME(1, "__CheckPyLibFiles processing "PYFOLD);
+	//PRINTME(1, "__CheckPyLibFiles processing "PYFOLD);
 	if (checkPyLibDir(PYFOLD))
 		return false;
 	return true;

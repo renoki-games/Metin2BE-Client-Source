@@ -559,9 +559,9 @@ typedef struct granny_tri_topology granny_tri_topology;
 typedef struct granny_defined_type granny_defined_type;
 
 typedef struct granny_variant_builder granny_variant_builder;
-#define GrannyProductVersion "2.4.0.10"
+#define GrannyProductVersion "2.9.12.0"
 #define GrannyProductMajorVersion 2
-#define GrannyProductMinorVersion 4
+#define GrannyProductMinorVersion 7
 #define GrannyProductCustomization 0
 #define GrannyProductBuildNumber 10
 #define GrannyProductReleaseName prerelease

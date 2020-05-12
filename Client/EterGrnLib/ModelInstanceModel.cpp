@@ -83,7 +83,7 @@ const granny_int32x* CGrannyModelInstance::__GetMeshBoneIndices(unsigned int iMe
 #endif
 {
 	assert(iMeshBinding<m_vct_pgrnMeshBinding.size());
-	return GrannyGetMeshBindingToBoneIndices(m_vct_pgrnMeshBinding[iMeshBinding]);
+	return (int*)GrannyGetMeshBindingToBoneIndices(m_vct_pgrnMeshBinding[iMeshBinding]);
 }
 
 bool CGrannyModelInstance::__CreateMeshBindingVector(CGrannyModelInstance* pkDstModelInst)

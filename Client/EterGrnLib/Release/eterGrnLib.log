@@ -1,17 +1,1 @@
-﻿  StdAfx.cpp
-  LODController.cpp
-  Material.cpp
-  Mesh.cpp
-  Model.cpp
-  ModelInstance.cpp
-  ModelInstanceCollisionDetection.cpp
-  ModelInstanceModel.cpp
-  ModelInstanceMotion.cpp
-  ModelInstanceRender.cpp
-  ModelInstanceUpdate.cpp
-  Motion.cpp
-  Thing.cpp
-  ThingInstance.cpp
-  Util.cpp
-  Code wird generiert...
-  eterGrnLib.vcxproj -> C:\Games\Metin2\Metin2 Files\Marty Samer Files unbearbeitet\Marty Samer Files unbearbeitet\Client Source\Client Source\Srcs\Client\eterGrnLib\Release\eterGrnLib.lib
+﻿  eterGrnLib.vcxproj -> C:\Metin2BE-Git\Metin2BE - Client Source\Srcs\Client\eterGrnLib\..\vs_files\eterGrnLib\Release\eterGrnLib.lib

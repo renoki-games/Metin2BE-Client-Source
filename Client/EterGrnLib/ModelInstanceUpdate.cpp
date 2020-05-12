@@ -50,7 +50,7 @@ void CGrannyModelInstance::UpdateTransform(D3DXMATRIX * pMatrix, float fSecondsE
 #if GrannyProductMinorVersion==4
 	GrannyUpdateModelMatrix(m_pgrnModelInstance, fSecondsElapsed, (const float *) pMatrix, (float *) pMatrix);
 #elif GrannyProductMinorVersion==11 || GrannyProductMinorVersion==9 || GrannyProductMinorVersion==8 || GrannyProductMinorVersion==7
-	GrannyUpdateModelMatrix(m_pgrnModelInstance, fSecondsElapsed, (const float *) pMatrix, (float *) pMatrix, false);
+	GrannyUpdateModelMatrix(m_pgrnModelInstance, fSecondsElapsed, (const float*)pMatrix, (float*)pMatrix, false);
 #else
 #error "unknown granny version"
 #endif
