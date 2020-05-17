@@ -58,7 +58,7 @@ void LocaleService_LoadConfig(const char* fileName)
 
 unsigned LocaleService_GetLastExp(int level)
 {
-	static const int GUILD_LEVEL_MAX = 20;
+	static const int GUILD_LEVEL_MAX = 22;
 
 	if (LocaleService_IsCHEONMA())
 	{
@@ -84,7 +84,9 @@ unsigned LocaleService_GetLastExp(int level)
 			6500000ul,	// 17
 			8000000ul,	// 18
 			10000000ul,	// 19
-			42000000UL	// 20
+			42000000UL,	// 20
+			42000000UL,	// 21
+			42000000UL	// 22
 		};
 		if (level < 0 && level >= GUILD_LEVEL_MAX)
 			return 0;
@@ -114,7 +116,9 @@ unsigned LocaleService_GetLastExp(int level)
 		2600000UL,	// 17
 		3200000UL,	// 18
 		4000000UL,	// 19
-		16800000UL	// 20
+		16800000UL,	// 20
+		16800000UL,	// 21
+		16800000UL	// 22
 	};
 
 	if (level < 0 && level >= GUILD_LEVEL_MAX)

@@ -471,7 +471,7 @@ PyObject * guildGetGuildExperience(PyObject * poSelf, PyObject * poArgs)
 {
 	CPythonGuild::TGuildInfo & rGuildInfo = CPythonGuild::Instance().GetGuildInfoRef();
 
-	int GULID_MAX_LEVEL = 20;
+	int GULID_MAX_LEVEL = 22;
 	if (rGuildInfo.dwGuildLevel >= GULID_MAX_LEVEL)
 		return Py_BuildValue("ii", 0, 0);
 
