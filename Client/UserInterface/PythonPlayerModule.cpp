@@ -557,6 +557,16 @@ PyObject * playerGetElk(PyObject* poSelf, PyObject* poArgs)
 	return PyLong_FromLongLong(CPythonPlayer::Instance().GetGold());
 }
 
+PyObject * playerGetDR(PyObject* poSelf, PyObject* poArgs)
+{
+	return Py_BuildValue("i", CPythonPlayer::Instance().GetDR());
+}
+
+PyObject * playerGetDM(PyObject* poSelf, PyObject* poArgs)
+{
+	return Py_BuildValue("i", CPythonPlayer::Instance().GetDM());
+}
+
 PyObject * playerGetGuildID(PyObject* poSelf, PyObject* poArgs)
 {
 	CInstanceBase * pInstance = CPythonPlayer::Instance().NEW_GetMainActorPtr();
@@ -2179,6 +2189,8 @@ void initPlayer()
 		{ "SetStatus",					playerSetStatus,					METH_VARARGS },
 		{ "GetElk",						playerGetElk,						METH_VARARGS },
 		{ "GetMoney",					playerGetElk,						METH_VARARGS },
+		{ "GetDR",					playerGetDR,						METH_VARARGS },
+		{ "GetDM",					playerGetDM,						METH_VARARGS },
 		{ "GetGuildID",					playerGetGuildID,					METH_VARARGS },
 		{ "GetGuildName",				playerGetGuildName,					METH_VARARGS },
 		{ "GetAlignmentData",			playerGetAlignmentData,				METH_VARARGS },

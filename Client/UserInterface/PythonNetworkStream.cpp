@@ -187,6 +187,8 @@ class CMainPacketHeaderMap : public CNetworkPacketHeaderMap
 			Set(HEADER_GC_REFRESH_GM_STATE, CNetworkPacketHeaderMap::TPacketType(sizeof(TPacketGCRefreshGMState), DYNAMIC_SIZE_PACKET));
 			Set(HEADER_GC_CHARACTER_GOLD, CNetworkPacketHeaderMap::TPacketType (sizeof (TPacketGCGold), STATIC_SIZE_PACKET));
 			Set(HEADER_GC_CHARACTER_GOLD_CHANGE, CNetworkPacketHeaderMap::TPacketType(sizeof(TPacketGCGoldChange), STATIC_SIZE_PACKET));
+			Set(HEADER_GC_CHARACTER_DRAGON_POINT, CNetworkPacketHeaderMap::TPacketType (sizeof (TPacketGCDragonPoint), STATIC_SIZE_PACKET));
+			Set(HEADER_GC_CHARACTER_DRAGON_POINT_CHANGE, CNetworkPacketHeaderMap::TPacketType(sizeof(TPacketGCDragonPointChange), STATIC_SIZE_PACKET));
 		}
 };
 

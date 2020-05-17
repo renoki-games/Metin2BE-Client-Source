@@ -317,6 +317,11 @@ void CPythonNetworkStream::GamePhase()
 					return;
 				break;
 
+			case HEADER_GC_CHARACTER_DRAGON_POINT_CHANGE:
+				if (RecvDragonPointChange())
+					return;
+				break;
+
 			// item packet.
 			case HEADER_GC_ITEM_SET:
 				ret = RecvItemSetPacket();
@@ -416,6 +421,10 @@ void CPythonNetworkStream::GamePhase()
 
 			case HEADER_GC_CHARACTER_GOLD:
 				ret = __RecvPlayerGold();
+				break;
+
+			case HEADER_GC_CHARACTER_DRAGON_POINT:
+				ret = __RecvPlayerDragonPoint();
 				break;
 
 			case HEADER_GC_CREATE_FLY:
@@ -4544,6 +4553,32 @@ bool CPythonNetworkStream::RecvGoldChange()
 				PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "OnPickMoney", Py_BuildValue("(L)", GoldChange.amount));
 			}
 			
+		}
+	}
+
+	PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "RefreshStatus", Py_BuildValue("()"));
+	return true;
+}
+
+bool CPythonNetworkStream::RecvDragonPointChange()
+{
+	TPacketGCDragonPointChange DragonPointChange;
+
+	if (!Recv(sizeof(TPacketGCDragonPointChange), &DragonPointChange))
+	{
+		Tracen("Recv Dragon Point Change Packet Error");
+		return false;
+	}
+
+	CInstanceBase * pInstance = CPythonCharacterManager::Instance().GetMainInstancePtr();
+
+	if (pInstance)
+	{
+		if (DragonPointChange.dwVID == pInstance->GetVirtualID())
+		{
+			CPythonPlayer & rkPlayer = CPythonPlayer::Instance();
+			rkPlayer.SetDR(DragonPointChange.iDR);
+			rkPlayer.SetDM(DragonPointChange.iDM);
 		}
 	}
 

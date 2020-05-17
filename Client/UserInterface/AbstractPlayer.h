@@ -16,6 +16,8 @@ class IAbstractPlayer : public TAbstractSingleton<IAbstractPlayer>
 
 		virtual int		GetStatus(DWORD dwType) = 0;
 		virtual GoldType GetGold() = 0;
+		virtual int GetDR() = 0;
+		virtual int GetDM() = 0;
 
 		virtual const char *	GetName() = 0;
 

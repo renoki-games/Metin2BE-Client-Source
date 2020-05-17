@@ -368,6 +368,9 @@ enum
 	HEADER_GC_CHARACTER_GOLD = 220,
 	HEADER_GC_CHARACTER_GOLD_CHANGE = 221,
 
+	HEADER_GC_CHARACTER_DRAGON_POINT = 222,
+	HEADER_GC_CHARACTER_DRAGON_POINT_CHANGE = 223,
+
 	HEADER_GC_KEY_AGREEMENT_COMPLETED			= 0xfa, // _IMPROVED_PACKET_ENCRYPTION_
 	HEADER_GC_KEY_AGREEMENT						= 0xfb, // _IMPROVED_PACKET_ENCRYPTION_
 	HEADER_GC_HANDSHAKE_OK						= 0xfc, // 252
@@ -2841,5 +2844,20 @@ typedef struct SPacketGCRefreshGMState
 	BYTE byCount;
 	bool bClear;
 } TPacketGCRefreshGMState;
+
+typedef struct SPacketGCDragonPoint
+{
+	BYTE byHeader;
+	int iDR;
+	int iDM;
+} TPacketGCDragonPoint;
+
+typedef struct SPacketGCDragonPointChange
+{
+	BYTE byHeader;
+	DWORD dwVID;
+	int iDR;
+	int iDM;
+} TPacketGCDragonPointChange;
 
 #pragma pack(pop)

@@ -131,6 +131,11 @@ void CPythonNetworkStream::LoadingPhase()
 				return;
 			break;
 
+		case HEADER_GC_CHARACTER_DRAGON_POINT:
+			if (__RecvPlayerDragonPoint())
+				return;
+			break;
+
 		case HEADER_GC_CHARACTER_POINT_CHANGE:
 			if (RecvPointChange())
 				return;
@@ -138,6 +143,11 @@ void CPythonNetworkStream::LoadingPhase()
 
 		case HEADER_GC_CHARACTER_GOLD_CHANGE:
 			if (RecvGoldChange())
+				return;
+			break;
+
+		case HEADER_GC_CHARACTER_DRAGON_POINT_CHANGE:
+			if (RecvDragonPointChange())
 				return;
 			break;
 
@@ -378,6 +388,20 @@ bool CPythonNetworkStream::__RecvPlayerGold()
 		return false;
 
 	CPythonPlayer::Instance().SetGold(GoldPacket.gold);
+
+	PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "RefreshStatus", Py_BuildValue("()"));
+	return true;
+}
+
+bool CPythonNetworkStream::__RecvPlayerDragonPoint()
+{
+	TPacketGCDragonPoint DragonPointPacket;
+
+	if (!Recv(sizeof(TPacketGCDragonPoint), &DragonPointPacket))
+		return false;
+
+	CPythonPlayer::Instance().SetDR(DragonPointPacket.iDR);
+	CPythonPlayer::Instance().SetDM(DragonPointPacket.iDM);
 
 	PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "RefreshStatus", Py_BuildValue("()"));
 	return true;

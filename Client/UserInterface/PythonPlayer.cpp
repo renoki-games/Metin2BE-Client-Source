@@ -25,6 +25,26 @@ enum
 
 const DWORD POINT_MAGIC_NUMBER = 0xe73ac1da;
 
+void CPythonPlayer::SPlayerStatus::SetDR(int iDR)
+{
+	m_iDR = iDR;
+}
+
+int CPythonPlayer::SPlayerStatus::GetDR()
+{
+	return m_iDR;
+}
+
+void CPythonPlayer::SPlayerStatus::SetDM(int iDM)
+{
+	m_iDM = iDM;
+}
+
+int CPythonPlayer::SPlayerStatus::GetDM()
+{
+	return m_iDM;
+}
+
 void CPythonPlayer::SPlayerStatus::SetGold(GoldType gold)
 {
 	m_llGold = gold;
@@ -1782,6 +1802,26 @@ void CPythonPlayer::SetGold(GoldType value)
 GoldType CPythonPlayer::GetGold()
 {
 	return m_playerStatus.GetGold();
+}
+
+void CPythonPlayer::SetDR(int iDR)
+{
+	m_playerStatus.SetDR(iDR);
+}
+
+int CPythonPlayer::GetDR()
+{
+	return m_playerStatus.GetDR();
+}
+
+void CPythonPlayer::SetDM(int iDM)
+{
+	m_playerStatus.SetDM(iDM);
+}
+
+int CPythonPlayer::GetDM()
+{
+	return m_playerStatus.GetDM();
 }
 
 CPythonPlayer::~CPythonPlayer(void)

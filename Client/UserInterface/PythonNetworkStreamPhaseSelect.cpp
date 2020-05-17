@@ -138,6 +138,12 @@ void CPythonNetworkStream::SelectPhase()
 			return;
 			break;
 
+		case HEADER_GC_CHARACTER_DRAGON_POINT_CHANGE:
+			TPacketGCDragonPointChange DragonPointChange;
+			Recv(sizeof(TPacketGCDragonPointChange), &DragonPointChange);
+			return;
+			break;
+
 		///////////////////////////////////////////////////////////////////////////////////////////
 		case HEADER_GC_PING:
 			if (RecvPingPacket())

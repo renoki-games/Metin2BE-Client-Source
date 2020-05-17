@@ -123,12 +123,20 @@ class CPythonPlayer : public CSingleton<CPythonPlayer>, public IAbstractPlayer
 			GoldType				m_alPoint[POINT_MAX_NUM];
 			long				lQuickPageIndex;
 
-			GoldType m_llGold;
 			void SetPoint(UINT ePoint, long lPoint);
 			long GetPoint(UINT ePoint);
 
+			GoldType m_llGold;
 			void SetGold(GoldType gold);
 			GoldType GetGold();
+
+			int m_iDR;
+			void SetDR(int iDR);
+			int GetDR();
+
+			int m_iDM;
+			void SetDM(int iDM);
+			int GetDM();
 		} TPlayerStatus;
 
 		typedef struct SPartyMemberInfo
@@ -281,6 +289,12 @@ class CPythonPlayer : public CSingleton<CPythonPlayer>, public IAbstractPlayer
 
 		void SetGold(GoldType value);
 		GoldType GetGold();
+
+		void SetDR(int iDR);
+		int GetDR();
+
+		void SetDM(int iDM);
+		int GetDM();
 
 		// Item
 		void	MoveItemData(TItemPos SrcCell, TItemPos DstCell);
