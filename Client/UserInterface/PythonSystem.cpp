@@ -502,7 +502,9 @@ bool CPythonSystem::LoadConfig()
 		}
 		if (m_Config.height >= screen_height)
 		{
-			m_Config.height = screen_height;
+			int config_height = m_Config.height;
+			int difference = (config_height - screen_height) + 7;
+			m_Config.height = config_height - difference;
 		}
 	}
 
