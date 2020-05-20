@@ -1101,11 +1101,11 @@ static void GrannyError(granny_log_message_type Type,
 	// if (Type == GrannyWarningLogMessage)
 	if (Origin==GrannyFileReadingLogMessage || Origin==GrannyControlLogMessage || Origin==GrannyMeshBindingLogMessage)
 		return;
-	TraceError("GRANNY: %s(%d): ERROR: %s --- [%d] %s --- [%d] %s", File, Line, Error, Type, GrannyGetLogMessageTypeString(Type), Origin, GrannyGetLogMessageOriginString(Origin));
+	//TraceError("GRANNY: %s(%d): ERROR: %s --- [%d] %s --- [%d] %s", File, Line, Error, Type, GrannyGetLogMessageTypeString(Type), Origin, GrannyGetLogMessageOriginString(Origin));
 }
 #else
 #error "unknown granny version"
-#endif
+#endif 
 
 int Setup(LPSTR lpCmdLine)
 {
@@ -1125,9 +1125,9 @@ int Setup(LPSTR lpCmdLine)
 	 *	그래니 에러 핸들링
 	 */
 
-	granny_log_callback Callback;
-    Callback.Function = GrannyError;
-    Callback.UserData = 0;
-    GrannySetLogCallback(&Callback);
+	//granny_log_callback Callback;
+   // Callback.Function = GrannyError;
+    //Callback.UserData = 0;
+    //GrannySetLogCallback(&Callback);
 	return 1;
 }
