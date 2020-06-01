@@ -1223,37 +1223,28 @@ void CPythonPlayer::SendClickItemPacket(DWORD dwIID)
 	if (IsObserverMode())
 		return;
 
-	static DWORD s_dwNextTCPTime = 0;
+	const char * c_szOwnerName;
+	if (!CPythonItem::Instance().GetOwnership(dwIID, &c_szOwnerName))
+		return;
 
-	DWORD dwCurTime=ELTimer_GetMSec();
-
-	if (dwCurTime >= s_dwNextTCPTime)
+	if (strlen(c_szOwnerName) > 0)
+	if (0 != strcmp(c_szOwnerName, GetName()))
 	{
-		s_dwNextTCPTime=dwCurTime + 500;
-
-		const char * c_szOwnerName;
-		if (!CPythonItem::Instance().GetOwnership(dwIID, &c_szOwnerName))
-			return;
-
-		if (strlen(c_szOwnerName) > 0)
-		if (0 != strcmp(c_szOwnerName, GetName()))
+		CItemData * pItemData;
+		if (!CItemManager::Instance().GetItemDataPointer(CPythonItem::Instance().GetVirtualNumberOfGroundItem(dwIID), &pItemData))
 		{
-			CItemData * pItemData;
-			if (!CItemManager::Instance().GetItemDataPointer(CPythonItem::Instance().GetVirtualNumberOfGroundItem(dwIID), &pItemData))
-			{
-				Tracenf("CPythonPlayer::SendClickItemPacket(dwIID=%d) : Non-exist item.", dwIID);
-				return;
-			}
-			if (!IsPartyMemberByName(c_szOwnerName) || pItemData->IsAntiFlag(CItemData::ITEM_ANTIFLAG_DROP | CItemData::ITEM_ANTIFLAG_GIVE))
-			{
-				PyCallClassMemberFunc(m_ppyGameWindow, "OnCannotPickItem", Py_BuildValue("()"));
-				return;
-			}
+			Tracenf("CPythonPlayer::SendClickItemPacket(dwIID=%d) : Non-exist item.", dwIID);
+			return;
 		}
-
-		CPythonNetworkStream& rkNetStream=CPythonNetworkStream::Instance();
-		rkNetStream.SendItemPickUpPacket(dwIID);
+		if (!IsPartyMemberByName(c_szOwnerName) || pItemData->IsAntiFlag(CItemData::ITEM_ANTIFLAG_DROP | CItemData::ITEM_ANTIFLAG_GIVE))
+		{
+			PyCallClassMemberFunc(m_ppyGameWindow, "OnCannotPickItem", Py_BuildValue("()"));
+			return;
+		}
 	}
+
+	CPythonNetworkStream& rkNetStream=CPythonNetworkStream::Instance();
+	rkNetStream.SendItemPickUpPacket(dwIID);
 }
 
 void CPythonPlayer::__SendClickActorPacket(CInstanceBase& rkInstVictim)
