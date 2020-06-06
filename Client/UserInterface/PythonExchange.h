@@ -10,7 +10,7 @@ class CPythonExchange : public CSingleton<CPythonExchange>
 	public:
 		enum
 		{
-			EXCHANGE_ITEM_MAX_NUM = 12,
+			EXCHANGE_ITEM_MAX_NUM = (6 * 4),
 		};
 
 		typedef struct trade
