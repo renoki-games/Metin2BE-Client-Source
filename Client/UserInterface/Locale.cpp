@@ -116,9 +116,9 @@ unsigned LocaleService_GetLastExp(int level)
 		2600000UL,	// 17
 		3200000UL,	// 18
 		4000000UL,	// 19
-		16800000UL,	// 20
-		16800000UL,	// 21
-		16800000UL	// 22
+		5652000UL,	// 20
+		7000000UL,	// 21
+		7000000UL	// 22
 	};
 
 	if (level < 0 && level >= GUILD_LEVEL_MAX)
