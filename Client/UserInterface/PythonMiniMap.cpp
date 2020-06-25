@@ -900,7 +900,7 @@ bool CPythonMiniMap::LoadAtlas()
 	snprintf(atlasFileName, sizeof(atlasFileName), "%s/atlas.sub", rkMap.GetName().c_str());
 	if (!CEterPackManager::Instance().isExist(atlasFileName))
 	{
-		snprintf(atlasFileName, sizeof(atlasFileName), "d:/ymir work/ui/atlas/%s/atlas.sub", rkMap.GetName().c_str());
+		snprintf(atlasFileName, sizeof(atlasFileName), "d:/ymir work/atlas/%s_atlas.tga", rkMap.GetName().c_str());
 	}
 
 	m_AtlasImageInstance.Destroy();
