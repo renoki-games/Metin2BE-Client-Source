@@ -2904,6 +2904,10 @@ UINT CInstanceBase::__GetRefinedEffect(CItemData* pItem)
 			{
 				__AttachEffect(EFFECT_REFINED + EFFECT_BODYARMOR_70ER_ARMOR); //effect 21 NEW EFFECT
 			}
+			if (vnum >= 11971 && vnum <= 11974)	// King Rüstungen
+			{
+				__AttachEffect(EFFECT_REFINED + EFFECT_BODYARMOR_REFINED9); //effect Armor +9
+			}
 		}
 
 		if (refine < 7)	//ÇöÀç Á¦·Ãµµ 7 ÀÌ»ó¸¸ ÀÌÆåÆ®°¡ ÀÖ½À´Ï´Ù.
