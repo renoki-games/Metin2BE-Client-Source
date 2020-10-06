@@ -41,6 +41,7 @@
 #include "ServerStateChecker.h"
 #include "AbstractApplication.h"
 #include "MovieMan.h"
+#include "PythonWhisper.h"
 
 class CPythonApplication : public CMSApplication, public CInputKeyboard, public IAbstractApplication
 {
@@ -340,6 +341,10 @@ class CPythonApplication : public CMSApplication, public CInputKeyboard, public 
 		CPythonMessenger			m_pyManager;
 		CPythonSafeBox				m_pySafeBox;
 		CPythonGuild				m_pyGuild;
+
+#ifdef ENABLE_WHISPER_TIPPING
+		CPythonWhisper				m_pyWhisper;
+#endif
 
 		CGuildMarkManager			m_kGuildMarkManager;
 		CGuildMarkDownloader		m_kGuildMarkDownloader;

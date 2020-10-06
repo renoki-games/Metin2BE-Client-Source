@@ -315,6 +315,17 @@
     <ClCompile Include="StdAfx.cpp" />
     <ClCompile Include="UserInterface.cpp" />
     <ClCompile Include="PythonEventManagerModule.cpp" />
+    <ClCompile Include="CefClientApp.cpp" />
+    <ClCompile Include="CefClientHandler.cpp" />
+    <ClCompile Include="CefClientV8ExtensionHandler.cpp" />
+    <ClCompile Include="CefWebBrowser.cpp" />
+    <ClCompile Include="PythonWhisper.cpp" />
+    <ClCompile Include="CCpuId.cpp" />
+    <ClCompile Include="CHddData.cpp" />
+    <ClCompile Include="CMacAddr.cpp" />
+    <ClCompile Include="CMachineGuid.cpp" />
+    <ClCompile Include="CNetworkAdapter.cpp" />
+    <ClCompile Include="HWIDManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AffectFlagContainer.h">
@@ -516,6 +527,17 @@
     <ClInclude Include="MovieMan.h" />
     <ClInclude Include="StdAfx.h" />
     <ClInclude Include="Test.h" />
+    <ClInclude Include="CefClientApp.h" />
+    <ClInclude Include="CefClientHandler.h" />
+    <ClInclude Include="CefClientV8ExtensionHandler.h" />
+    <ClInclude Include="CefWebBrowser.h" />
+    <ClInclude Include="PythonWhisper.h" />
+    <ClInclude Include="CCpuId.h" />
+    <ClInclude Include="CHddData.h" />
+    <ClInclude Include="CMacAddr.h" />
+    <ClInclude Include="CMachineGuid.h" />
+    <ClInclude Include="CNetworkAdapter.h" />
+    <ClInclude Include="HWIDManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\bin\colorInfo.py">

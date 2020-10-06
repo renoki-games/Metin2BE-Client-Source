@@ -4,14 +4,21 @@
 #include "PythonExceptionSender.h"
 #include "resource.h"
 #include "Version.h"
-
+#ifdef CRYPT_LOGINSETTINGS
+#include "HWIDManager.h"
+#endif
 #ifdef _DEBUG
 #include <crtdbg.h>
 #endif
 
+#ifdef CEF_BROWSER
+#include "CefWebBrowser.h"
+#else
+#include "../CWebBrowser/CWebBrowser.h"
+#endif
+
 #include "../eterPack/EterPackManager.h"
 #include "../eterLib/Util.h"
-#include "../CWebBrowser/CWebBrowser.h"
 #include "../eterBase/CPostIt.h"
 
 #include "CheckLatestFiles.h"
@@ -634,6 +641,9 @@ bool RunMainScript(CPythonLauncher& pyLauncher, const char* lpCmdLine)
 	initsafebox();
 	initguild();
 	initServerStateChecker();
+#ifdef ENABLE_WHISPER_TIPPING
+	initWhisper();
+#endif
 #ifdef __USE_CYTHON__
 	// don't add this line if you're implementing cython via .pyd:
 	// initrootlibManager();
@@ -737,11 +747,40 @@ bool RunMainScript(CPythonLauncher& pyLauncher, const char* lpCmdLine)
 	return true;
 }
 
+void SetInternetRegKey()
+{
+	LONG status;
+	HKEY hKey;
+
+	status = RegOpenKeyEx(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION"), 0, KEY_ALL_ACCESS, &hKey);
+	if ((status == ERROR_SUCCESS) && (hKey != NULL))
+	{
+		DWORD standard = 11000;
+		DWORD version;
+		DWORD size = sizeof(version);
+		DWORD type = REG_DWORD;
+		status = RegQueryValueEx(hKey, TEXT("metin2client.exe"), NULL, &type, (BYTE*)&version, &size);
+		if (status != ERROR_SUCCESS)
+		{
+			status = RegSetValueEx(hKey, TEXT("metin2client.exe"), NULL, REG_DWORD, (BYTE*)&standard, sizeof(standard));
+			if (status != ERROR_SUCCESS)
+			{
+
+			}
+		}
+		RegCloseKey(hKey);
+	}
+}
+
 bool Main(HINSTANCE hInstance, LPSTR lpCmdLine)
 {
+	SetInternetRegKey();
 #ifdef LOCALE_SERVICE_YMIR
 	extern bool g_isScreenShotKey;
 	g_isScreenShotKey = true;
+#endif
+#ifdef CRYPT_LOGINSETTINGS
+	static HWIDMANAGER		hwidManager;
 #endif
 
 	DWORD dwRandSeed=time(NULL)+DWORD(GetCurrentProcess());
@@ -1047,7 +1086,11 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	}
 #endif
 
+#ifdef CEF_BROWSER
+	CefWebBrowser_Startup(hInstance);
+#else
 	WebBrowser_Startup(hInstance);
+#endif
 
 #ifndef ENABLE_PYLIB_CHECK
 	if (!CheckPythonLibraryFilenames())
@@ -1063,7 +1106,11 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	GameGuard_NoticeMessage();
 #endif
 
+#ifdef CEF_BROWSER
+	CefWebBrowser_Cleanup();
+#else
 	WebBrowser_Cleanup();
+#endif
 
 	::CoUninitialize();
 

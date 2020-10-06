@@ -79,6 +79,9 @@ void initquest();
 void initsafebox();
 void initguild();
 void initMessenger();
+#ifdef ENABLE_WHISPER_TIPPING
+void initWhisper();
+#endif
 
 extern const std::string& ApplicationStringTable_GetString(DWORD dwID);
 extern const std::string& ApplicationStringTable_GetString(DWORD dwID, LPCSTR szKey);

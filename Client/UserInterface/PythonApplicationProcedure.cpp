@@ -1,7 +1,12 @@
 #include "StdAfx.h"
 #include "PythonApplication.h"
 #include "../eterlib/Camera.h"
+
+#ifdef CEF_BROWSER
+#include "CefWebBrowser.h"
+#else
 #include "../CWebBrowser/CWebBrowser.h"
+#endif
 
 #include <winuser.h>
 
@@ -180,7 +185,11 @@ LRESULT CPythonApplication::WindowProcedure(HWND hWnd, UINT uiMsg, WPARAM wParam
 			return 0;
 
 		case 0x20a:
+#ifdef CEF_BROWSER
+			if (CefWebBrowser_IsVisible())
+#else
 			if (WebBrowser_IsVisible())
+#endif
 			{
 				// 웹브라우저 상태일때는 휠 작동 안되도록 처리
 			}

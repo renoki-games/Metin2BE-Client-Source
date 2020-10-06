@@ -20,20 +20,20 @@
     </SccLocalPath>
     <SccProvider>
     </SccProvider>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -63,7 +63,7 @@
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">metin2client_debug</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">metin2client</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Metin2-BlackEdition</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
@@ -179,6 +179,34 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AffectFlagContainer.cpp" />
+    <ClCompile Include="CCpuId.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="CefClientApp.cpp" />
+    <ClCompile Include="CefClientHandler.cpp" />
+    <ClCompile Include="CefClientV8ExtensionHandler.cpp" />
+    <ClCompile Include="CefWebBrowser.cpp" />
+    <ClCompile Include="CHddData.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="CMacAddr.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="CMachineGuid.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="CNetworkAdapter.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="HWIDManager.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="InstanceBase.cpp" />
     <ClCompile Include="InstanceBaseBattle.cpp" />
     <ClCompile Include="InstanceBaseEffect.cpp" />
@@ -262,6 +290,7 @@
     <ClCompile Include="PythonNetworkStreamPhaseLogin.cpp" />
     <ClCompile Include="PythonNetworkStreamPhaseOffline.cpp" />
     <ClCompile Include="PythonNetworkStreamPhaseSelect.cpp" />
+    <ClCompile Include="PythonWhisper.cpp" />
     <ClCompile Include="ServerStateChecker.cpp" />
     <ClCompile Include="ServerStateCheckerModule.cpp" />
     <ClCompile Include="CheckLatestFiles.cpp" />
@@ -278,6 +307,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AffectFlagContainer.h" />
+    <ClInclude Include="CCpuId.h" />
+    <ClInclude Include="CefClientApp.h" />
+    <ClInclude Include="CefClientHandler.h" />
+    <ClInclude Include="CefClientV8ExtensionHandler.h" />
+    <ClInclude Include="CefWebBrowser.h" />
+    <ClInclude Include="CHddData.h" />
+    <ClInclude Include="CMacAddr.h" />
+    <ClInclude Include="CMachineGuid.h" />
+    <ClInclude Include="CNetworkAdapter.h" />
+    <ClInclude Include="HWIDManager.h" />
     <ClInclude Include="InstanceBase.h" />
     <ClInclude Include="PythonBackground.h" />
     <ClInclude Include="PythonCharacterManager.h" />
@@ -304,6 +343,7 @@
     <ClInclude Include="GuildMarkUploader.h" />
     <ClInclude Include="MarkImage.h" />
     <ClInclude Include="MarkManager.h" />
+    <ClInclude Include="PythonWhisper.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="AbstractApplication.h" />
     <ClInclude Include="AbstractCharacterManager.h" />

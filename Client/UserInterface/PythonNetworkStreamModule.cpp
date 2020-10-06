@@ -366,6 +366,27 @@ PyObject* netConnectToAccountServer(PyObject* poSelf, PyObject* poArgs)
 	return Py_BuildNone();
 }
 
+#ifdef ENABLE_SEND_TARGET_INFO
+PyObject* netTargetInfoLoad(PyObject* poSelf, PyObject* poArgs)
+{
+	DWORD dwVID;
+
+	if (!PyArg_ParseTuple(poArgs, "i", &dwVID))
+	{
+		return Py_BuildException();
+	}
+	if (dwVID < 0)
+	{
+		return Py_BuildNone();
+	}
+
+	CPythonNetworkStream& rns = CPythonNetworkStream::Instance();
+	rns.SendTargetInfoLoadPacket(dwVID);
+
+	return Py_BuildNone();
+}
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 PyObject* netSetLoginInfo(PyObject* poSelf, PyObject* poArgs)
@@ -1779,6 +1800,10 @@ void initnet()
 		{ "ConnectTCP",							netConnectTCP,							METH_VARARGS },
 		{ "ConnectUDP",							netConnectUDP,							METH_VARARGS },
 		{ "ConnectToAccountServer",				netConnectToAccountServer,				METH_VARARGS },
+
+#ifdef ENABLE_SEND_TARGET_INFO
+		{ "SendTargetInfoLoad",					netTargetInfoLoad,						METH_VARARGS },
+#endif
 
 		{ "SendLoginPacket",					netSendLoginPacket,						METH_VARARGS },
 		{ "SendChinaMatrixCardPacket",			netSendChinaMatrixCardPacket,			METH_VARARGS },

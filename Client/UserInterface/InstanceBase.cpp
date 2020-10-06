@@ -250,6 +250,7 @@ bool CInstanceBase::SHORSE::IsNewMount()
 #endif
 	return false;
 }
+
 bool CInstanceBase::SHORSE::CanUseSkill()
 {
 	// ¸¶»ó½ºÅ³Àº ¸»ÀÇ ·¹º§ÀÌ 3 ÀÌ»óÀÌ¾î¾ß¸¸ ÇÔ.
@@ -2435,6 +2436,10 @@ bool CInstanceBase::CanViewTargetHP(CInstanceBase& rkInstVictim)
 		return true;
 	if (rkInstVictim.IsEnemy())
 		return true;
+#ifdef ENABLE_VIEW_TARGET_PLAYER_HP
+	if (rkInstVictim.IsPC())
+		return true;
+#endif
 
 	return false;
 }
@@ -2907,6 +2912,7 @@ UINT CInstanceBase::__GetRefinedEffect(CItemData* pItem)
 			if (vnum >= 11971 && vnum <= 11974)	// King Rüstungen
 			{
 				__AttachEffect(EFFECT_REFINED + EFFECT_BODYARMOR_REFINED9); //effect Armor +9
+				__AttachEffect(EFFECT_REFINED + EFFECT_BODYARMOR_KAISER);	//white shining
 			}
 		}
 

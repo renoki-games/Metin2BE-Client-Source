@@ -159,7 +159,12 @@ void CActorInstance::SetHair(DWORD eHair)
 void CActorInstance::SetShape(DWORD eShape, float fSpecular)
 {
 	m_eShape = eShape;
-
+	
+	if (IsNPC() || IsPoly())
+	{
+		fSpecular = 1.0;
+	}
+	
 	CRaceData * pRaceData;
 	if (!CRaceManager::Instance().GetRaceDataPointer(m_eRace, &pRaceData))
 		return;

@@ -90,8 +90,8 @@ void CServerStateChecker::Update()
 		}
 		for (std::list<TChannel>::const_iterator it = m_lstChannel.begin(); it != m_lstChannel.end(); ++it) {
 			if (channelStatus.nPort == it->uPort) {
-				PyCallClassMemberFunc(m_poWnd, "NotifyChannelState", Py_BuildValue("(ii)", it->uServerIndex, channelStatus.bStatus));
-				break;
+				PyCallClassMemberFunc(m_poWnd, "NotifyChannelState", Py_BuildValue("(iii)", it->uServerIndex, channelStatus.bStatus, channelStatus.player_count));
+			break;
 			}
 		}
 	}

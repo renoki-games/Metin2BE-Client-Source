@@ -5,6 +5,14 @@
 #include "Locale.h"
 #include "../GameLib/GameLibDefines.h"
 
+#ifdef CRYPT_LOGINSETTINGS
+#include <cryptopp/filters.h>
+#include <cryptopp/hex.h>
+#include <cryptopp/default.h>
+#include <cryptopp/base64.h>
+#include "HWIDManager.h"
+#endif
+
 extern bool PERF_CHECKER_RENDER_GAME;
 extern D3DXCOLOR g_fSpecularColor;
 extern BOOL bVisibleNotice = true;
@@ -722,6 +730,104 @@ PyObject * appIsPressed(PyObject * poSelf, PyObject * poArgs)
 	return Py_BuildValue("i", CPythonApplication::Instance().IsPressed(iKey));
 }
 
+#ifdef CRYPT_LOGINSETTINGS
+PyObject* appDecryptByHWID(PyObject* poSelf, PyObject* poArgs)
+{
+	char* stringToDec;
+	if (!PyTuple_GetString(poArgs, 0, &stringToDec))
+		return Py_BuildException();
+
+	try
+	{
+		std::string encrypted(stringToDec);
+
+
+		std::string chain;
+		chain.append(HWIDMANAGER::instance().getCPUid())
+			.append(HWIDMANAGER::instance().getHDDModel())
+			.append(HWIDMANAGER::instance().getMachineGUID())
+			.append(HWIDMANAGER::instance().getMacAddr())
+			.append(HWIDMANAGER::instance().getHDDSerial())
+			.append("K,u$#<W|k(T0=;d%Tt!k");
+
+		std::string hwid;
+		CryptoPP::SHA256 tempHash;
+
+		CryptoPP::StringSource nn(chain, true,
+			new CryptoPP::HashFilter(tempHash,
+				new CryptoPP::Base64Encoder(
+					new CryptoPP::StringSink(hwid), false
+				)
+			)
+		);
+
+		std::string decrypted;
+
+
+		CryptoPP::StringSource ss1(encrypted, true,
+			new CryptoPP::Base64Decoder(
+				new CryptoPP::DefaultDecryptorWithMAC(
+					(byte*)hwid.data(), hwid.size(),
+					new CryptoPP::StringSink(decrypted)
+				)
+			)
+		);
+
+		return Py_BuildValue("s#", decrypted.c_str(), decrypted.length());
+	}
+	catch (const CryptoPP::Exception& e)
+	{
+		return Py_BuildValue("s", "");
+	}
+}
+
+
+PyObject* appEncryptByHWID(PyObject* poSelf, PyObject* poArgs)
+{
+
+	char* stringToEnc;
+	if (!PyTuple_GetString(poArgs, 0, &stringToEnc))
+		return Py_BuildException();
+
+
+	std::string decrypted(stringToEnc);
+
+
+	std::string chain;
+	chain.append(HWIDMANAGER::instance().getCPUid())
+		.append(HWIDMANAGER::instance().getHDDModel())
+		.append(HWIDMANAGER::instance().getMachineGUID())
+		.append(HWIDMANAGER::instance().getMacAddr())
+		.append(HWIDMANAGER::instance().getHDDSerial())
+		.append("K,u$#<W|k(T0=;d%Tt!k");
+
+	std::string hwid;
+	CryptoPP::SHA256 tempHash;
+
+	CryptoPP::StringSource nn(chain, true,
+		new CryptoPP::HashFilter(tempHash,
+			new CryptoPP::Base64Encoder(
+				new CryptoPP::StringSink(hwid), false
+			)
+		)
+	);
+
+	std::string encrypted;
+
+
+	CryptoPP::StringSource ss1(decrypted, true,
+		new CryptoPP::DefaultEncryptorWithMAC(
+			(byte*)hwid.data(), hwid.size(),
+			new CryptoPP::Base64Encoder(
+				new CryptoPP::StringSink(encrypted), false
+			)
+		)
+	);
+
+	return Py_BuildValue("s#", encrypted.c_str(), encrypted.length());
+}
+#endif
+
 PyObject * appSetCursor(PyObject * poSelf, PyObject * poArgs)
 {
 /*
@@ -1350,6 +1456,10 @@ void initapp()
 		{ "OnLogoRender",				appLogoRender,					METH_VARARGS },
 		{ "OnLogoOpen",					appLogoOpen,					METH_VARARGS },
 		{ "OnLogoClose",				appLogoClose,					METH_VARARGS },
+#ifdef CRYPT_LOGINSETTINGS
+		{ "EncryptByHWID",				appEncryptByHWID,				METH_VARARGS },
+		{ "DecryptByHWID",				appDecryptByHWID,				METH_VARARGS },
+#endif
 
 		{ "ExecuteShell", appExecuteShell, METH_VARARGS },
 
@@ -1513,6 +1623,30 @@ void initapp()
 	PyModule_AddIntConstant(poModule, "CAMERA_TO_NEGATIVE",		CPythonApplication::CAMERA_TO_NEGITIVE);
 	PyModule_AddIntConstant(poModule, "CAMERA_STOP",			CPythonApplication::CAMERA_STOP);
 
+#ifdef ENABLE_REFINE_RENEWAL
+	PyModule_AddIntConstant(poModule, "ENABLE_REFINE_RENEWAL",	1);
+#else
+	PyModule_AddIntConstant(poModule, "ENABLE_REFINE_RENEWAL",	0);
+#endif
+
+#ifdef ENABLE_MOVE_CHANNEL
+	PyModule_AddIntConstant(poModule, "ENABLE_MOVE_CHANNEL",	1);
+#else
+	PyModule_AddIntConstant(poModule, "ENABLE_MOVE_CHANNEL",	0);
+#endif
+
+#ifdef ENABLE_VIEW_TARGET_PLAYER_HP
+	PyModule_AddIntConstant(poModule, "ENABLE_VIEW_TARGET_PLAYER_HP", 1);
+#else
+	PyModule_AddIntConstant(poModule, "ENABLE_VIEW_TARGET_PLAYER_HP", 0);
+#endif
+
+#ifdef ENABLE_VIEW_TARGET_DECIMAL_HP
+	PyModule_AddIntConstant(poModule, "ENABLE_VIEW_TARGET_DECIMAL_HP", 1);
+#else
+	PyModule_AddIntConstant(poModule, "ENABLE_VIEW_TARGET_DECIMAL_HP", 0);
+#endif
+
 #ifdef ENABLE_COSTUME_SYSTEM
 	PyModule_AddIntConstant(poModule, "ENABLE_COSTUME_SYSTEM",	1);
 #else
@@ -1663,6 +1797,48 @@ void initapp()
 	PyModule_AddIntConstant(poModule, "ENABLE_USE_COSTUME_ATTR",	1);
 #else
 	PyModule_AddIntConstant(poModule, "ENABLE_USE_COSTUME_ATTR",	0);
+#endif
+
+#if defined(ENABLE_AFFECT_POLYMORPH_REMOVE)
+	PyModule_AddIntConstant(poModule, "ENABLE_AFFECT_POLYMORPH_REMOVE",	1);
+#else
+	PyModule_AddIntConstant(poModule, "ENABLE_AFFECT_POLYMORPH_REMOVE",	0);
+#endif
+
+#if defined(__COMPARE_TOOLTIP__)
+	PyModule_AddIntConstant(poModule, "__COMPARE_TOOLTIP__", true);
+#else
+	PyModule_AddIntConstant(poModule, "__COMPARE_TOOLTIP__", false);
+#endif
+
+#ifdef RENEWAL_DEAD_PACKET
+	PyModule_AddIntConstant(poModule, "RENEWAL_DEAD_PACKET",	true);
+#else
+	PyModule_AddIntConstant(poModule, "RENEWAL_DEAD_PACKET",	false);
+#endif
+
+#ifdef ENABLE_TARGET_AFFECT
+	PyModule_AddIntConstant(poModule, "ENABLE_TARGET_AFFECT", 1);
+#else
+	PyModule_AddIntConstant(poModule, "ENABLE_TARGET_AFFECT", 0);
+#endif
+
+#ifdef ENABLE_WHISPER_TIPPING
+	PyModule_AddIntConstant(poModule, "ENABLE_WHISPER_TIPPING",	1);
+#else
+	PyModule_AddIntConstant(poModule, "ENABLE_WHISPER_TIPPING",	0);
+#endif
+
+#ifdef ENABLE_UNSTACK_ADDON
+	PyModule_AddIntConstant(poModule, "ENABLE_UNSTACK_ADDON",	1);
+#else
+	PyModule_AddIntConstant(poModule, "ENABLE_UNSTACK_ADDON",	0);
+#endif
+
+#ifdef ENABLE_SEND_TARGET_INFO
+	PyModule_AddIntConstant(poModule, "ENABLE_SEND_TARGET_INFO",	1);
+#else
+	PyModule_AddIntConstant(poModule, "ENABLE_SEND_TARGET_INFO",	0);
 #endif
 
 #ifdef USE_OPENID

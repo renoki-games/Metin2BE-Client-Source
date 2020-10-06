@@ -2493,6 +2493,13 @@ void initPlayer()
 	PyModule_AddIntConstant(poModule, "AUTO_POTION_TYPE_HP",	CPythonPlayer::AUTO_POTION_TYPE_HP);
 	PyModule_AddIntConstant(poModule, "AUTO_POTION_TYPE_SP",	CPythonPlayer::AUTO_POTION_TYPE_SP);
 
+#ifdef RENEWAL_DEAD_PACKET
+	PyModule_AddIntConstant(poModule, "REVIVE_TYPE_HERE",		REVIVE_TYPE_HERE);
+	PyModule_AddIntConstant(poModule, "REVIVE_TYPE_TOWN",		REVIVE_TYPE_TOWN);
+	PyModule_AddIntConstant(poModule, "REVIVE_TYPE_AUTO_TOWN",	REVIVE_TYPE_AUTO_TOWN);
+	PyModule_AddIntConstant(poModule, "REVIVE_TYPE_MAX",		REVIVE_TYPE_MAX);
+#endif
+
 #ifdef WJ_ENABLE_TRADABLE_ICON
 	PyModule_AddIntConstant(poModule, "ON_TOP_WND_NONE",			ON_TOP_WND_NONE);
 	PyModule_AddIntConstant(poModule, "ON_TOP_WND_SHOP",			ON_TOP_WND_SHOP);

@@ -4,7 +4,12 @@
 #include "../eterlib/AttributeInstance.h"
 #include "../gamelib/AreaTerrain.h"
 #include "../EterGrnLib/Material.h"
+
+#ifdef CEF_BROWSER
+#include "CefWebBrowser.h"
+#else
 #include "../CWebBrowser/CWebBrowser.h"
+#endif
 
 #include "resource.h"
 #include "PythonApplication.h"
@@ -1394,7 +1399,11 @@ void CPythonApplication::Clear()
 
 void CPythonApplication::Destroy()
 {
+#ifdef CEF_BROWSER
+	CefWebBrowser_Destroy();
+#else
 	WebBrowser_Destroy();
+#endif
 
 	// SphereMap
 	CGrannyMaterial::DestroySphereMap();

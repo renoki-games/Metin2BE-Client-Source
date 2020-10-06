@@ -4,6 +4,11 @@
 #include "../EffectLib/EffectManager.h"
 #include "PythonBackground.h"
 
+#ifdef ENABLE_EXTENDED_ITEMNAME_ON_GROUND
+#include "PythonSkill.h"
+#include "PythonNonPlayer.h"
+#endif
+
 #include "pythonitem.h"
 #include "PythonTextTail.h"
 
@@ -287,7 +292,11 @@ DWORD	CPythonItem::__GetUseSoundType(const CItemData& c_rkItemData)
 	return USESOUND_DEFAULT;
 }
 
+#ifdef ENABLE_EXTENDED_ITEMNAME_ON_GROUND
+void CPythonItem::CreateItem(DWORD dwVirtualID, DWORD dwVirtualNumber, float x, float y, float z, bool bDrop, long alSockets[ITEM_SOCKET_SLOT_MAX_NUM], TPlayerItemAttribute aAttrs[ITEM_ATTRIBUTE_SLOT_MAX_NUM])
+#else
 void CPythonItem::CreateItem(DWORD dwVirtualID, DWORD dwVirtualNumber, float x, float y, float z, bool bDrop)
+#endif
 {
 	//CItemManager& rkItemMgr=CItemManager::Instance();
 
@@ -297,7 +306,7 @@ void CPythonItem::CreateItem(DWORD dwVirtualID, DWORD dwVirtualNumber, float x, 
 
 	CGraphicThing* pItemModel = pItemData->GetDropModelThing();
 
-	TGroundItemInstance *	pGroundItemInstance = m_GroundItemInstancePool.Alloc();
+	TGroundItemInstance *	pGroundItemInstance = m_GroundItemInstancePool.Alloc();	
 	pGroundItemInstance->dwVirtualNumber = dwVirtualNumber;
 
 	bool bStabGround = false;
@@ -306,17 +315,10 @@ void CPythonItem::CreateItem(DWORD dwVirtualID, DWORD dwVirtualNumber, float x, 
 	{
 		z = CPythonBackground::Instance().GetHeight(x, y) + 10.0f;
 
-#ifdef __OBSOLETE__
-		if (pItemData->GetType()==CItemData::ITEM_TYPE_WEAPON &&
-			(pItemData->GetWeaponType() == CItemData::WEAPON_SWORD ||
-				pItemData->GetWeaponType() == CItemData::WEAPON_ARROW
-			)
-#ifdef ENABLE_WEAPON_COSTUME_SYSTEM
-			|| (pItemData->GetType()==CItemData::ITEM_TYPE_COSTUME && pItemData->GetSubType()==CItemData::COSTUME_WEAPON)
-#endif
-		)
+		if (pItemData->GetType()==CItemData::ITEM_TYPE_WEAPON && 
+			(pItemData->GetWeaponType() == CItemData::WEAPON_SWORD || 
+			 pItemData->GetWeaponType() == CItemData::WEAPON_ARROW))
 			bStabGround = true;
-#endif
 
 		bStabGround = false;
 		pGroundItemInstance->bAnimEnded = false;
@@ -329,8 +331,8 @@ void CPythonItem::CreateItem(DWORD dwVirtualID, DWORD dwVirtualNumber, float x, 
 	{
 		// attaching effect
 		CEffectManager & rem =CEffectManager::Instance();
-		pGroundItemInstance->dwEffectInstanceIndex =
-		rem.CreateEffect(m_dwDropItemEffectID, D3DXVECTOR3(x, -y, z), D3DXVECTOR3(0,0,0));
+		pGroundItemInstance->dwEffectInstanceIndex = 
+		rem.CreateEffect(m_dwDropItemEffectID, D3DXVECTOR3(x, -y, z), D3DXVECTOR3(0,0,0));		
 
 		pGroundItemInstance->eDropSoundType=__GetDropSoundType(*pItemData);
 	}
@@ -363,17 +365,17 @@ void CPythonItem::CreateItem(DWORD dwVirtualID, DWORD dwVirtualNumber, float x, 
 		pGroundItemInstance->ThingInstance.GetBoundBox(&vMin,&vMax);
 		pGroundItemInstance->v3Center = (vMin + vMax) * 0.5f;
 
-		std::pair<float,int> f[3] =
+		std::pair<float,int> f[3] = 
 			{
-				make_pair(vMax.x - vMin.x,0),
-				make_pair(vMax.y - vMin.y,1),
+				make_pair(vMax.x - vMin.x,0), 
+				make_pair(vMax.y - vMin.y,1), 
 				make_pair(vMax.z - vMin.z,2)
 			};
 
 		std::sort(f,f+3);
 
 		//int no_rotation_axis=-1;
-
+		
 		D3DXVECTOR3 rEnd;
 
 		if (/*f[1].first-f[0].first < (f[2].first-f[0].first)*0.30f*/ bStabGround)
@@ -405,7 +407,7 @@ void CPythonItem::CreateItem(DWORD dwVirtualID, DWORD dwVirtualNumber, float x, 
 			if (f[0].second == 0)
 			{
 				// y,z = by normal
-				pGroundItemInstance->qEnd =
+				pGroundItemInstance->qEnd = 
 					RotationArc(
 						D3DXVECTOR3(
 						((float)(random()%2))*2-1+frandom(-0.1f,0.1f),
@@ -415,7 +417,7 @@ void CPythonItem::CreateItem(DWORD dwVirtualID, DWORD dwVirtualNumber, float x, 
 			}
 			else if (f[0].second == 1)
 			{
-				pGroundItemInstance->qEnd =
+				pGroundItemInstance->qEnd = 
 					RotationArc(
 						D3DXVECTOR3(
 							0+frandom(-0.1f,0.1f),
@@ -423,9 +425,9 @@ void CPythonItem::CreateItem(DWORD dwVirtualID, DWORD dwVirtualNumber, float x, 
 							0+frandom(-0.1f,0.1f)),
 						D3DXVECTOR3(0,0,1)/*normal*/);
 			}
-			else
+			else 
 			{
-				pGroundItemInstance->qEnd =
+				pGroundItemInstance->qEnd = 
 					RotationArc(
 					D3DXVECTOR3(
 					0+frandom(-0.1f,0.1f),
@@ -464,9 +466,9 @@ void CPythonItem::CreateItem(DWORD dwVirtualID, DWORD dwVirtualNumber, float x, 
 		D3DXVECTOR3 v3Adjust = -pGroundItemInstance->v3Center;
 		D3DXMATRIX mat;
 		D3DXMatrixRotationQuaternion(&mat, &pGroundItemInstance->qEnd);
-		/*D3DXMatrixRotationYawPitchRoll(&mat,
-			D3DXToRadian(pGroundItemInstance->rEnd.y),
-			D3DXToRadian(pGroundItemInstance->rEnd.x),
+		/*D3DXMatrixRotationYawPitchRoll(&mat, 
+			D3DXToRadian(pGroundItemInstance->rEnd.y), 
+			D3DXToRadian(pGroundItemInstance->rEnd.x), 
 			D3DXToRadian(pGroundItemInstance->rEnd.z));*/
 
 		D3DXVec3TransformCoord(&v3Adjust,&v3Adjust,&mat);
@@ -480,10 +482,55 @@ void CPythonItem::CreateItem(DWORD dwVirtualID, DWORD dwVirtualNumber, float x, 
 	m_GroundItemInstanceMap.insert(TGroundItemInstanceMap::value_type(dwVirtualID, pGroundItemInstance));
 
 	CPythonTextTail& rkTextTail=CPythonTextTail::Instance();
+
+#ifdef ENABLE_EXTENDED_ITEMNAME_ON_GROUND
+	static char szItemName[128];
+	ZeroMemory(szItemName, sizeof(szItemName));
+	int len = 0;
+	switch (pItemData->GetType())
+	{
+	case CItemData::ITEM_TYPE_POLYMORPH:
+	{
+		const char* c_szTmp;
+		CPythonNonPlayer& rkNonPlayer = CPythonNonPlayer::Instance();
+		rkNonPlayer.GetName(alSockets[0], &c_szTmp);
+		len += snprintf(szItemName, sizeof(szItemName), "%s", c_szTmp);
+		break;
+	}
+	case CItemData::ITEM_TYPE_SKILLBOOK:
+	case CItemData::ITEM_TYPE_SKILLFORGET:
+	{
+		const DWORD dwSkillVnum = (dwVirtualNumber == 50300 || dwVirtualNumber == 70037) ? alSockets[0] : 0;
+		CPythonSkill::SSkillData * c_pSkillData;
+		if ((dwSkillVnum != 0) && CPythonSkill::Instance().GetSkillData(dwSkillVnum, &c_pSkillData))
+			len += snprintf(szItemName, sizeof(szItemName), "%s", c_pSkillData->GradeData[0].strName.c_str());
+
+		break;
+	}
+	}
+
+	len += snprintf(szItemName + len, sizeof(szItemName) - len, (len>0) ? " %s" : "%s", pItemData->GetName());
+
+	bool bHasAttr = false;
+	for (size_t i = 0; i < ITEM_ATTRIBUTE_SLOT_MAX_NUM; ++i)
+	{
+		if (aAttrs[i].bType != 0 && aAttrs[i].sValue != 0)
+		{
+			bHasAttr = true;
+			break;
+		}
+	}
+	rkTextTail.RegisterItemTextTail(
+		dwVirtualID,
+		szItemName,
+		&pGroundItemInstance->ThingInstance,
+		bHasAttr);
+#else
 	rkTextTail.RegisterItemTextTail(
 		dwVirtualID,
 		pItemData->GetName(),
 		&pGroundItemInstance->ThingInstance);
+#endif
 }
 
 void CPythonItem::SetOwnership(DWORD dwVID, const char * c_pszName)

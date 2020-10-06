@@ -295,18 +295,17 @@ bool CPythonNetworkStream::RecvItemUpdatePacket()
 
 bool CPythonNetworkStream::RecvItemGroundAddPacket()
 {
-	TPacketGCItemGroundAdd packet_item_ground_add;
-
-	if (!Recv(sizeof(TPacketGCItemGroundAdd), &packet_item_ground_add))
+	TPacketGCItemGroundAdd recv;
+	if (!Recv(sizeof(TPacketGCItemGroundAdd), &recv))
 		return false;
 
-	__GlobalPositionToLocalPosition(packet_item_ground_add.lX, packet_item_ground_add.lY);
+	__GlobalPositionToLocalPosition(recv.lX, recv.lY);
 
-	CPythonItem::Instance().CreateItem(packet_item_ground_add.dwVID,
-									   packet_item_ground_add.dwVnum,
-									   packet_item_ground_add.lX,
-									   packet_item_ground_add.lY,
-									   packet_item_ground_add.lZ);
+#ifdef ENABLE_EXTENDED_ITEMNAME_ON_GROUND
+	CPythonItem::Instance().CreateItem(recv.dwVID, recv.dwVnum, recv.lX, recv.lY, recv.lZ, true, recv.alSockets, recv.aAttrs);
+#else
+	CPythonItem::Instance().CreateItem(recv.dwVID, recv.dwVnum, recv.lX, recv.lY, recv.lZ);
+#endif
 	return true;
 }
 

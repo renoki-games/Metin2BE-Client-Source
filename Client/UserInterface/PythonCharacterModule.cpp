@@ -1496,6 +1496,10 @@ void initchr()
 	PyModule_AddIntConstant(poModule, "NEW_AFFECT_EXP_BONUS_EURO_FREE",		CInstanceBase::NEW_AFFECT_EXP_BONUS_EURO_FREE);
 	PyModule_AddIntConstant(poModule, "NEW_AFFECT_EXP_BONUS_EURO_FREE_UNDER_15",CInstanceBase::NEW_AFFECT_EXP_BONUS_EURO_FREE_UNDER_15);
 
+#if defined(ENABLE_AFFECT_POLYMORPH_REMOVE)
+	PyModule_AddIntConstant(poModule, "NEW_AFFECT_POLYMORPH",				CInstanceBase::NEW_AFFECT_POLYMORPH);
+#endif
+
 	PyModule_AddIntConstant(poModule, "NEW_AFFECT_ITEM_BONUS",				CInstanceBase::NEW_AFFECT_ITEM_BONUS);
 	PyModule_AddIntConstant(poModule, "NEW_AFFECT_SAFEBOX",					CInstanceBase::NEW_AFFECT_SAFEBOX);
 	PyModule_AddIntConstant(poModule, "NEW_AFFECT_AUTOLOOT",				CInstanceBase::NEW_AFFECT_AUTOLOOT);

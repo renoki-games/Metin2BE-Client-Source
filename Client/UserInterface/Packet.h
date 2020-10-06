@@ -227,6 +227,11 @@ enum
 	HEADER_GC_SCRIPT							= 45,
     HEADER_GC_QUEST_CONFIRM                     = 46,
 
+#ifdef ENABLE_SEND_TARGET_INFO
+	HEADER_GC_TARGET_INFO						= 58,
+	HEADER_CG_TARGET_INFO_LOAD					= 59,
+#endif
+
 	HEADER_GC_MOUNT								= 61,
 	HEADER_GC_OWNERSHIP                         = 62,
     HEADER_GC_TARGET                            = 63,
@@ -1481,10 +1486,26 @@ typedef struct packet_stun
 	DWORD		vid;
 } TPacketGCStun;
 
+#ifdef RENEWAL_DEAD_PACKET
+enum EReviveTypes
+{
+	REVIVE_TYPE_HERE,
+	REVIVE_TYPE_TOWN,
+	REVIVE_TYPE_AUTO_TOWN,
+	REVIVE_TYPE_MAX
+};
+#endif
+
 typedef struct packet_dead
 {
-	BYTE		header;
-	DWORD		vid;
+#ifdef RENEWAL_DEAD_PACKET
+	packet_dead() {	memset(&t_d, 0, sizeof(t_d)); }
+#endif
+	BYTE	header;
+	DWORD	vid;
+#ifdef RENEWAL_DEAD_PACKET
+	BYTE	t_d[REVIVE_TYPE_MAX];
+#endif
 } TPacketGCDead;
 
 typedef struct packet_main_character
@@ -1830,13 +1851,24 @@ typedef struct packet_update_item
 
 typedef struct packet_ground_add_item
 {
-    BYTE        bHeader;
-    long        lX;
-	long		lY;
-	long		lZ;
+#ifdef ENABLE_EXTENDED_ITEMNAME_ON_GROUND
+	packet_ground_add_item()
+	{
+		memset(&alSockets, 0, sizeof(alSockets));
+		memset(&aAttrs, 0, sizeof(aAttrs));
+	}
+#endif
 
-    DWORD       dwVID;
-    DWORD       dwVnum;
+	BYTE	bHeader;
+	long	lX;
+	long	lY;
+	long	lZ;
+	DWORD	dwVID;
+	DWORD	dwVnum;
+#ifdef ENABLE_EXTENDED_ITEMNAME_ON_GROUND
+	long	alSockets[ITEM_SOCKET_SLOT_MAX_NUM];//3 
+	TPlayerItemAttribute aAttrs[ITEM_ATTRIBUTE_SLOT_MAX_NUM];//7
+#endif
 } TPacketGCItemGroundAdd;
 
 typedef struct packet_ground_del_item
@@ -1976,12 +2008,52 @@ typedef struct packet_script
     WORD        src_size;
 } TPacketGCScript;
 
+#ifdef ENABLE_TARGET_AFFECT
+enum ESimpleAffect
+{
+	SIMPLE_AFFECT_POISION,
+	SIMPLE_AFFECT_SLOW,
+	SIMPLE_AFFECT_STUN,
+	SIMPLE_AFFECT_MAX_NUM
+};
+
+typedef struct SSimpleAffect
+{
+	DWORD dwAffectID;
+	long lDuration;
+} TSimpleAffect;
+#endif
+
 typedef struct packet_target
 {
     BYTE        header;
     DWORD       dwVID;
     BYTE        bHPPercent;
+#ifdef ENABLE_VIEW_TARGET_DECIMAL_HP
+	int		iMinHP;
+	int		iMaxHP;
+#endif
+#ifdef ENABLE_TARGET_AFFECT
+	TSimpleAffect affects[SIMPLE_AFFECT_MAX_NUM];
+#endif
 } TPacketGCTarget;
+
+#ifdef ENABLE_SEND_TARGET_INFO
+typedef struct packet_target_info
+{
+	BYTE	header;
+	DWORD	dwVID;
+	DWORD	race;
+	DWORD	dwVnum;
+	BYTE	count;
+} TPacketGCTargetInfo;
+
+typedef struct packet_target_info_load
+{
+	BYTE header;
+	DWORD dwVID;
+} TPacketCGTargetInfoLoad;
+#endif
 
 typedef struct packet_damage_info
 {
@@ -2810,6 +2882,7 @@ typedef struct SChannelStatus
 {
 	short nPort;
 	BYTE bStatus;
+	int player_count;
 } TChannelStatus;
 
 // @fixme007 length 2

@@ -403,6 +403,12 @@ void CPythonNetworkStream::GamePhase()
 				ret = RecvTargetPacket();
 				break;
 
+#ifdef ENABLE_SEND_TARGET_INFO
+			case HEADER_GC_TARGET_INFO:
+				ret = RecvTargetInfoPacket();
+				break;
+#endif
+
 			case HEADER_GC_DAMAGE_INFO:
 				ret = RecvDamageInfoPacket();
 				break;
@@ -913,6 +919,20 @@ bool CPythonNetworkStream::RecvObserverAddPacket()
 
 	return true;
 }
+
+#ifdef ENABLE_SEND_TARGET_INFO
+bool CPythonNetworkStream::SendTargetInfoLoadPacket(DWORD dwVID)
+{
+	TPacketCGTargetInfoLoad TargetInfoLoadPacket;
+	TargetInfoLoadPacket.header = HEADER_CG_TARGET_INFO_LOAD;
+	TargetInfoLoadPacket.dwVID = dwVID;
+
+	if (!Send(sizeof(TargetInfoLoadPacket), &TargetInfoLoadPacket))
+		return false;
+
+	return SendSequence();
+}
+#endif
 
 bool CPythonNetworkStream::RecvUnk213() // @fixme007
 {
@@ -1457,6 +1477,18 @@ bool CPythonNetworkStream::RecvWhisperPacket()
 
 	buf[whisperPacket.wSize - sizeof(whisperPacket)] = '\0';
 
+#ifdef ENABLE_WHISPER_TIPPING
+	#include "PythonWhisper.h"
+	if (std::string(buf).find("|?whisper_renewal>|") != std::string::npos) {
+		CPythonWhisper::Instance().AddName(whisperPacket.szNameFrom, CPythonWhisper::TARGET);
+		return true;
+	}
+	else if (std::string(buf).find("|?whisper_renewal<|") != std::string::npos) {
+		CPythonWhisper::Instance().DeleteName(whisperPacket.szNameFrom, CPythonWhisper::TARGET);
+		return true;
+	}
+#endif
+
 	static char line[256];
 	if (CPythonChat::WHISPER_TYPE_CHAT == whisperPacket.bType || CPythonChat::WHISPER_TYPE_GM == whisperPacket.bType)
 	{
@@ -1619,11 +1651,19 @@ bool CPythonNetworkStream::RecvDeadPacket()
 			Tracenf("On MainActor");
 			if (false == pkInstMain->GetDuelMode())
 			{
+#ifndef RENEWAL_DEAD_PACKET
 				PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "OnGameOver", Py_BuildValue("()"));
+#else
+				PyObject *times = PyTuple_New(REVIVE_TYPE_MAX);
+				for (int i = REVIVE_TYPE_HERE; i < REVIVE_TYPE_MAX; i++)
+					PyTuple_SetItem(times, i, PyInt_FromLong(DeadPacket.t_d[i]));
+				PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "OnGameOver", Py_BuildValue("(O)", times));
+#endif
 			}
+			
 			CPythonPlayer::Instance().NotifyDeadMainCharacter();
+		
 		}
-
 		pkChrInstSel->Die();
 	}
 
@@ -2479,13 +2519,51 @@ bool CPythonNetworkStream::RecvTargetPacket()
 	{
 		if (!pInstTarget->IsDead())
 		{
+#ifdef ENABLE_VIEW_TARGET_PLAYER_HP
+			if (pInstTarget->IsBuilding())
+#else
 			if (pInstTarget->IsPC() || pInstTarget->IsBuilding())
+#endif
 				PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "CloseTargetBoardIfDifferent", Py_BuildValue("(i)", TargetPacket.dwVID));
 			else if (pInstPlayer->CanViewTargetHP(*pInstTarget))
+#ifdef ENABLE_VIEW_TARGET_DECIMAL_HP
+				PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "SetHPTargetBoard", Py_BuildValue("(iiii)", TargetPacket.dwVID, TargetPacket.bHPPercent, TargetPacket.iMinHP, TargetPacket.iMaxHP));
+#else
 				PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "SetHPTargetBoard", Py_BuildValue("(ii)", TargetPacket.dwVID, TargetPacket.bHPPercent));
+#endif
 			else
 				PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "CloseTargetBoard", Py_BuildValue("()"));
 
+#ifdef ENABLE_TARGET_AFFECT
+			if (pInstTarget->IsEnemy())
+			{
+				WORD count = 0;
+				WORD i = 0;
+				for (i = 0; i < SIMPLE_AFFECT_MAX_NUM; i++)
+				{
+					TSimpleAffect& simpleAffect = TargetPacket.affects[i];
+					if (simpleAffect.dwAffectID != 0)
+					{
+						++count;
+						break;
+					}
+				}
+				if (count)
+				{
+					PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "ClearTargetAffects", Py_BuildValue("()"));
+
+					for (i = 0; i < SIMPLE_AFFECT_MAX_NUM; i++)
+					{
+
+						TSimpleAffect& simpleAffect = TargetPacket.affects[i];
+						if (simpleAffect.dwAffectID != 0)
+						{
+							PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "AddTargetBoardAffect", Py_BuildValue("(ii)", simpleAffect.dwAffectID, simpleAffect.lDuration));
+						}
+					}
+				}
+			}
+#endif
 			m_pInstTarget = pInstTarget;
 		}
 	}
@@ -2496,6 +2574,44 @@ bool CPythonNetworkStream::RecvTargetPacket()
 
 	return true;
 }
+
+#ifdef ENABLE_SEND_TARGET_INFO
+bool CPythonNetworkStream::RecvTargetInfoPacket()
+{
+	TPacketGCTargetInfo pInfoTargetPacket;
+
+	if (!Recv(sizeof(TPacketGCTargetInfo), &pInfoTargetPacket))
+	{
+		Tracen("Recv Info Target Packet Error");
+		return false;
+	}
+
+	CInstanceBase * pInstPlayer = CPythonCharacterManager::Instance().GetMainInstancePtr();
+	CInstanceBase * pInstTarget = CPythonCharacterManager::Instance().GetInstancePtr(pInfoTargetPacket.dwVID);
+	if (pInstPlayer && pInstTarget)
+	{
+		if (!pInstTarget->IsDead())
+		{
+			if (pInstTarget->IsEnemy() || pInstTarget->IsStone())
+			{
+				PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "BINARY_AddTargetMonsterDropInfo", 
+				Py_BuildValue("(iii)", pInfoTargetPacket.race, pInfoTargetPacket.dwVnum, pInfoTargetPacket.count));
+				PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "BINARY_RefreshTargetMonsterDropInfo", Py_BuildValue("(i)", pInfoTargetPacket.race));
+			}
+			else
+				PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "CloseTargetBoard", Py_BuildValue("()"));
+
+			// m_pInstTarget = pInstTarget;
+		}
+	}
+	else
+	{
+		PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "CloseTargetBoard", Py_BuildValue("()"));
+	}
+
+	return true;
+}
+#endif
 
 bool CPythonNetworkStream::RecvMountPacket()
 {
@@ -4256,6 +4372,9 @@ bool CPythonNetworkStream::RecvChannelPacket()
 	TPacketGCChannel kChannelPacket;
 	if (!Recv(sizeof(kChannelPacket), &kChannelPacket))
 		return false;
+#ifdef ENABLE_MOVE_CHANNEL
+	PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "RefreshChannel", Py_BuildValue("(i)", kChannelPacket.channel));
+#endif
 
 	//Tracef(" >> CPythonNetworkStream::RecvChannelPacket(channel=%d)\n", kChannelPacket.channel);
 
