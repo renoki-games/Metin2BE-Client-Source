@@ -1852,6 +1852,12 @@ void initapp()
 	PyModule_AddIntConstant(poModule, "OPENID_TEST",	0);
 #endif /* USE_OPENID */
 
+#ifdef __LOADING_TIP__
+	PyModule_AddIntConstant(poModule, "__LOADING_TIP__", true);
+#else
+	PyModule_AddIntConstant(poModule, "__LOADING_TIP__", false);
+#endif
+
 #ifdef WJ_ENABLE_TRADABLE_ICON
 	PyModule_AddIntConstant(poModule, "WJ_ENABLE_TRADABLE_ICON", 1);
 #endif

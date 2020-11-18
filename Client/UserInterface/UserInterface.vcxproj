@@ -318,6 +318,7 @@
     <ClInclude Include="CNetworkAdapter.h" />
     <ClInclude Include="HWIDManager.h" />
     <ClInclude Include="InstanceBase.h" />
+    <ClInclude Include="LTipList.h" />
     <ClInclude Include="PythonBackground.h" />
     <ClInclude Include="PythonCharacterManager.h" />
     <ClInclude Include="PythonEventManager.h" />

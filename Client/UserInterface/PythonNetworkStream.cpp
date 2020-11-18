@@ -905,4 +905,7 @@ CPythonNetworkStream::CPythonNetworkStream()
 CPythonNetworkStream::~CPythonNetworkStream()
 {
 	Tracen("PythonNetworkMainStream Clear");
+#if defined(__LOADING_TIP__)
+	m_TipVnum.clear();
+#endif
 }

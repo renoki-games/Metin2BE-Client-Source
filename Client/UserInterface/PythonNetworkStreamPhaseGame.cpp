@@ -977,6 +977,9 @@ bool CPythonNetworkStream::RecvWarpPacket()
 	if (!Recv(sizeof(kWarpPacket), &kWarpPacket))
 		return false;
 
+#if defined(__LOADING_TIP__)
+	CPythonBackground::Instance().SetWarpMapInfo(kWarpPacket.l_MapIndex);
+#endif
 	__DirectEnterMode_Set(m_dwSelectedCharacterIndex);
 
 	CNetworkStream::Connect((DWORD)kWarpPacket.lAddr, kWarpPacket.wPort);

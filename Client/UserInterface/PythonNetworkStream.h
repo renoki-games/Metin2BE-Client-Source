@@ -4,6 +4,10 @@
 #include "../eterlib/NetStream.h"
 #include "../eterLib/NetPacketHeaderMap.h"
 
+#if defined(__LOADING_TIP__)
+#include <unordered_map>
+#endif
+
 #include "InsultChecker.h"
 
 #include "packet.h"
@@ -725,11 +729,18 @@ class CPythonNetworkStream : public CNetworkStream, public CSingleton<CPythonNet
 		} m_kDirectEnterMode;
 
 		void __DirectEnterMode_Initialize();
+#if defined(__LOADING_TIP__)
+		std::unordered_map<int, std::string> m_TipVnum;
+#endif
 		void __DirectEnterMode_Set(UINT uChrSlotIndex);
 		bool __DirectEnterMode_IsSet();
 
 	public:
 		DWORD EXPORT_GetBettingGuildWarValue(const char* c_szValueName);
+#if defined(__LOADING_TIP__)
+		bool LoadTipVnum(const char* FileName);
+		const decltype(m_TipVnum)& GetTipMap() const { return m_TipVnum; };
+#endif
 
 	private:
 		struct SBettingGuildWar

@@ -46,6 +46,9 @@
 // -- New Login Interface
 #define CRYPT_LOGINSETTINGS
 
+// -- Ladescreen Infos
+#define __LOADING_TIP__
+
 //////////////////////////////////////////////////////////////////////////
 
 #define ENABLE_SHINING_SYSTEM

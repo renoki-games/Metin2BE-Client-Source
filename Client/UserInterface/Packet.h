@@ -2219,6 +2219,9 @@ typedef struct packet_warp
 	LONG			lY;
 	LONG			lAddr;
 	WORD			wPort;
+#if defined(__LOADING_TIP__)
+	long			l_MapIndex;
+#endif
 } TPacketGCWarp;
 
 typedef struct packet_party_invite

@@ -214,6 +214,9 @@ CPythonBackground::CPythonBackground()
 	m_dwBaseX=0;
 	m_dwBaseY=0;
 	m_strMapName="";
+#if defined(__LOADING_TIP__)
+	l_WarpMapIndex = 0;
+#endif
 	m_iDayMode = DAY_MODE_LIGHT;
 	m_iXMasTreeGrade = 0;
 	m_bVisibleGuildArea = FALSE;

@@ -126,6 +126,10 @@ public:
 	void RegisterDungeonMapName(const char * c_szMapName);
 	TMapInfo* GlobalPositionToMapInfo(DWORD dwGlobalX, DWORD dwGlobalY);
 	const char* GetWarpMapName();
+#if defined(__LOADING_TIP__)
+	void SetWarpMapInfo(long m) { l_WarpMapIndex = m; }
+	long GetWarpMapIndex() const { return l_WarpMapIndex; }
+#endif
 
 protected:
 	void __CreateProperty();
@@ -133,6 +137,9 @@ protected:
 
 protected:
 	std::string m_strMapName;
+#if defined(__LOADING_TIP__)
+	long l_WarpMapIndex;
+#endif
 
 private:
 	CSnowEnvironment m_SnowEnvironment;

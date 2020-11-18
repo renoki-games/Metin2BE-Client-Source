@@ -538,6 +538,7 @@
     <ClInclude Include="CMachineGuid.h" />
     <ClInclude Include="CNetworkAdapter.h" />
     <ClInclude Include="HWIDManager.h" />
+    <ClInclude Include="LTipList.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\bin\colorInfo.py">
