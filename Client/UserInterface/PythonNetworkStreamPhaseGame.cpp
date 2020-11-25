@@ -205,16 +205,8 @@ void CPythonNetworkStream::GamePhase()
 	kMap_kPacketInfo.clear();
 #endif
 
-	const DWORD MAX_RECV_COUNT = 4;
-	const DWORD SAFE_RECV_BUFSIZE = 8192;
-	DWORD dwRecvCount = 0;
-
     while (ret)
 	{
-		if(dwRecvCount++ >= MAX_RECV_COUNT-1 && GetRecvBufferSize() < SAFE_RECV_BUFSIZE
-			&& m_strPhase == "Game") //phase_game 이 아니어도 여기로 들어오는 경우가 있다.
-			break;
-
 		if (!CheckPacket(&header))
 			break;
 
