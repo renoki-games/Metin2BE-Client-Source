@@ -33,7 +33,7 @@ void CPythonPlayer::PickCloseMoney()
 	TPixelPosition kPPosMain;
 	pkInstMain->NEW_GetPixelPosition(&kPPosMain);
 
-	DWORD dwItemID;
+	uint32_t dwItemID;
 	CPythonItem& rkItem=CPythonItem::Instance();
 	if (!rkItem.GetCloseMoney(kPPosMain, &dwItemID, __GetPickableDistance()))
 		return;
@@ -50,7 +50,7 @@ void CPythonPlayer::PickCloseItem()
 	TPixelPosition kPPosMain;
 	pkInstMain->NEW_GetPixelPosition(&kPPosMain);
 
-	DWORD dwItemID;
+	uint32_t dwItemID;
 	CPythonItem& rkItem=CPythonItem::Instance();
 	if (!rkItem.GetCloseItem(kPPosMain, &dwItemID, __GetPickableDistance()))
 		return;

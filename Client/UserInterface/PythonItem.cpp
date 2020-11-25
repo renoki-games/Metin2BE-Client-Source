@@ -591,65 +591,58 @@ void CPythonItem::DeleteItem(DWORD dwVirtualID)
 }
 
 
-bool CPythonItem::GetCloseMoney(const TPixelPosition & c_rPixelPosition, DWORD * pdwItemID, DWORD dwDistance)
+bool CPythonItem::GetCloseMoney(const TPixelPosition &c_rPixelPosition, uint32_t*pdwItemID, uint32_t dwDistance)
 {
-	DWORD dwCloseItemID = 0;
-	DWORD dwCloseItemDistance = 1000 * 1000;
+    uint32_t dwCloseItemID = 0;
+    uint32_t dwCloseItemDistance = dwDistance * dwDistance;
+    TGroundItemInstanceMap::iterator i;
 
-	TGroundItemInstanceMap::iterator i;
-	for (i = m_GroundItemInstanceMap.begin(); i != m_GroundItemInstanceMap.end(); ++i)
-	{
-		TGroundItemInstance * pInstance = i->second;
+    for (i = m_GroundItemInstanceMap.begin(); i != m_GroundItemInstanceMap.end(); ++i)
+    {
+        TGroundItemInstance *pInstance = i->second;
+        if (pInstance->dwVirtualNumber != VNUM_MONEY)
+            continue;
+        uint32_t dwxDistance = DISTANCE_APPROX(c_rPixelPosition.x, pInstance->v3EndPosition.x);
+        uint32_t dwyDistance = DISTANCE_APPROX(c_rPixelPosition.y, pInstance->v3EndPosition.y);
+        uint32_t dwDistance = uint32_t(dwxDistance * dwxDistance + dwyDistance * dwyDistance);
+        if (dwDistance < dwCloseItemDistance)
+        {
+            dwCloseItemID = i->first;
+            dwCloseItemDistance = dwDistance;
+        }
+    }
 
-		if (pInstance->dwVirtualNumber!=VNUM_MONEY)
-			continue;
+    if (dwCloseItemDistance > dwDistance * dwDistance)
+        return false;
 
-		DWORD dwxDistance = DWORD(c_rPixelPosition.x-pInstance->v3EndPosition.x);
-		DWORD dwyDistance = DWORD(c_rPixelPosition.y-(-pInstance->v3EndPosition.y));
-		DWORD dwDistance = DWORD(dwxDistance*dwxDistance + dwyDistance*dwyDistance);
-
-		if (dwxDistance*dwxDistance + dwyDistance*dwyDistance < dwCloseItemDistance)
-		{
-			dwCloseItemID = i->first;
-			dwCloseItemDistance = dwDistance;
-		}
-	}
-
-	if (dwCloseItemDistance>float(dwDistance)*float(dwDistance))
-		return false;
-
-	*pdwItemID=dwCloseItemID;
-
-	return true;
+    *pdwItemID = dwCloseItemID;
+    return false;
 }
 
-bool CPythonItem::GetCloseItem(const TPixelPosition & c_rPixelPosition, DWORD * pdwItemID, DWORD dwDistance)
+bool CPythonItem::GetCloseItem(const TPixelPosition &c_rPixelPosition, uint32_t*pdwItemID, uint32_t dwDistance)
 {
-	DWORD dwCloseItemID = 0;
-	DWORD dwCloseItemDistance = 1000 * 1000;
+    uint32_t dwCloseItemID = 0;
+    uint32_t dwCloseItemDistance = dwDistance * dwDistance;
+    TGroundItemInstanceMap::iterator i;
 
-	TGroundItemInstanceMap::iterator i;
-	for (i = m_GroundItemInstanceMap.begin(); i != m_GroundItemInstanceMap.end(); ++i)
-	{
-		TGroundItemInstance * pInstance = i->second;
+    for (i = m_GroundItemInstanceMap.begin(); i != m_GroundItemInstanceMap.end(); ++i)
+    {
+        TGroundItemInstance *pInstance = i->second;
+        uint32_t dwxDistance = DISTANCE_APPROX(c_rPixelPosition.x, pInstance->v3EndPosition.x);
+        uint32_t dwyDistance = DISTANCE_APPROX(c_rPixelPosition.y, pInstance->v3EndPosition.y);
+        uint32_t dwDistance = uint32_t(dwxDistance * dwxDistance + dwyDistance * dwyDistance);
+        if (dwDistance < dwCloseItemDistance)
+        {
+            dwCloseItemID = i->first;
+            dwCloseItemDistance = dwDistance;
+        }
+    }
 
-		DWORD dwxDistance = DWORD(c_rPixelPosition.x-pInstance->v3EndPosition.x);
-		DWORD dwyDistance = DWORD(c_rPixelPosition.y-(-pInstance->v3EndPosition.y));
-		DWORD dwDistance = DWORD(dwxDistance*dwxDistance + dwyDistance*dwyDistance);
+    if (dwCloseItemDistance > dwDistance * dwDistance)
+        return false;
 
-		if (dwxDistance*dwxDistance + dwyDistance*dwyDistance < dwCloseItemDistance)
-		{
-			dwCloseItemID = i->first;
-			dwCloseItemDistance = dwDistance;
-		}
-	}
-
-	if (dwCloseItemDistance>float(dwDistance)*float(dwDistance))
-		return false;
-
-	*pdwItemID=dwCloseItemID;
-
-	return true;
+    *pdwItemID = dwCloseItemID;
+    return true;
 }
 
 BOOL CPythonItem::GetGroundItemPosition(DWORD dwVirtualID, TPixelPosition * pPosition)

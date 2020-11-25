@@ -8,6 +8,26 @@
 
 class CItemData;
 
+inline int32_t DISTANCE_APPROX(int32_t dx, int32_t dy)
+{
+    int32_t min, max;
+    if (dx < 0)
+        dx = -dx;
+    if (dy < 0)
+        dy = -dy;
+    if (dx < dy)
+    {
+        min = dx;
+        max = dy;
+    }
+    else
+    {
+        min = dy;
+        max = dx;
+    }
+    return max - min;
+}
+
 class CPythonItem : public CSingleton<CPythonItem>
 {
 	public:
@@ -109,8 +129,8 @@ class CPythonItem : public CSingleton<CPythonItem>
 
 		bool	GetPickedItemID(DWORD* pdwPickedItemID);
 
-		bool	GetCloseItem(const TPixelPosition & c_rPixelPosition, DWORD* pdwItemID, DWORD dwDistance=300);
-		bool	GetCloseMoney(const TPixelPosition & c_rPixelPosition, DWORD* dwItemID, DWORD dwDistance=300);
+		bool GetCloseItem(const TPixelPosition& c_rPixelPosition, uint32_t* pdwItemID, uint32_t dwDistance);
+		bool GetCloseMoney(const TPixelPosition& c_rPixelPosition, uint32_t* pdwItemID, uint32_t dwDistance);
 
 		DWORD	GetVirtualNumberOfGroundItem(DWORD dwVID);
 
