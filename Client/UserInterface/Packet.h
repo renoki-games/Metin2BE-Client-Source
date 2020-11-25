@@ -1356,7 +1356,11 @@ typedef struct packet_add_char
 	BYTE		bType;
     WORD        wRaceNum;
     //WORD        awPart[CHR_EQUIPPART_NUM];
+#ifdef GMS_CAN_WALK_REALLY_FAST
+	short bMovingSpeed;
+#else
     BYTE        bMovingSpeed;
+#endif
     BYTE        bAttackSpeed;
 
     BYTE        bStateFlag;
@@ -1403,7 +1407,11 @@ typedef struct packet_update_char
     DWORD       dwVID;
 
     WORD        awPart[CHR_EQUIPPART_NUM];
+#ifdef GMS_CAN_WALK_REALLY_FAST
+	short bMovingSpeed;
+#else
     BYTE        bMovingSpeed;
+#endif
 	BYTE		bAttackSpeed;
 
     BYTE        bStateFlag;

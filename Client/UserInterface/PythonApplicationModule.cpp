@@ -1861,4 +1861,8 @@ void initapp()
 #ifdef WJ_ENABLE_TRADABLE_ICON
 	PyModule_AddIntConstant(poModule, "WJ_ENABLE_TRADABLE_ICON", 1);
 #endif
+
+#ifdef GMS_CAN_WALK_REALLY_FAST
+	PyModule_AddIntConstant(poModule, "GMS_CAN_WALK_REALLY_FAST", 1);
+#endif
 }
