@@ -1300,23 +1300,6 @@ PyObject* appLogoClose(PyObject* poSelf, PyObject* poArgs)
 	return Py_BuildNone();
 }
 
-#include <Shellapi.h>
-PyObject *appExecuteShell(PyObject *poSelf, PyObject *poArgs)
-{
-	char *szPageLink;
-	if (!PyTuple_GetString(poArgs, 0, &szPageLink))
-		return Py_BuildException();
-	int iExit;
-	if (!PyTuple_GetInteger(poArgs, 1, &iExit))
-		iExit = 0;
-
-	ShellExecute(0, "open", szPageLink, 0, 0, SW_SHOWNORMAL);
-	if (iExit)
-		PostQuitMessage(0);
-
-	return Py_BuildNone();
-}
-
 void initapp()
 {
 	static PyMethodDef s_methods[] =
@@ -1460,8 +1443,6 @@ void initapp()
 		{ "EncryptByHWID",				appEncryptByHWID,				METH_VARARGS },
 		{ "DecryptByHWID",				appDecryptByHWID,				METH_VARARGS },
 #endif
-
-		{ "ExecuteShell", appExecuteShell, METH_VARARGS },
 
 		{ NULL, NULL },
 	};
