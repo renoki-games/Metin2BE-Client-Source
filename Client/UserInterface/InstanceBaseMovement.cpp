@@ -5,7 +5,7 @@
 
 void CInstanceBase::SetAttackSpeed(UINT uAtkSpd)
 {
-	if (uAtkSpd > 1100)
+	if (!IsGameMaster() && uAtkSpd > 1100)
 		uAtkSpd = 0;
 
 	m_GraphicThingInstance.SetAttackSpeed(uAtkSpd/100.0f);
@@ -14,7 +14,7 @@ void CInstanceBase::SetAttackSpeed(UINT uAtkSpd)
 
 void CInstanceBase::SetMoveSpeed(UINT uMovSpd)
 {
-	if (uMovSpd > 1100)
+	if (!IsGameMaster() && uMovSpd > 1100)
 		uMovSpd = 0;
 
 	m_GraphicThingInstance.SetMoveSpeed(uMovSpd/100.0f);
