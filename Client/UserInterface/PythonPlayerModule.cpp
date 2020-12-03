@@ -2509,4 +2509,6 @@ void initPlayer()
 	PyModule_AddIntConstant(poModule, "ON_TOP_WND_ITEM_COMB",		ON_TOP_WND_ITEM_COMB);
 	PyModule_AddIntConstant(poModule, "ON_TOP_WND_PET_FEED",		ON_TOP_WND_PET_FEED);
 #endif
+
+	PyModule_AddIntConstant(poModule, "GUILD_NAME_MAX_LEN", GUILD_NAME_MAX_LEN);
 }
