@@ -111,6 +111,10 @@ const DWORD c_Equipment_Shield	= c_Equipment_Start + 10;
 	const DWORD c_Costume_Slot_End		= c_Costume_Slot_Start + c_Costume_Slot_Count;
 #endif
 
+const DWORD c_Equipment_Ring1 = c_Costume_Slot_End + 0;
+const DWORD c_Equipment_Ring2 = c_Costume_Slot_End + 1;
+const DWORD c_Equipment_Special = c_Costume_Slot_End + 2;
+
 const DWORD c_Inventory_Count = c_ItemSlot_Count + CItemData::WEAR_MAX_NUM;
 
 enum ESlotType

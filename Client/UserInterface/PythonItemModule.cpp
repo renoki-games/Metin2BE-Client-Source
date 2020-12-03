@@ -654,6 +654,7 @@ void initItem()
 	PyModule_AddIntConstant(poModule, "EQUIPMENT_UNIQUE2",			c_Equipment_Unique2);
 	PyModule_AddIntConstant(poModule, "EQUIPMENT_ARROW",			c_Equipment_Arrow);
 	PyModule_AddIntConstant(poModule, "EQUIPMENT_SHIELD", c_Equipment_Shield);
+	PyModule_AddIntConstant(poModule, "EQUIPMENT_SPECIAL", c_Equipment_Special);
 
 	PyModule_AddIntConstant(poModule, "ITEM_TYPE_NONE",				CItemData::ITEM_TYPE_NONE);
 	PyModule_AddIntConstant(poModule, "ITEM_TYPE_WEAPON",			CItemData::ITEM_TYPE_WEAPON);
