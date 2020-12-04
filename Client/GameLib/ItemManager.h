@@ -7,11 +7,18 @@ class CItemManager : public CSingleton<CItemManager>
 	public:
 		enum EItemDescCol
 		{
+#ifdef ENABLE_LANG_SYSTEM
+			ITEMDESC_COL_VNUM,
+			ITEMDESC_COL_DE,
+			ITEMDESC_COL_EN,
+			ITEMDESC_COL_NUM,
+#else
 			ITEMDESC_COL_VNUM,
 			ITEMDESC_COL_NAME,
 			ITEMDESC_COL_DESC,
 			ITEMDESC_COL_SUMM,
 			ITEMDESC_COL_NUM,
+#endif
 		};
 
 	public:
@@ -33,6 +40,9 @@ class CItemManager : public CSingleton<CItemManager>
 		bool			LoadItemDesc(const char* c_szFileName);
 		bool			LoadItemList(const char* c_szFileName);
 		bool			LoadItemTable(const char* c_szFileName);
+#ifdef ENABLE_LANG_SYSTEM
+		bool LoadItemNames(const char* c_szFileName);
+#endif
 #ifdef ENABLE_SHINING_SYSTEM
 		bool			LoadShiningTable(const char* szShiningTable);
 #endif

@@ -24,6 +24,14 @@ extern std::string g_strImagePath;
 #define GET_MOTION_INDEX(key)				LOWORD(key)
 */
 
+#ifdef ENABLE_LANG_SYSTEM
+typedef struct SLangTable
+{
+	std::string de;
+	std::string en;
+} TLangTable;
+#endif
+
 // Race Data
 namespace NRaceData
 {

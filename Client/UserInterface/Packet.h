@@ -587,7 +587,10 @@ typedef struct command_login3
     BYTE	header;
     char	name[ID_MAX_NUM + 1];
     char	pwd[PASS_MAX_NUM + 1];
-    DWORD	adwClientKey[4];
+	DWORD	adwClientKey[4];
+#ifdef ENABLE_LANG_SYSTEM
+	int iLang;
+#endif
 } TPacketCGLogin3;
 
 typedef struct command_login5

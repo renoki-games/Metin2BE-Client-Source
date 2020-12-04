@@ -572,6 +572,9 @@ class CPythonNonPlayer : public CSingleton<CPythonNonPlayer>
 		void Destroy();
 
 		bool				LoadNonPlayerData(const char * c_szFileName);
+#ifdef ENABLE_LANG_SYSTEM
+		bool LoadMobNames(const char* c_szFileName);
+#endif
 
 		const TMobTable *	GetTable(DWORD dwVnum);
 		bool				GetName(DWORD dwVnum, const char ** c_pszName);
@@ -611,4 +614,9 @@ class CPythonNonPlayer : public CSingleton<CPythonNonPlayer>
 
 	protected:
 		TNonPlayerDataMap	m_NonPlayerDataMap;
+
+#ifdef ENABLE_LANG_SYSTEM
+		std::map<DWORD, TLangTable> m_mobNames;
+		const char* GetMobName(DWORD dwVnum);
+#endif
 };

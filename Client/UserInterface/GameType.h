@@ -58,6 +58,15 @@ enum ETopWindowTypes
 };
 #endif
 
+#ifdef ENABLE_LANG_SYSTEM
+enum ELanguages
+{
+	LANGUAGE_GERMAN,
+	LANGUAGE_ENGLISH,
+	LANGUAGE_MAX_NUM
+};
+#endif
+
 extern std::string g_strGuildSymbolPathName;
 
 const DWORD c_Name_Max_Length = 64;

@@ -1300,6 +1300,18 @@ PyObject* appLogoClose(PyObject* poSelf, PyObject* poArgs)
 	return Py_BuildNone();
 }
 
+#ifdef ENABLE_LANG_SYSTEM
+PyObject* appSetDefaultCodePage(PyObject* poSelf, PyObject* poArgs)
+{
+	int iCodePage;
+	if (!PyTuple_GetInteger(poArgs, 0, &iCodePage))
+		return Py_BuildException();
+
+	SetDefaultCodePage(iCodePage);
+	return Py_BuildNone();
+}
+#endif
+
 void initapp()
 {
 	static PyMethodDef s_methods[] =
@@ -1442,6 +1454,10 @@ void initapp()
 #ifdef CRYPT_LOGINSETTINGS
 		{ "EncryptByHWID",				appEncryptByHWID,				METH_VARARGS },
 		{ "DecryptByHWID",				appDecryptByHWID,				METH_VARARGS },
+#endif
+
+#ifdef ENABLE_LANG_SYSTEM
+		{ "SetDefaultCodePage", appSetDefaultCodePage, METH_VARARGS },
 #endif
 
 		{ NULL, NULL },
@@ -1845,5 +1861,9 @@ void initapp()
 
 #ifdef GMS_CAN_WALK_REALLY_FAST
 	PyModule_AddIntConstant(poModule, "GMS_CAN_WALK_REALLY_FAST", 1);
+#endif
+
+#ifdef ENABLE_LANG_SYSTEM
+	PyModule_AddIntConstant(poModule, "ENABLE_LANG_SYSTEM", 1);
 #endif
 }

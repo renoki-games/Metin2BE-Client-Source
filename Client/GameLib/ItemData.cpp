@@ -3,6 +3,10 @@
 
 #include "ItemData.h"
 
+#ifdef ENABLE_LANG_SYSTEM
+#include "../UserInterface/PythonItem.h"
+#endif
+
 CDynamicPool<CItemData>		CItemData::ms_kPool;
 
 extern DWORD GetDefaultCodePage();
@@ -98,6 +102,15 @@ void CItemData::SetDescription(const std::string& c_rstDesc)
 {
 	m_strDescription=c_rstDesc;
 }
+
+#ifdef ENABLE_LANG_SYSTEM
+void CItemData::SetName(const std::string& c_Name)
+{
+	strncpy(m_ItemTable.szName, c_Name.c_str(), ITEM_NAME_MAX_LEN);
+	strncpy(m_ItemTable.szLocaleName, c_Name.c_str(), ITEM_NAME_MAX_LEN);
+}
+#endif
+
 /*
 BOOL CItemData::LoadItemData(const char * c_szFileName)
 {

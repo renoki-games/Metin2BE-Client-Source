@@ -36,6 +36,8 @@
 #include "MapUtil.h"
 #include "Interface.h"
 
+#include "../UserInterface/Locale_inc.h"
+
 //#include "FlyingObjectManager.h"
 //#include "FlyingData.h"
 //#include "FlyingInstance.h"

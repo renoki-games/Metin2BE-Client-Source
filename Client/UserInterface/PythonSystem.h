@@ -81,6 +81,9 @@ class CPythonSystem : public CSingleton<CPythonSystem>
 #if defined(WJ_SHOW_MOB_INFO) && defined(ENABLE_SHOW_MOBLEVEL)
 			bool			bShowMobLevel;
 #endif
+#ifdef ENABLE_LANG_SYSTEM
+			int bLanguage;
+#endif
 		} TConfig;
 
 	public:
@@ -132,6 +135,10 @@ class CPythonSystem : public CSingleton<CPythonSystem>
 #if defined(WJ_SHOW_MOB_INFO) && defined(ENABLE_SHOW_MOBLEVEL)
 		bool							IsShowMobLevel();
 		void							SetShowMobLevelFlag(int iFlag);
+#endif
+#ifdef ENABLE_LANG_SYSTEM
+		int GetLanguage();
+		void SetLanguage(int iFlag);
 #endif
 
 		// Window

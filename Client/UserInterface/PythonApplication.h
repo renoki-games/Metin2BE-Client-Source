@@ -242,7 +242,12 @@ class CPythonApplication : public CMSApplication, public CInputKeyboard, public 
 		void SetCameraSetting(const SCameraSetting & c_rCameraSetting);
 		void GetCameraSetting(SCameraSetting * pCameraSetting);
 		void SaveCameraSetting(const char * c_szFileName);
-		bool LoadCameraSetting(const char * c_szFileName);
+		bool LoadCameraSetting(const char* c_szFileName);
+
+#ifdef ENABLE_LANG_SYSTEM
+		std::string GetLanguageShortString();
+		std::string GetLanguageShortString(DWORD lang);
+#endif
 
 		void SetForceSightRange(int iRange);
 

@@ -4,4 +4,7 @@
     <LocalDebuggerWorkingDirectory>..\..\..\Metin2BE - Client\Metin2</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup>
+    <ShowAllFiles>false</ShowAllFiles>
+  </PropertyGroup>
 </Project>

@@ -5,6 +5,7 @@
 //        조금 난잡해진거 같기도 하다 - 2003. 01. 13. [levites]
 
 #include "../EterGrnLib/ThingInstance.h"
+#include "../UserInterface/GameType.h"
 
 class CItemData;
 
@@ -156,5 +157,14 @@ class CPythonItem : public CSingleton<CPythonItem>
 
 		std::string m_astUseSoundFileName[USESOUND_NUM];
 
-		std::vector<CItemData *> m_NoGradeNameItemData;
+		std::vector<CItemData*> m_NoGradeNameItemData;
+
+#ifdef ENABLE_LANG_SYSTEM
+public:
+	std::map<DWORD, TLangTable> m_itemNames;
+	const char* GetItemName(DWORD dwVnum);
+
+	std::map<DWORD, TLangTable> m_itemDescriptions;
+	const char* GetItemDescription(DWORD dwVnum);
+#endif
 };

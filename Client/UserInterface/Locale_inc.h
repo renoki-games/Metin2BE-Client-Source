@@ -54,6 +54,7 @@
 #define ENABLE_SHINING_SYSTEM
 #define WJ_ENABLE_TRADABLE_ICON
 #define GMS_CAN_WALK_REALLY_FAST
+#define ENABLE_LANG_SYSTEM
 
 typedef long long GoldType;
 

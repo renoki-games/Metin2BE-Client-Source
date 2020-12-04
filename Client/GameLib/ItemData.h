@@ -715,6 +715,9 @@ class CItemData
 		void Clear();
 		void SetSummary(const std::string& c_rstSumm);
 		void SetDescription(const std::string& c_rstDesc);
+#ifdef ENABLE_LANG_SYSTEM
+		void SetName(const std::string& c_Name);
+#endif
 
 		CGraphicThing * GetModelThing();
 		CGraphicThing * GetSubModelThing();

@@ -1013,6 +1013,10 @@ bool LoadLocaleData(const char* localePath)
 	char szItemList[256];
 	char szItemProto[256];
 	char szItemDesc[256];
+#ifdef ENABLE_LANG_SYSTEM
+	char szItemNames[256];
+	char szMobNames[256];
+#endif
 #ifdef ENABLE_SHINING_SYSTEM
     char szShiningTable[256];
 #endif
@@ -1020,16 +1024,33 @@ bool LoadLocaleData(const char* localePath)
 	char szSkillDescFileName[256];
 	char szSkillTableFileName[256];
 	char szInsultList[256];
-	snprintf(szItemList,	sizeof(szItemList) ,	"%s/item_list.txt",	localePath);
-	snprintf(szItemProto,	sizeof(szItemProto),	"%s/item_proto",	localePath);
-	snprintf(szItemDesc,	sizeof(szItemDesc),	"%s/itemdesc.txt",	localePath);
+
+#ifdef ENABLE_LANG_SYSTEM
+	std::string langStr = CPythonApplication::Instance().GetLanguageShortString();
+
+	snprintf(szItemList, sizeof(szItemList), "%s/language/global/item_list.txt", localePath);
+	snprintf(szItemNames, sizeof(szItemNames), "%s/language/global/item_names.txt", localePath);
+	snprintf(szItemProto, sizeof(szItemProto), "%s/language/global/item_proto", localePath);
+	snprintf(szItemDesc, sizeof(szItemDesc), "%s/language/global/item_desc.txt", localePath);
+	snprintf(szMobProto, sizeof(szMobProto), "%s/language/global/mob_proto", localePath);
+	snprintf(szMobNames, sizeof(szMobNames), "%s/language/global/mob_names.txt", localePath);
+	snprintf(szSkillTableFileName, sizeof(szSkillTableFileName), "%s/language/global/SkillTable.txt", localePath);
+	snprintf(szSkillDescFileName, sizeof(szSkillDescFileName), "%s/language/%s/skilldesc.txt", localePath, langStr.c_str());
+	snprintf(szInsultList, sizeof(szInsultList), "%s/language/global/insult.txt", localePath);
+#else
+	snprintf(szItemList, sizeof(szItemList), "%s/item_list.txt", localePath);
+	snprintf(szItemProto, sizeof(szItemProto), "%s/item_proto", localePath);
+	snprintf(szItemDesc, sizeof(szItemDesc), "%s/itemdesc.txt", localePath);
+	snprintf(szMobProto, sizeof(szMobProto), "%s/mob_proto", localePath);
+	snprintf(szSkillTableFileName, sizeof(szSkillTableFileName), "%s/SkillTable.txt", localePath);
+	snprintf(szSkillDescFileName, sizeof(szSkillDescFileName), "%s/skilldesc.txt", localePath);
+	snprintf(szInsultList, sizeof(szInsultList), "%s/insult.txt", localePath);
+#endif
+
+
 #ifdef ENABLE_SHINING_SYSTEM
     snprintf(szShiningTable, sizeof(szShiningTable), "%s/shiningtable.txt", localePath);
 #endif
-	snprintf(szMobProto,	sizeof(szMobProto),	"%s/mob_proto",		localePath);
-	snprintf(szSkillDescFileName, sizeof(szSkillDescFileName),	"%s/SkillDesc.txt", localePath);
-	snprintf(szSkillTableFileName, sizeof(szSkillTableFileName),	"%s/SkillTable.txt", localePath);
-	snprintf(szInsultList,	sizeof(szInsultList),	"%s/insult.txt", localePath);
 
 	rkNPCMgr.Destroy();
 	rkItemMgr.Destroy();
@@ -1059,6 +1080,20 @@ bool LoadLocaleData(const char* localePath)
 	{
 		Tracenf("LoadLocaleData - LoadItemDesc(%s) Error", szItemDesc);
 	}
+
+#ifdef ENABLE_LANG_SYSTEM
+	if (!rkItemMgr.LoadItemNames(szItemNames))
+	{
+		TraceError("LoadLocaleData - LoadItemNames(%s) Error", szItemNames);
+		return false;
+	}
+
+	if (!rkNPCMgr.LoadMobNames(szMobNames))
+	{
+		TraceError("LoadLocaleData - LoadMobNames(%s) Error", szMobNames);
+		return false;
+	}
+#endif
 
 #ifdef ENABLE_SHINING_SYSTEM
 	if (!rkItemMgr.LoadShiningTable(szShiningTable))
@@ -1478,3 +1513,21 @@ void CPythonApplication::Destroy()
 	sStickKeys.dwFlags = m_dwStickyKeysFlag;
 	SystemParametersInfo( SPI_SETSTICKYKEYS, sizeof(sStickKeys), &sStickKeys, 0 );
 }
+
+#ifdef ENABLE_LANG_SYSTEM
+std::string CPythonApplication::GetLanguageShortString()
+{
+	return GetLanguageShortString(CPythonSystem::Instance().GetLanguage());
+}
+
+std::string CPythonApplication::GetLanguageShortString(DWORD lang)
+{
+	switch (lang)
+	{
+	case LANGUAGE_ENGLISH:
+		return "en";
+	default:
+		return "de";
+	}
+}
+#endif

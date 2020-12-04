@@ -4,6 +4,10 @@
 
 #include "ItemManager.h"
 
+#ifdef ENABLE_LANG_SYSTEM
+#include "../UserInterface/PythonItem.h"
+#endif
+
 static DWORD s_adwItemProtoKey[4] =
 {
 	173217,
@@ -175,6 +179,57 @@ bool CItemManager::LoadItemList(const char * c_szFileName)
 	return true;
 }
 
+#ifdef ENABLE_LANG_SYSTEM
+bool CItemManager::LoadItemNames(const char* c_szFileName)
+{
+	CMappedFile File;
+	LPCVOID pData;
+
+	if (!CEterPackManager::Instance().Get(File, c_szFileName, &pData))
+		return false;
+
+	CMemoryTextFileLoader textFileLoader;
+	textFileLoader.Bind(File.Size(), pData);
+
+	CTokenVector TokenVector;
+	for (DWORD i = 0; i < textFileLoader.GetLineCount(); ++i)
+	{
+		if (textFileLoader.GetLineString(i)[0] == '#')
+		{
+			// Skip line, it's a comment
+			continue;
+		}
+		if (!textFileLoader.SplitLineByTab(i, &TokenVector))
+			continue;
+
+		if (TokenVector.size() != 3)
+		{
+			TraceError(" CItemManager::LoadItemNames(%s) - StrangeLine in %d TokenVector size too long: %d", c_szFileName, i, TokenVector.size());
+			continue;
+		}
+
+		const std::string& c_rstrID = TokenVector[0];
+		const std::string& c_rstrDeName = TokenVector[1];
+		const std::string& c_rstrEnName = TokenVector[2];
+
+		DWORD dwItemVNum = atoi(c_rstrID.c_str());
+		TItemMap::iterator f = m_ItemMap.find(dwItemVNum);
+		if (m_ItemMap.end() == f)
+		{
+			continue;
+		}
+
+		CItemData* pItemData = f->second;
+		pItemData->SetName(c_rstrDeName);
+
+		CPythonItem::Instance().m_itemNames[dwItemVNum].de = c_rstrDeName;
+		CPythonItem::Instance().m_itemNames[dwItemVNum].en = c_rstrEnName;
+	}
+
+	return true;
+}
+#endif
+
 const std::string& __SnapString(const std::string& c_rstSrc, std::string& rstTemp)
 {
 	UINT uSrcLen=c_rstSrc.length();
@@ -221,16 +276,28 @@ bool CItemManager::LoadItemDesc(const char* c_szFileName)
 		//assert(kTokenVector.size()==ITEMDESC_COL_NUM);
 
 		DWORD dwVnum=atoi(kTokenVector[ITEMDESC_COL_VNUM].c_str());
-		const std::string& c_rstDesc=kTokenVector[ITEMDESC_COL_DESC];
-		const std::string& c_rstSumm=kTokenVector[ITEMDESC_COL_SUMM];
+
+#ifdef ENABLE_LANG_SYSTEM
+		const std::string& c_rstDescDe = kTokenVector[ITEMDESC_COL_DE];
+		const std::string& c_rstDescEn = kTokenVector[ITEMDESC_COL_EN];
+#else
+		const std::string& c_rstDesc = kTokenVector[ITEMDESC_COL_DESC];
+		const std::string& c_rstSumm = kTokenVector[ITEMDESC_COL_SUMM];
+#endif
+
 		TItemMap::iterator f = m_ItemMap.find(dwVnum);
 		if (m_ItemMap.end() == f)
 			continue;
 
 		CItemData* pkItemDataFind = f->second;
 
+#ifdef ENABLE_LANG_SYSTEM
+		CPythonItem::Instance().m_itemDescriptions[dwVnum].de = c_rstDescDe;
+		CPythonItem::Instance().m_itemDescriptions[dwVnum].en = c_rstDescEn;
+#else
 		pkItemDataFind->SetDescription(__SnapString(c_rstDesc, stTemp));
 		pkItemDataFind->SetSummary(__SnapString(c_rstSumm, stTemp));
+#endif
 	}
 	return true;
 }

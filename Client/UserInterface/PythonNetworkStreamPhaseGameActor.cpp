@@ -93,6 +93,19 @@ bool IsInvisibleRace(WORD raceNum)
 
 static SNetworkActorData s_kNetActorData;
 
+#ifdef ENABLE_LANG_SYSTEM
+static bool ShowInstanceName(uint8_t char_type)
+{
+	switch (char_type)
+	{
+	case CActorInstance::TYPE_PC:
+	case CActorInstance::TYPE_NPC:
+		return true;
+	}
+
+	return false;
+}
+#endif
 
 bool CPythonNetworkStream::RecvCharacterAppendPacket()
 {
@@ -131,15 +144,35 @@ bool CPythonNetworkStream::RecvCharacterAppendPacket()
 
 	kNetActorData.m_dwLevel = 0; // 몬스터 레벨 표시 안함
 
-	if(kNetActorData.m_bType != CActorInstance::TYPE_PC &&
-		kNetActorData.m_bType != CActorInstance::TYPE_NPC)
+#ifdef ENABLE_LANG_SYSTEM
+	if (kNetActorData.m_bType != CActorInstance::TYPE_PC)
 	{
-		const char * c_szName;
-		CPythonNonPlayer& rkNonPlayer=CPythonNonPlayer::Instance();
+		const char* c_szName;
+		CPythonNonPlayer& rkNonPlayer = CPythonNonPlayer::Instance();
 		if (rkNonPlayer.GetName(kNetActorData.m_dwRace, &c_szName))
 			kNetActorData.m_stName = c_szName;
-		//else
-		//	kNetActorData.m_stName=chrAddPacket.name;
+
+		if (!ShowInstanceName(kNetActorData.m_bType))
+		{
+			__RecvCharacterAppendPacket(&kNetActorData);
+		}
+		else
+		{
+			s_kNetActorData = kNetActorData;
+		}
+	}
+	else
+	{
+		s_kNetActorData = kNetActorData;
+	}
+#else
+	if (kNetActorData.m_bType != CActorInstance::TYPE_PC &&
+		kNetActorData.m_bType != CActorInstance::TYPE_NPC)
+	{
+		const char* c_szName;
+		CPythonNonPlayer& rkNonPlayer = CPythonNonPlayer::Instance();
+		if (rkNonPlayer.GetName(kNetActorData.m_dwRace, &c_szName))
+			kNetActorData.m_stName = c_szName;
 
 		__RecvCharacterAppendPacket(&kNetActorData);
 	}
@@ -147,6 +180,7 @@ bool CPythonNetworkStream::RecvCharacterAppendPacket()
 	{
 		s_kNetActorData = kNetActorData;
 	}
+#endif
 
 	return true;
 }
@@ -164,7 +198,11 @@ bool CPythonNetworkStream::RecvCharacterAdditionalInfo()
 
 	if(kNetActorData.m_dwVID == chrInfoPacket.dwVID)
 	{
-		kNetActorData.m_stName = chrInfoPacket.name;
+#ifdef ENABLE_LANG_SYSTEM
+		if (ShowInstanceName(kNetActorData.m_bType))
+#endif
+			kNetActorData.m_stName = chrInfoPacket.name;
+
 		kNetActorData.m_dwGuildID = chrInfoPacket.dwGuildID;
 		kNetActorData.m_dwLevel = chrInfoPacket.dwLevel;
 		kNetActorData.m_sAlignment=chrInfoPacket.sAlignment;

@@ -11,11 +11,38 @@
 
 #include "pythonitem.h"
 #include "PythonTextTail.h"
+#ifdef ENABLE_LANG_SYSTEM
+#include "PythonSystem.h"
+#endif
 
 const float c_fDropStartHeight = 100.0f;
 const float c_fDropTime = 0.5f;
 
 std::string CPythonItem::TGroundItemInstance::ms_astDropSoundFileName[DROPSOUND_NUM];
+
+#ifdef ENABLE_LANG_SYSTEM
+const char* CPythonItem::GetItemName(DWORD dwVnum)
+{
+	switch (CPythonSystem::Instance().GetLanguage())
+	{
+	case LANGUAGE_ENGLISH:
+		return m_itemNames[dwVnum].en.c_str();
+	default:
+		return m_itemNames[dwVnum].de.c_str();
+	}
+}
+
+const char* CPythonItem::GetItemDescription(DWORD dwVnum)
+{
+	switch (CPythonSystem::Instance().GetLanguage())
+	{
+	case LANGUAGE_ENGLISH:
+		return m_itemDescriptions[dwVnum].en.c_str();
+	default:
+		return m_itemDescriptions[dwVnum].de.c_str();
+	}
+}
+#endif
 
 void CPythonItem::GetInfo(std::string* pstInfo)
 {

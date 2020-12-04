@@ -3,6 +3,9 @@
 #include "pythonnonplayer.h"
 #include "InstanceBase.h"
 #include "PythonCharacterManager.h"
+#ifdef ENABLE_LANG_SYSTEM
+#include "PythonSystem.h"
+#endif
 
 bool CPythonNonPlayer::LoadNonPlayerData(const char * c_szFileName)
 {
@@ -80,6 +83,70 @@ bool CPythonNonPlayer::LoadNonPlayerData(const char * c_szFileName)
 	return true;
 }
 
+#ifdef ENABLE_LANG_SYSTEM
+bool CPythonNonPlayer::LoadMobNames(const char* c_pszName)
+{
+	CMappedFile File;
+	LPCVOID pData;
+
+	if (!CEterPackManager::Instance().Get(File, c_pszName, &pData))
+		return false;
+
+	CMemoryTextFileLoader textFileLoader;
+	textFileLoader.Bind(File.Size(), pData);
+
+	CTokenVector TokenVector;
+	for (DWORD i = 0; i < textFileLoader.GetLineCount(); ++i)
+	{
+		if (textFileLoader.GetLineString(i)[0] == '#')
+		{
+			// Skip line, it's a comment
+			continue;
+		}
+		if (!textFileLoader.SplitLine(i, &TokenVector, "\t"))
+			continue;
+
+		if (TokenVector.size() != 3)
+		{
+			TraceError("CPythonNonPlayer::LoadMobNames(%s) - StrangeLine in %d\n", c_pszName, i);
+			continue;
+		}
+
+		const std::string& c_rstrID = TokenVector[0];
+		const std::string& c_rstrDeName = TokenVector[1];
+		const std::string& c_rstrEnName = TokenVector[2];
+
+		DWORD dwMobVnum = atoi(c_rstrID.c_str());
+		TNonPlayerDataMap::iterator f = m_NonPlayerDataMap.find(dwMobVnum);
+
+		if (m_NonPlayerDataMap.end() == f)
+		{
+			continue;
+		}
+
+		m_mobNames[dwMobVnum].de = c_rstrDeName;
+		m_mobNames[dwMobVnum].en = c_rstrEnName;
+
+		TMobTable* pMobData = f->second;
+		strncpy(pMobData->szName, c_rstrDeName.c_str(), CHARACTER_NAME_MAX_LEN);
+		strncpy(pMobData->szLocaleName, c_rstrEnName.c_str(), CHARACTER_NAME_MAX_LEN);
+	}
+
+	return true;
+}
+
+const char* CPythonNonPlayer::GetMobName(DWORD dwVnum)
+{
+	switch (CPythonSystem::Instance().GetLanguage())
+	{
+	case LANGUAGE_ENGLISH:
+		return m_mobNames[dwVnum].en.c_str();
+	default:
+		return m_mobNames[dwVnum].de.c_str();
+	}
+}
+#endif
+
 bool CPythonNonPlayer::GetName(DWORD dwVnum, const char ** c_pszName)
 {
 	const TMobTable * p = GetTable(dwVnum);
@@ -87,7 +154,11 @@ bool CPythonNonPlayer::GetName(DWORD dwVnum, const char ** c_pszName)
 	if (!p)
 		return false;
 
-	*c_pszName = p->szLocaleName;
+#ifdef ENABLE_LANG_SYSTEM
+	* c_pszName = GetMobName(dwVnum);
+#else
+	* c_pszName = p->szLocaleName;
+#endif
 
 	return true;
 }
@@ -173,7 +244,11 @@ const char*	CPythonNonPlayer::GetMonsterName(DWORD dwVnum)
 		return sc_szEmpty;
 	}
 
+#ifdef ENABLE_LANG_SYSTEM
+	return GetMobName(dwVnum);
+#else
 	return c_pTable->szLocaleName;
+#endif
 }
 
 DWORD CPythonNonPlayer::GetMonsterColor(DWORD dwVnum)

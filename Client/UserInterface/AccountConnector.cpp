@@ -5,6 +5,10 @@
 #include "../EterBase/tea.h"
 #include "../EterPack/EterPackManager.h"
 
+#ifdef ENABLE_LANG_SYSTEM
+#include "PythonSystem.h"
+#endif
+
 #include "Hackshield.h"
 #include "WiseLogicXTrap.h"
 
@@ -319,6 +323,9 @@ bool CAccountConnector::__AuthState_RecvPhase()
 
 		strncpy(LoginPacket.name, m_strID.c_str(), ID_MAX_NUM);
 		strncpy(LoginPacket.pwd, m_strPassword.c_str(), PASS_MAX_NUM);
+#ifdef ENABLE_LANG_SYSTEM
+		LoginPacket.iLang = CPythonSystem::Instance().GetLanguage();
+#endif
 		LoginPacket.name[ID_MAX_NUM] = '\0';
 		LoginPacket.pwd[PASS_MAX_NUM] = '\0';
 

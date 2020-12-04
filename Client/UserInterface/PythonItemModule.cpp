@@ -4,6 +4,9 @@
 #include "../gamelib/ItemManager.h"
 #include "../gamelib/GameLibDefines.h"
 #include "InstanceBase.h"
+#ifdef ENABLE_LANG_SYSTEM
+#include "PythonSystem.h"
+#endif
 #include "AbstractApplication.h"
 
 extern int TWOHANDED_WEWAPON_ATT_SPEED_DECREASE_VALUE;

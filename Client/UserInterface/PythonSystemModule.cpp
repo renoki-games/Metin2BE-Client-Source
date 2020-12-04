@@ -1,6 +1,10 @@
 #include "StdAfx.h"
 #include "PythonSystem.h"
 
+#ifdef ENABLE_LANG_SYSTEM
+#include "PythonApplication.h"
+#endif
+
 PyObject * systemGetWidth(PyObject* poSelf, PyObject* poArgs)
 {
 	return Py_BuildValue("i", CPythonSystem::Instance().GetWidth());
@@ -426,6 +430,28 @@ PyObject * systemSetShadowLevel(PyObject * poSelf, PyObject * poArgs)
 	return Py_BuildNone();
 }
 
+#ifdef ENABLE_LANG_SYSTEM
+PyObject* systemGetLanguage(PyObject* poSelf, PyObject* poArgs)
+{
+	return Py_BuildValue("i", CPythonSystem::Instance().GetLanguage());
+}
+
+PyObject* systemGetLanguageShortString(PyObject* poSelf, PyObject* poArgs)
+{
+	return Py_BuildValue("s", CPythonApplication::Instance().GetLanguageShortString().c_str());
+}
+
+PyObject* systemSetLanguage(PyObject* poSelf, PyObject* poArgs)
+{
+	int iOpt;
+	if (!PyTuple_GetInteger(poArgs, 0, &iOpt))
+		return Py_BuildException();
+
+	CPythonSystem::Instance().SetLanguage(iOpt);
+	return Py_BuildNone();
+}
+#endif
+
 void initsystemSetting()
 {
 	static PyMethodDef s_methods[] =
@@ -488,6 +514,11 @@ void initsystemSetting()
 		{ "SetShowMobLevel",			systemSetShowMobLevel,			METH_VARARGS },
 #endif
 
+#ifdef ENABLE_LANG_SYSTEM
+		{"SetLanguage", systemSetLanguage, METH_VARARGS},
+		{"GetLanguage", systemGetLanguage, METH_VARARGS},
+		{"GetLanguageShortString", systemGetLanguageShortString, METH_VARARGS},
+#endif
 		{ NULL,							NULL,							NULL }
 	};
 

@@ -313,6 +313,9 @@ void CPythonSystem::SetDefaultConfig()
 #if defined(WJ_SHOW_MOB_INFO) && defined(ENABLE_SHOW_MOBLEVEL)
 	m_Config.bShowMobLevel		= true;
 #endif
+#ifdef ENABLE_LANG_SYSTEM
+	m_Config.bLanguage = 0;
+#endif
 }
 
 bool CPythonSystem::IsWindowed()
@@ -489,6 +492,10 @@ bool CPythonSystem::LoadConfig()
 		else if (!stricmp(command, "SHOW_MOBLEVEL"))
 			m_Config.bShowMobLevel = atoi(value) == 1 ? true : false;
 #endif
+#ifdef ENABLE_LANG_SYSTEM
+		else if (!stricmp(command, "LANGUAGE"))
+			m_Config.bLanguage = atoi(value);
+#endif
 	}
 
 	if (m_Config.bWindowed)
@@ -583,6 +590,9 @@ bool CPythonSystem::SaveConfig()
 	fprintf(fp, "USE_DEFAULT_IME		%d\n", m_Config.bUseDefaultIME);
 	fprintf(fp, "SOFTWARE_TILING		%d\n", m_Config.bSoftwareTiling);
 	fprintf(fp, "SHADOW_LEVEL			%d\n", m_Config.iShadowLevel);
+#ifdef ENABLE_LANG_SYSTEM
+	fprintf(fp, "LANGUAGE	%d\n", m_Config.bLanguage);
+#endif
 	fprintf(fp, "\n");
 
 	fclose(fp);
@@ -720,3 +730,15 @@ CPythonSystem::~CPythonSystem()
 {
 	assert(m_poInterfaceHandler==NULL && "CPythonSystem MUST CLEAR!");
 }
+
+#ifdef ENABLE_LANG_SYSTEM
+void CPythonSystem::SetLanguage(int iOpt)
+{
+	m_Config.bLanguage = iOpt;
+}
+
+int CPythonSystem::GetLanguage()
+{
+	return m_Config.bLanguage;
+}
+#endif
