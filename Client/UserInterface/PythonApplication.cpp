@@ -1087,12 +1087,6 @@ bool LoadLocaleData(const char* localePath)
 		TraceError("LoadLocaleData - LoadItemNames(%s) Error", szItemNames);
 		return false;
 	}
-
-	if (!rkNPCMgr.LoadMobNames(szMobNames))
-	{
-		TraceError("LoadLocaleData - LoadMobNames(%s) Error", szMobNames);
-		return false;
-	}
 #endif
 
 #ifdef ENABLE_SHINING_SYSTEM
@@ -1107,6 +1101,14 @@ bool LoadLocaleData(const char* localePath)
 		TraceError("LoadLocaleData - LoadMobProto(%s) Error", szMobProto);
 		return false;
 	}
+
+#ifdef ENABLE_LANG_SYSTEM
+	if (!rkNPCMgr.LoadMobNames(szMobNames))
+	{
+		TraceError("LoadLocaleData - LoadMobNames(%s) Error", szMobNames);
+		return false;
+	}
+#endif
 
 	if (!rkSkillMgr.RegisterSkillDesc(szSkillDescFileName))
 	{
