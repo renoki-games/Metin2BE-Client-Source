@@ -1779,6 +1779,16 @@ PyObject* netRegisterErrorLog(PyObject* poSelf, PyObject* poArgs)
 	return Py_BuildNone();
 }
 
+PyObject* netSendGetWhisperDetails(PyObject* poSelf, PyObject* poArgs)
+{
+	char* szName;
+	if (!PyTuple_GetString(poArgs, 0, &szName))
+		return Py_BuildException();
+
+	CPythonNetworkStream::Instance().SendGetWhisperDetails(szName);
+	return Py_BuildNone();
+}
+
 void initnet()
 {
 	static PyMethodDef s_methods[] =
@@ -1954,6 +1964,7 @@ void initnet()
 		// Log
 		{ "RegisterErrorLog",						netRegisterErrorLog,						METH_VARARGS },
 
+		{ "SendGetWhisperDetails", netSendGetWhisperDetails, METH_VARARGS },
 		{ NULL,										NULL,										NULL },
 	};
 

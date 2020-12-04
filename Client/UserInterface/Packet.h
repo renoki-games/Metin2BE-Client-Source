@@ -160,6 +160,7 @@ enum
 #ifdef __AUCTION__
 	HEADER_CG_AUCTION_CMD							= 205,
 #endif
+	HEADER_CG_WHISPER_DETAILS = 220,
 
 	HEADER_CG_KEY_AGREEMENT						= 0xfb, // _IMPROVED_PACKET_ENCRYPTION_
 	HEADER_CG_TIME_SYNC							= 0xfc,
@@ -375,6 +376,7 @@ enum
 
 	HEADER_GC_CHARACTER_DRAGON_POINT = 222,
 	HEADER_GC_CHARACTER_DRAGON_POINT_CHANGE = 223,
+	HEADER_GC_WHISPER_DETAILS = 225,
 
 	HEADER_GC_KEY_AGREEMENT_COMPLETED			= 0xfa, // _IMPROVED_PACKET_ENCRYPTION_
 	HEADER_GC_KEY_AGREEMENT						= 0xfb, // _IMPROVED_PACKET_ENCRYPTION_
@@ -2946,5 +2948,19 @@ typedef struct SPacketGCDragonPointChange
 	int iDR;
 	int iDM;
 } TPacketGCDragonPointChange;
+
+typedef struct SPacketCGWhisperDetails
+{
+	BYTE header = HEADER_CG_WHISPER_DETAILS;
+	char name[CHARACTER_NAME_MAX_LEN + 1];
+} TPacketCGWhisperDetails;
+
+typedef struct SPacketGCWhisperDetails
+{
+	BYTE header = HEADER_GC_WHISPER_DETAILS;
+	char name[CHARACTER_NAME_MAX_LEN + 1];
+	uint8_t language;
+	uint8_t empire;
+} TPacketGCWhisperDetails;
 
 #pragma pack(pop)

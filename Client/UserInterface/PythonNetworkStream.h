@@ -318,7 +318,10 @@ class CPythonNetworkStream : public CNetworkStream, public CSingleton<CPythonNet
 		bool SendMobileMessagePacket(const char * name, const char * c_szChat);
 		bool SendMessengerAddByVIDPacket(DWORD vid);
 		bool SendMessengerAddByNamePacket(const char * c_szName);
-		bool SendMessengerRemovePacket(const char * c_szKey, const char * c_szName);
+		bool SendMessengerRemovePacket(const char* c_szKey, const char* c_szName);
+
+		// Whisper Details
+		bool SendGetWhisperDetails(const char* szName);
 
 	protected:
 		bool OnProcess();	// State들을 실제로 실행한다.
@@ -486,6 +489,9 @@ class CPythonNetworkStream : public CNetworkStream, public CSingleton<CPythonNet
 		bool RecvTargetPacket();
 		bool RecvViewEquipPacket();
 		bool RecvDamageInfoPacket();
+
+		// Whisper Details
+		bool RecvWhisperDetails();
 
 #ifdef ENABLE_SEND_TARGET_INFO
 		bool RecvTargetInfoPacket();

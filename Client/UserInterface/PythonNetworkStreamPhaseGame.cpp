@@ -650,6 +650,10 @@ void CPythonNetworkStream::GamePhase()
 				ret = RecvRefreshGMState();
 				break;
 
+			case HEADER_GC_WHISPER_DETAILS:
+				ret = RecvWhisperDetails();
+				break;
+
 			default:
 				ret = RecvDefaultPacket(header);
 				break;
@@ -4697,5 +4701,31 @@ bool CPythonNetworkStream::RecvDragonPointChange()
 	}
 
 	PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "RefreshStatus", Py_BuildValue("()"));
+	return true;
+}
+
+bool CPythonNetworkStream::SendGetWhisperDetails(const char* name)
+{
+	TPacketCGWhisperDetails whisperDetailsPacket;
+	strncpy(whisperDetailsPacket.name, name, sizeof(whisperDetailsPacket.name));
+	whisperDetailsPacket.name[CHARACTER_NAME_MAX_LEN] = '\0';
+
+	if (!Send(sizeof(TPacketCGWhisperDetails), &whisperDetailsPacket))
+	{
+		Tracen("SendGetWhisperDetails Error");
+		return false;
+	}
+
+	return SendSequence();
+}
+
+bool CPythonNetworkStream::RecvWhisperDetails()
+{
+	TPacketGCWhisperDetails p;
+
+	if (!Recv(sizeof(p), &p))
+		return false;
+
+	PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "BINARY_GetWhisperDetails", Py_BuildValue("(sii)", p.name, p.language, p.empire));
 	return true;
 }
