@@ -246,12 +246,20 @@ DWORD CItemData::GetIndex() const
 
 const char * CItemData::GetName() const
 {
+#ifdef ENABLE_LANG_SYSTEM
+	return CPythonItem::Instance().GetItemName(GetIndex());
+#else
 	return m_ItemTable.szLocaleName;
+#endif
 }
 
 const char * CItemData::GetDescription() const
 {
+#ifdef ENABLE_LANG_SYSTEM
+	return CPythonItem::Instance().GetItemDescription(GetIndex());
+#else
 	return m_strDescription.c_str();
+#endif
 }
 
 const char * CItemData::GetSummary() const

@@ -1076,16 +1076,16 @@ bool LoadLocaleData(const char* localePath)
 		return false;
 	}
 
-	if (!rkItemMgr.LoadItemDesc(szItemDesc))
-	{
-		Tracenf("LoadLocaleData - LoadItemDesc(%s) Error", szItemDesc);
-	}
-
 #ifdef ENABLE_LANG_SYSTEM
 	if (!rkItemMgr.LoadItemNames(szItemNames))
 	{
 		TraceError("LoadLocaleData - LoadItemNames(%s) Error", szItemNames);
 		return false;
+	}
+
+	if (!rkItemMgr.LoadItemDesc(szItemDesc))
+	{
+		Tracenf("LoadLocaleData - LoadItemDesc(%s) Error", szItemDesc);
 	}
 #endif
 
