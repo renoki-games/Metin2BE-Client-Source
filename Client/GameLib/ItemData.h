@@ -331,25 +331,27 @@ class CItemData
 			WEAR_EAR,           // 6
 			WEAR_UNIQUE1,       // 7
 			WEAR_UNIQUE2,       // 8
-			WEAR_ARROW,         // 9
-			WEAR_SHIELD,        // 10
+			WEAR_UNIQUE3,       // 9
+			WEAR_UNIQUE4,       // 10
+			WEAR_ARROW,         // 11
+			WEAR_SHIELD,        // 12
 
-			WEAR_ABILITY1,  // 11
-			WEAR_ABILITY2,  // 12
-			WEAR_ABILITY3,  // 13
-			WEAR_ABILITY4,  // 14
-			WEAR_ABILITY5,  // 15
-			WEAR_ABILITY6,  // 16
-			WEAR_ABILITY7,  // 17
-			WEAR_ABILITY8,  // 18
-			WEAR_COSTUME_BODY,	// 19
-			WEAR_COSTUME_HAIR,	// 20
+			WEAR_ABILITY1,  // 13
+			WEAR_ABILITY2,  // 14
+			WEAR_ABILITY3,  // 15
+			WEAR_ABILITY4,  // 16
+			WEAR_ABILITY5,  // 17
+			WEAR_ABILITY6,  // 18
+			WEAR_ABILITY7,  // 19
+			WEAR_ABILITY8,  // 20
+			WEAR_COSTUME_BODY,	// 21
+			WEAR_COSTUME_HAIR,	// 22
 
 #ifdef ENABLE_WEAPON_COSTUME_SYSTEM
-			WEAR_COSTUME_WEAPON,// 21
+			WEAR_COSTUME_WEAPON,// 23
 #endif
 
-			WEAR_SPECIAL, // 22
+			WEAR_SPECIAL, // 24
 
 			WEAR_MAX_NUM = 32,
 		};

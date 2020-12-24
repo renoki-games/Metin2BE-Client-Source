@@ -82,7 +82,7 @@ const DWORD c_Inventory_Page_Count = 5;
 const DWORD c_Inventory_Page_Count = 2;
 #endif
 const DWORD c_ItemSlot_Count = c_Inventory_Page_Size * c_Inventory_Page_Count;
-const DWORD c_Equipment_Count = 12;
+const DWORD c_Equipment_Count = 14;
 
 const DWORD c_Equipment_Start = c_ItemSlot_Count;
 
@@ -101,7 +101,7 @@ const DWORD c_Equipment_Arrow	= c_Equipment_Start + 11;
 const DWORD c_Equipment_Shield	= c_Equipment_Start + 12;
 
 #ifdef ENABLE_COSTUME_SYSTEM
-	const DWORD c_Costume_Slot_Start	= c_Equipment_Start + 19;	// [주의] 숫자(19) 하드코딩 주의. 현재 서버에서 코스츔 슬롯은 19부터임. 서버 common/length.h 파일의 EWearPositions 열거형 참고.
+	const DWORD c_Costume_Slot_Start	= c_Equipment_Start + 21;	// [주의] 숫자(19) 하드코딩 주의. 현재 서버에서 코스츔 슬롯은 19부터임. 서버 common/length.h 파일의 EWearPositions 열거형 참고.
 	const DWORD	c_Costume_Slot_Body		= c_Costume_Slot_Start + 0;
 	const DWORD	c_Costume_Slot_Hair		= c_Costume_Slot_Start + 1;
 
