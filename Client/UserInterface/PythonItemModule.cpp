@@ -655,6 +655,8 @@ void initItem()
 	PyModule_AddIntConstant(poModule, "EQUIPMENT_EAR",				c_Equipment_Ear);
 	PyModule_AddIntConstant(poModule, "EQUIPMENT_UNIQUE1",			c_Equipment_Unique1);
 	PyModule_AddIntConstant(poModule, "EQUIPMENT_UNIQUE2",			c_Equipment_Unique2);
+	PyModule_AddIntConstant(poModule, "EQUIPMENT_UNIQUE3",			c_Equipment_Unique3);
+	PyModule_AddIntConstant(poModule, "EQUIPMENT_UNIQUE4",			c_Equipment_Unique4);
 	PyModule_AddIntConstant(poModule, "EQUIPMENT_ARROW",			c_Equipment_Arrow);
 	PyModule_AddIntConstant(poModule, "EQUIPMENT_SHIELD", c_Equipment_Shield);
 	PyModule_AddIntConstant(poModule, "EQUIPMENT_SPECIAL", c_Equipment_Special);
@@ -683,7 +685,6 @@ void initItem()
 	PyModule_AddIntConstant(poModule, "ITEM_TYPE_TREASURE_KEY",		CItemData::ITEM_TYPE_TREASURE_KEY);
 	PyModule_AddIntConstant(poModule, "ITEM_TYPE_PICK",				CItemData::ITEM_TYPE_PICK);
 	PyModule_AddIntConstant(poModule, "ITEM_TYPE_BLEND",			CItemData::ITEM_TYPE_BLEND);
-	PyModule_AddIntConstant(poModule, "ITEM_TYPE_RING",				CItemData::ITEM_TYPE_RING);
 
 
 #ifdef ENABLE_COSTUME_SYSTEM

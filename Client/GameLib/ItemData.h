@@ -106,13 +106,7 @@ class CItemData
 			ITEM_TYPE_UNUSED2,					//30
 			ITEM_TYPE_EXTRACT,					//31 추출도구.
 			ITEM_TYPE_SECONDARY_COIN,			//32 명도전.
-			ITEM_TYPE_RING,						//33 반지 (유니크 슬롯이 아닌 순수 반지 슬롯)
-			ITEM_TYPE_UNUSED3,
-
-#ifdef __UNIMPLEMENTED__
-			ITEM_TYPE_PET,						//35
-			ITEM_TYPE_MEDIUM,					//36
-#endif
+			ITEM_TYPE_UNUSED3,					//33
 
 			ITEM_TYPE_MAX_NUM,
 		};
@@ -354,17 +348,8 @@ class CItemData
 #ifdef ENABLE_WEAPON_COSTUME_SYSTEM
 			WEAR_COSTUME_WEAPON,// 21
 #endif
-			WEAR_RING1,                     // 22   : <BD><C5><B1><D4> <B9><DD><C1><F6><BD><BD><B7><D4>1 (<BF><DE><C2><CA>)
-#ifdef ENABLE_MOUNT_COSTUME_SYSTEM
-			WEAR_COSTUME_MOUNT = WEAR_RING1, // costume_mount == ring1
-#endif
 
-			WEAR_RING2,                     // 23   : <BD><C5><B1><D4> <B9><DD><C1><F6><BD><BD><B7><D4>2 (<BF><C0><B8><A5><C2><CA>)
-#ifdef ENABLE_ACCE_COSTUME_SYSTEM
-			WEAR_COSTUME_ACCE = WEAR_RING2, // costume_acce == ring2
-#endif
-
-			WEAR_SPECIAL,
+			WEAR_SPECIAL, // 22
 
 			WEAR_MAX_NUM = 32,
 		};

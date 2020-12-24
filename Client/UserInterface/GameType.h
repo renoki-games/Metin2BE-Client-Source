@@ -95,8 +95,10 @@ const DWORD c_Equipment_Neck	= c_Equipment_Start + 5;
 const DWORD c_Equipment_Ear		= c_Equipment_Start + 6;
 const DWORD c_Equipment_Unique1	= c_Equipment_Start + 7;
 const DWORD c_Equipment_Unique2	= c_Equipment_Start + 8;
-const DWORD c_Equipment_Arrow	= c_Equipment_Start + 9;
-const DWORD c_Equipment_Shield	= c_Equipment_Start + 10;
+const DWORD c_Equipment_Unique3	= c_Equipment_Start + 9;
+const DWORD c_Equipment_Unique4	= c_Equipment_Start + 10;
+const DWORD c_Equipment_Arrow	= c_Equipment_Start + 11;
+const DWORD c_Equipment_Shield	= c_Equipment_Start + 12;
 
 #ifdef ENABLE_COSTUME_SYSTEM
 	const DWORD c_Costume_Slot_Start	= c_Equipment_Start + 19;	// [주의] 숫자(19) 하드코딩 주의. 현재 서버에서 코스츔 슬롯은 19부터임. 서버 common/length.h 파일의 EWearPositions 열거형 참고.
@@ -120,9 +122,7 @@ const DWORD c_Equipment_Shield	= c_Equipment_Start + 10;
 	const DWORD c_Costume_Slot_End		= c_Costume_Slot_Start + c_Costume_Slot_Count;
 #endif
 
-const DWORD c_Equipment_Ring1 = c_Costume_Slot_End + 0;
-const DWORD c_Equipment_Ring2 = c_Costume_Slot_End + 1;
-const DWORD c_Equipment_Special = c_Costume_Slot_End + 2;
+const DWORD c_Equipment_Special = c_Costume_Slot_End + 0;
 
 const DWORD c_Inventory_Count = c_ItemSlot_Count + CItemData::WEAR_MAX_NUM;
 
