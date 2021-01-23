@@ -4060,12 +4060,19 @@ bool CPythonNetworkStream::RecvDungeon()
 
 /////////////////////////////////////////////////////////////////////////
 // MyShop
+#ifdef ENABLE_OFFLINE_SHOP
+bool CPythonNetworkStream::SendBuildPrivateShopPacket(const char * c_szName, const std::vector<TShopItemTable> & c_rSellingItemStock,DWORD days)
+#else
 bool CPythonNetworkStream::SendBuildPrivateShopPacket(const char * c_szName, const std::vector<TShopItemTable> & c_rSellingItemStock)
+#endif
 {
 	TPacketCGMyShop packet;
 	packet.bHeader = HEADER_CG_MYSHOP;
-	strncpy(packet.szSign, c_szName, SHOP_SIGN_MAX_LEN);
+	strncpy_s(packet.szSign, c_szName, SHOP_SIGN_MAX_LEN);
 	packet.bCount = c_rSellingItemStock.size();
+	#ifdef ENABLE_OFFLINE_SHOP
+	packet.days = days;
+	#endif
 	if (!Send(sizeof(packet), &packet))
 		return false;
 
@@ -4082,30 +4089,26 @@ bool CPythonNetworkStream::SendBuildPrivateShopPacket(const char * c_szName, con
 bool CPythonNetworkStream::RecvShopSignPacket()
 {
 	TPacketGCShopSign p;
-	if (!Recv(sizeof(TPacketGCShopSign), &p))
-		return false;
+	if (!Recv(sizeof(TPacketGCShopSign), &p)) return false;
 
 	CPythonPlayer& rkPlayer=CPythonPlayer::Instance();
-
-	if (0 == strlen(p.szSign))
+	
+	if (strlen(p.szSign) == 0)
 	{
-		PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME],
-			"BINARY_PrivateShop_Disappear",
-			Py_BuildValue("(i)", p.dwVID)
-		);
-
+		PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "BINARY_PrivateShop_Disappear", Py_BuildValue("(i)", p.dwVID));
 		if (rkPlayer.IsMainCharacterIndex(p.dwVID))
 			rkPlayer.ClosePrivateShop();
 	}
 	else
 	{
-		PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME],
-			"BINARY_PrivateShop_Appear",
-			Py_BuildValue("(is)", p.dwVID, p.szSign)
-		);
-
-		if (rkPlayer.IsMainCharacterIndex(p.dwVID))
-			rkPlayer.OpenPrivateShop();
+		CInstanceBase * pInstance = CPythonCharacterManager::instance().GetInstancePtr(p.dwVID);
+		if (pInstance && (pInstance->IsPC() || pInstance->GetRace() == 30000))
+		{
+			PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "BINARY_PrivateShop_Appear", Py_BuildValue("(is)", p.dwVID, p.szSign));
+			if (rkPlayer.IsMainCharacterIndex(p.dwVID))
+				rkPlayer.OpenPrivateShop();
+		}else
+			PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "BINARY_PrivateShop_Disappear", Py_BuildValue("(i)", p.dwVID));
 	}
 
 	return true;

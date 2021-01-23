@@ -575,8 +575,13 @@ BOOL CActorInstance::TestPhysicsBlendingCollision(CActorInstance & rVictim)
 #define ENABLE_PETS_WITHOUT_COLLISIONS
 #define ENABLE_SHOPS_WITHOUT_COLLISIONS
 #define ENABLE_MOUNTS_WITHOUT_COLLISIONS
+#include "../UserInterface/Locale_inc.h"
 BOOL CActorInstance::TestActorCollision(CActorInstance & rVictim)
 {
+#ifdef ENABLE_OFFLINE_SHOP
+	if (rVictim.GetRace() == 30000)
+		return FALSE;
+#endif
 /*
 	if (m_pkHorse)
 	{

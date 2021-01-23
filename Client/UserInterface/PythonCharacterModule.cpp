@@ -708,6 +708,22 @@ PyObject * chrSetDirection(PyObject* poSelf, PyObject* poArgs)
 	return Py_BuildNone();
 }
 
+#ifdef ENABLE_OFFLINE_SHOP
+PyObject * chrGetPixelPosition(PyObject* poSelf, PyObject* poArgs)
+{
+	int iVirtualID;
+	if (!PyTuple_GetInteger(poArgs, 0, &iVirtualID))
+		return Py_BuildException();
+
+	CInstanceBase * pkInst = CPythonCharacterManager::Instance().GetInstancePtr(iVirtualID);
+	if (!pkInst)
+		return Py_BuildValue("iii", -100, -100, -100);
+
+	TPixelPosition PixelPosition;
+	pkInst->NEW_GetPixelPosition(&PixelPosition);
+	return Py_BuildValue("fff", PixelPosition.x, PixelPosition.y, PixelPosition.z);
+}
+#else
 PyObject * chrGetPixelPosition(PyObject* poSelf, PyObject* poArgs)
 {
 	int iVirtualID;
@@ -724,6 +740,7 @@ PyObject * chrGetPixelPosition(PyObject* poSelf, PyObject* poArgs)
 
 	return Py_BuildValue("fff", PixelPosition.x, PixelPosition.y, PixelPosition.z);
 }
+#endif
 
 PyObject * chrSetRotation(PyObject* poSelf, PyObject* poArgs)
 {

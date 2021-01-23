@@ -50,10 +50,21 @@ class CPythonShop : public CSingleton<CPythonShop>
 		BOOL IsMainPlayerPrivateShop();
 
 		void ClearPrivateShopStock();
-		void AddPrivateShopItemStock(TItemPos ItemPos, BYTE byDisplayPos, GoldType dwPrice);
 		void DelPrivateShopItemStock(TItemPos ItemPos);
-		GoldType GetPrivateShopItemPrice(TItemPos ItemPos);
+#ifndef ENABLE_OFFLINE_SHOP
 		void BuildPrivateShop(const char * c_szName);
+#else
+		void BuildPrivateShop(const char * c_szName, DWORD days);
+#endif
+#ifdef ENABLE_FULL_YANG
+		void AddPrivateShopItemStock(TItemPos ItemPos, BYTE dwDisplayPos, GoldType dwPrice);
+		GoldType GetPrivateShopItemPrice(TItemPos ItemPos);
+#else
+		void AddPrivateShopItemStock(TItemPos ItemPos, BYTE dwDisplayPos, DWORD dwPrice);
+		int GetPrivateShopItemPrice(TItemPos ItemPos);
+#endif
+		//void AddPrivateShopItemStock(TItemPos ItemPos, BYTE byDisplayPos, GoldType dwPrice);
+		//GoldType GetPrivateShopItemPrice(TItemPos ItemPos);
 
 	protected:
 		BOOL	CheckSlotIndex(DWORD dwIndex);

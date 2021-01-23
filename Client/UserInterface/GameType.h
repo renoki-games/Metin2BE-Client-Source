@@ -299,7 +299,11 @@ typedef struct packet_item
 typedef struct packet_shop_item
 {
     DWORD       vnum;
-    GoldType       price;
+#ifdef ENABLE_FULL_YANG
+	GoldType	price;
+#else
+	DWORD		price;
+#endif
     BYTE        count;
 	BYTE		display_pos;
 	long		alSockets[ITEM_SOCKET_SLOT_MAX_NUM];

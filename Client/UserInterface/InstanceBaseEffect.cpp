@@ -524,6 +524,10 @@ const D3DXCOLOR& CInstanceBase::GetNameColor()
 
 UINT CInstanceBase::GetNameColorIndex()
 {
+#ifdef ENABLE_OFFLINE_SHOP
+	if (GetRace() == 30000)
+		return NAMECOLOR_SHOP;
+#endif
 	if (IsPC())
 	{
 		if (m_isKiller)
@@ -1008,6 +1012,10 @@ void CInstanceBase::SetEmoticon(UINT eEmoticon)
 			GetVirtualID(), eEmoticon);
 		return;
 	}
+#ifdef ENABLE_OFFLINE_SHOP
+	if (GetRace() == 30000)
+		return;
+#endif
 	if (IsPossibleEmoticon())
 	{
 		D3DXVECTOR3 v3Pos = m_GraphicThingInstance.GetPosition();

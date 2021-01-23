@@ -250,8 +250,11 @@ class CPythonNetworkStream : public CNetworkStream, public CSingleton<CPythonNet
 		bool SendGiveItemPacket(DWORD dwTargetVID, TItemPos ItemPos, int iItemCount);
 
 		// Private Shop
+#ifdef ENABLE_OFFLINE_SHOP
+		bool SendBuildPrivateShopPacket(const char * c_szName, const std::vector<TShopItemTable> & c_rSellingItemStock,DWORD days);
+#else
 		bool SendBuildPrivateShopPacket(const char * c_szName, const std::vector<TShopItemTable> & c_rSellingItemStock);
-
+#endif
 		// Refine
 		bool SendRefinePacket(BYTE byPos, BYTE byType);
 		bool SendSelectItemPacket(DWORD dwItemPos);

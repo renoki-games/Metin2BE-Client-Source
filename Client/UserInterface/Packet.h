@@ -19,6 +19,7 @@ typedef struct _AHNHS_TRANS_BUFFER
 #endif /* !USE_AHNLAB_HACKSHIELD */
 
 #include "Locale.h"
+#include "Locale_inc.h"
 #include "../gamelib/RaceData.h"
 #include "../gamelib/ItemData.h"
 
@@ -1051,9 +1052,13 @@ typedef struct SShopItemTable
     DWORD		vnum;
     BYTE		count;
 
-    TItemPos	pos;			// PC 상점에만 이용
-    GoldType		price;			// PC 상점에만 이용
-    BYTE		display_pos;	//	PC 상점에만 이용, 보일 위치.
+    TItemPos	pos;
+#ifdef ENABLE_FULL_YANG
+    GoldType		price;	
+#else
+	DWORD		price;
+#endif
+    BYTE		display_pos;
 } TShopItemTable;
 
 typedef struct SPacketCGMyShop
@@ -1061,6 +1066,9 @@ typedef struct SPacketCGMyShop
     BYTE        bHeader;
     char        szSign[SHOP_SIGN_MAX_LEN + 1];
     BYTE        bCount;	// count of TShopItemTable, max 39
+#ifdef ENABLE_OFFLINE_SHOP
+	BYTE		days;
+#endif
 } TPacketCGMyShop;
 
 typedef struct SPacketCGRefine

@@ -106,7 +106,11 @@ void CPythonShop::ClearPrivateShopStock()
 {
 	m_PrivateShopItemStock.clear();
 }
+#ifdef ENABLE_FULL_YANG
 void CPythonShop::AddPrivateShopItemStock(TItemPos ItemPos, BYTE dwDisplayPos, GoldType dwPrice)
+#else
+void CPythonShop::AddPrivateShopItemStock(TItemPos ItemPos, BYTE dwDisplayPos, DWORD dwPrice)
+#endif
 {
 	DelPrivateShopItemStock(ItemPos);
 
@@ -125,7 +129,12 @@ void CPythonShop::DelPrivateShopItemStock(TItemPos ItemPos)
 
 	m_PrivateShopItemStock.erase(ItemPos);
 }
+
+#ifdef ENABLE_FULL_YANG
 GoldType CPythonShop::GetPrivateShopItemPrice(TItemPos ItemPos)
+#else
+int CPythonShop::GetPrivateShopItemPrice(TItemPos ItemPos)
+#endif
 {
 	TPrivateShopItemStock::iterator itor = m_PrivateShopItemStock.find(ItemPos);
 
@@ -142,7 +151,11 @@ struct ItemStockSortFunc
 		return rkLeft.display_pos < rkRight.display_pos;
 	}
 };
+#ifdef ENABLE_OFFLINE_SHOP
+void CPythonShop::BuildPrivateShop(const char * c_szName,DWORD days)
+#else
 void CPythonShop::BuildPrivateShop(const char * c_szName)
+#endif
 {
 	std::vector<TShopItemTable> ItemStock;
 	ItemStock.reserve(m_PrivateShopItemStock.size());
@@ -154,8 +167,11 @@ void CPythonShop::BuildPrivateShop(const char * c_szName)
 	}
 
 	std::sort(ItemStock.begin(), ItemStock.end(), ItemStockSortFunc());
-
+	#ifdef ENABLE_OFFLINE_SHOP
+	CPythonNetworkStream::Instance().SendBuildPrivateShopPacket(c_szName, ItemStock,days);
+	#else
 	CPythonNetworkStream::Instance().SendBuildPrivateShopPacket(c_szName, ItemStock);
+	#endif
 }
 
 void CPythonShop::Open(BOOL isPrivateShop, BOOL isMainPrivateShop)
@@ -279,7 +295,12 @@ PyObject *shopGetItemPrice(PyObject *poSelf, PyObject *poArgs)
 
 	const TShopItemData *c_pItemData;
 	if (CPythonShop::Instance().GetItemData(iIndex, &c_pItemData))
-		return PyLong_FromLongLong(c_pItemData->price);
+#ifdef ENABLE_FULL_YANG
+		return Py_BuildValue("L", c_pItemData->price);
+		//return PyLong_FromLongLong(c_pItemData->price);
+#else
+		return Py_BuildValue("i", c_pItemData->price);
+#endif
 
 	return Py_BuildValue("L", 0);
 }
@@ -335,9 +356,20 @@ PyObject * shopAddPrivateShopItemStock(PyObject * poSelf, PyObject * poArgs)
 	int iDisplaySlotIndex;
 	if (!PyTuple_GetInteger(poArgs, 2, &iDisplaySlotIndex))
 		return Py_BuildException();
-	GoldType iPrice;
-	if (!PyTuple_GetLongLong(poArgs, 3, &iPrice))
+
+#ifdef ENABLE_FULL_YANG
+	PyObject* val;
+	if (!PyTuple_GetObject(poArgs, 3, &val))
 		return Py_BuildException();
+	GoldType iPrice = PyLong_AsLongLong(val);
+#else
+	int iPrice;
+	if (!PyTuple_GetInteger(poArgs, 3, &iPrice))
+		return Py_BuildException();
+#endif
+	/* GoldType iPrice;
+	if (!PyTuple_GetLongLong(poArgs, 3, &iPrice))
+		return Py_BuildException(); */
 
 	CPythonShop::Instance().AddPrivateShopItemStock(TItemPos(bItemWindowType, wItemSlotIndex), iDisplaySlotIndex, iPrice);
 	return Py_BuildNone();
@@ -363,16 +395,29 @@ PyObject * shopGetPrivateShopItemPrice(PyObject * poSelf, PyObject * poArgs)
 	if (!PyTuple_GetInteger(poArgs, 1, &wItemSlotIndex))
 		return Py_BuildException();
 
-	GoldType iValue = CPythonShop::Instance().GetPrivateShopItemPrice(TItemPos(bItemWindowType, wItemSlotIndex));
-	return Py_BuildValue("L", iValue);
+#ifdef ENABLE_FULL_YANG
+	return Py_BuildValue("L", CPythonShop::Instance().GetPrivateShopItemPrice(TItemPos(bItemWindowType, wItemSlotIndex)));
+#else
+	return Py_BuildValue("i", CPythonShop::Instance().GetPrivateShopItemPrice(TItemPos(bItemWindowType, wItemSlotIndex)));
+#endif
+	//GoldType iValue = CPythonShop::Instance().GetPrivateShopItemPrice(TItemPos(bItemWindowType, wItemSlotIndex));
+	//return Py_BuildValue("L", iValue);
+	
+	return Py_BuildValue("L", 0);
 }
 PyObject * shopBuildPrivateShop(PyObject * poSelf, PyObject * poArgs)
 {
 	char * szName;
 	if (!PyTuple_GetString(poArgs, 0, &szName))
 		return Py_BuildException();
-
+	#ifdef ENABLE_OFFLINE_SHOP
+	int days;
+	if (!PyTuple_GetInteger(poArgs, 1, &days))
+		return Py_BuildException();
+	CPythonShop::Instance().BuildPrivateShop(szName,days);
+	#else
 	CPythonShop::Instance().BuildPrivateShop(szName);
+	#endif
 	return Py_BuildNone();
 }
 
