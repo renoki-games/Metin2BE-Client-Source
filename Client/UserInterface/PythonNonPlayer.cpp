@@ -115,6 +115,8 @@ bool CPythonNonPlayer::LoadMobNames(const char* c_pszName)
 		const std::string& c_rstrID = TokenVector[0];
 		const std::string& c_rstrDeName = TokenVector[1];
 		const std::string& c_rstrEnName = TokenVector[2];
+		const std::string& c_rstrTrName = TokenVector[3];
+		const std::string& c_rstrRuName = TokenVector[4];
 
 		DWORD dwMobVnum = atoi(c_rstrID.c_str());
 		TNonPlayerDataMap::iterator f = m_NonPlayerDataMap.find(dwMobVnum);
@@ -126,6 +128,8 @@ bool CPythonNonPlayer::LoadMobNames(const char* c_pszName)
 
 		m_mobNames[dwMobVnum].de = c_rstrDeName;
 		m_mobNames[dwMobVnum].en = c_rstrEnName;
+		m_mobNames[dwMobVnum].tr = c_rstrTrName;
+		m_mobNames[dwMobVnum].ru = c_rstrRuName;
 
 		TMobTable* pMobData = f->second;
 		strncpy(pMobData->szName, c_rstrDeName.c_str(), CHARACTER_NAME_MAX_LEN);
@@ -141,6 +145,10 @@ const char* CPythonNonPlayer::GetMobName(DWORD dwVnum)
 	{
 	case LANGUAGE_ENGLISH:
 		return m_mobNames[dwVnum].en.c_str();
+	case LANGUAGE_TURKISH:
+		return m_mobNames[dwVnum].tr.c_str();
+	case LANGUAGE_RUSSIAN:
+		return m_mobNames[dwVnum].ru.c_str();
 	default:
 		return m_mobNames[dwVnum].de.c_str();
 	}

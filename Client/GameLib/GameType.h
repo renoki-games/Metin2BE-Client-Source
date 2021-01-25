@@ -29,6 +29,8 @@ typedef struct SLangTable
 {
 	std::string de;
 	std::string en;
+	std::string tr;
+	std::string ru;
 } TLangTable;
 #endif
 

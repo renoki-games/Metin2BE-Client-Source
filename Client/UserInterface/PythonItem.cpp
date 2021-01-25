@@ -27,6 +27,10 @@ const char* CPythonItem::GetItemName(DWORD dwVnum)
 	{
 	case LANGUAGE_ENGLISH:
 		return m_itemNames[dwVnum].en.c_str();
+	case LANGUAGE_TURKISH:
+		return m_itemNames[dwVnum].tr.c_str();
+	case LANGUAGE_RUSSIAN:
+		return m_itemNames[dwVnum].ru.c_str();
 	default:
 		return m_itemNames[dwVnum].de.c_str();
 	}
@@ -38,6 +42,10 @@ const char* CPythonItem::GetItemDescription(DWORD dwVnum)
 	{
 	case LANGUAGE_ENGLISH:
 		return m_itemDescriptions[dwVnum].en.c_str();
+	case LANGUAGE_TURKISH:
+		return m_itemDescriptions[dwVnum].tr.c_str();
+	case LANGUAGE_RUSSIAN:
+		return m_itemDescriptions[dwVnum].ru.c_str();
 	default:
 		return m_itemDescriptions[dwVnum].de.c_str();
 	}

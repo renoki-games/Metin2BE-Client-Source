@@ -1528,6 +1528,10 @@ std::string CPythonApplication::GetLanguageShortString(DWORD lang)
 	{
 	case LANGUAGE_ENGLISH:
 		return "en";
+	case LANGUAGE_TURKISH:
+		return "tr";
+	case LANGUAGE_RUSSIAN:
+		return "ru";
 	default:
 		return "de";
 	}

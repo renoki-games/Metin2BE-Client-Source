@@ -1529,4 +1529,6 @@ void initchr()
 
 	PyModule_AddIntConstant(poModule, "LANGUAGE_GERMAN", LANGUAGE_GERMAN);
 	PyModule_AddIntConstant(poModule, "LANGUAGE_ENGLISH", LANGUAGE_ENGLISH);
+	PyModule_AddIntConstant(poModule, "LANGUAGE_TURKISH", LANGUAGE_TURKISH);
+	PyModule_AddIntConstant(poModule, "LANGUAGE_RUSSIAN", LANGUAGE_RUSSIAN);
 }
