@@ -1034,7 +1034,7 @@ bool LoadLocaleData(const char* localePath)
 	snprintf(szItemDesc, sizeof(szItemDesc), "%s/language/global/item_desc.txt", localePath);
 	snprintf(szMobProto, sizeof(szMobProto), "%s/language/global/mob_proto", localePath);
 	snprintf(szMobNames, sizeof(szMobNames), "%s/language/global/mob_names.txt", localePath);
-	snprintf(szSkillTableFileName, sizeof(szSkillTableFileName), "%s/language/global/SkillTable.txt", localePath);
+	snprintf(szSkillTableFileName, sizeof(szSkillTableFileName), "%s/language/global/skilltable.txt", localePath);
 	snprintf(szSkillDescFileName, sizeof(szSkillDescFileName), "%s/language/%s/skilldesc.txt", localePath, langStr.c_str());
 	snprintf(szInsultList, sizeof(szInsultList), "%s/language/global/insult.txt", localePath);
 #else
