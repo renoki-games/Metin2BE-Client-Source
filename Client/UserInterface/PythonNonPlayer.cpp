@@ -106,7 +106,7 @@ bool CPythonNonPlayer::LoadMobNames(const char* c_pszName)
 		if (!textFileLoader.SplitLine(i, &TokenVector, "\t"))
 			continue;
 
-		if (TokenVector.size() != 3)
+		if (TokenVector.size() != 5)
 		{
 			TraceError("CPythonNonPlayer::LoadMobNames(%s) - StrangeLine in %d\n", c_pszName, i);
 			continue;

@@ -202,7 +202,7 @@ bool CItemManager::LoadItemNames(const char* c_szFileName)
 		if (!textFileLoader.SplitLineByTab(i, &TokenVector))
 			continue;
 
-		if (TokenVector.size() != 3)
+		if (TokenVector.size() != 5)
 		{
 			TraceError(" CItemManager::LoadItemNames(%s) - StrangeLine in %d TokenVector size too long: %d", c_szFileName, i, TokenVector.size());
 			continue;
