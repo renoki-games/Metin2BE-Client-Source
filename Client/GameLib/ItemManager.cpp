@@ -211,6 +211,8 @@ bool CItemManager::LoadItemNames(const char* c_szFileName)
 		const std::string& c_rstrID = TokenVector[0];
 		const std::string& c_rstrDeName = TokenVector[1];
 		const std::string& c_rstrEnName = TokenVector[2];
+		const std::string& c_rstrTrName = TokenVector[3];
+		const std::string& c_rstrRuName = TokenVector[4];
 
 		DWORD dwItemVNum = atoi(c_rstrID.c_str());
 		TItemMap::iterator f = m_ItemMap.find(dwItemVNum);
@@ -224,6 +226,8 @@ bool CItemManager::LoadItemNames(const char* c_szFileName)
 
 		CPythonItem::Instance().m_itemNames[dwItemVNum].de = c_rstrDeName;
 		CPythonItem::Instance().m_itemNames[dwItemVNum].en = c_rstrEnName;
+		CPythonItem::Instance().m_itemNames[dwItemVNum].tr = c_rstrTrName;
+		CPythonItem::Instance().m_itemNames[dwItemVNum].ru = c_rstrRuName;
 	}
 
 	return true;
@@ -280,6 +284,8 @@ bool CItemManager::LoadItemDesc(const char* c_szFileName)
 #ifdef ENABLE_LANG_SYSTEM
 		const std::string& c_rstDescDe = kTokenVector[ITEMDESC_COL_DE];
 		const std::string& c_rstDescEn = kTokenVector[ITEMDESC_COL_EN];
+		const std::string& c_rstDescTr = kTokenVector[ITEMDESC_COL_TR];
+		const std::string& c_rstDescRu = kTokenVector[ITEMDESC_COL_RU];
 #else
 		const std::string& c_rstDesc = kTokenVector[ITEMDESC_COL_DESC];
 		const std::string& c_rstSumm = kTokenVector[ITEMDESC_COL_SUMM];
@@ -294,6 +300,8 @@ bool CItemManager::LoadItemDesc(const char* c_szFileName)
 #ifdef ENABLE_LANG_SYSTEM
 		CPythonItem::Instance().m_itemDescriptions[dwVnum].de = c_rstDescDe;
 		CPythonItem::Instance().m_itemDescriptions[dwVnum].en = c_rstDescEn;
+		CPythonItem::Instance().m_itemDescriptions[dwVnum].tr = c_rstDescTr;
+		CPythonItem::Instance().m_itemDescriptions[dwVnum].ru = c_rstDescRu;
 #else
 		pkItemDataFind->SetDescription(__SnapString(c_rstDesc, stTemp));
 		pkItemDataFind->SetSummary(__SnapString(c_rstSumm, stTemp));

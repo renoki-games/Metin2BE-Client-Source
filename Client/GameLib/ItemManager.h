@@ -11,6 +11,8 @@ class CItemManager : public CSingleton<CItemManager>
 			ITEMDESC_COL_VNUM,
 			ITEMDESC_COL_DE,
 			ITEMDESC_COL_EN,
+			ITEMDESC_COL_TR,
+			ITEMDESC_COL_RU,
 			ITEMDESC_COL_NUM,
 #else
 			ITEMDESC_COL_VNUM,

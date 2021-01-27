@@ -133,7 +133,7 @@ bool CPythonNonPlayer::LoadMobNames(const char* c_pszName)
 
 		TMobTable* pMobData = f->second;
 		strncpy(pMobData->szName, c_rstrDeName.c_str(), CHARACTER_NAME_MAX_LEN);
-		strncpy(pMobData->szLocaleName, c_rstrEnName.c_str(), CHARACTER_NAME_MAX_LEN);
+		strncpy(pMobData->szLocaleName, c_rstrDeName.c_str(), CHARACTER_NAME_MAX_LEN);
 	}
 
 	return true;
