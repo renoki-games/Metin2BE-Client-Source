@@ -1507,6 +1507,7 @@ void initchr()
 #endif
 	PyModule_AddIntConstant(poModule, "NEW_AFFECT_MALL",					CInstanceBase::NEW_AFFECT_MALL);
 	PyModule_AddIntConstant(poModule, "NEW_AFFECT_NO_DEATH_PENALTY",		CInstanceBase::NEW_AFFECT_NO_DEATH_PENALTY);
+	PyModule_AddIntConstant(poModule, "NEW_AFFECT_NO_DEATH_PENALTY_PERM",	CInstanceBase::NEW_AFFECT_NO_DEATH_PENALTY_PERM);
 	PyModule_AddIntConstant(poModule, "NEW_AFFECT_SKILL_BOOK_BONUS",		CInstanceBase::NEW_AFFECT_SKILL_BOOK_BONUS);
 	PyModule_AddIntConstant(poModule, "NEW_AFFECT_SKILL_BOOK_NO_DELAY",		CInstanceBase::NEW_AFFECT_SKILL_BOOK_NO_DELAY);
 	PyModule_AddIntConstant(poModule, "NEW_AFFECT_EXP_BONUS",				CInstanceBase::NEW_AFFECT_EXP_BONUS);

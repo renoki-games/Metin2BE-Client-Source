@@ -159,6 +159,7 @@ class CInstanceBase
 			NEW_AFFECT_CHINA_FIREWORK,
 
 			NEW_AFFECT_BOW_DISTANCE,        // 225
+			NEW_AFFECT_NO_DEATH_PENALTY = 230,
 
 			NEW_AFFECT_EXP_BONUS         = 500, // 경험의 반지
 			NEW_AFFECT_ITEM_BONUS        = 501, // 도둑의 장갑
@@ -169,7 +170,7 @@ class CInstanceBase
 			NEW_AFFECT_GOLD_BONUS        = 506,
 
 		    NEW_AFFECT_MALL              = 510, // 몰 아이템 에펙트
-			NEW_AFFECT_NO_DEATH_PENALTY  = 511, // 용신의 가호 (경험치 패널티를 한번 막아준다)
+			NEW_AFFECT_NO_DEATH_PENALTY_PERM  = 511,
 			NEW_AFFECT_SKILL_BOOK_BONUS  = 512, // 선인의 교훈 (책 수련 성공 확률이 50% 증가)
 			NEW_AFFECT_SKILL_BOOK_NO_DELAY  = 513, // 주안 술서 (책 수련 딜레이 없음)
 
