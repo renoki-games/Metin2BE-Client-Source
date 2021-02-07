@@ -163,6 +163,8 @@ namespace UI
 			// CallBack
 			void ReserveDestroyCoolTimeFinishEffect(DWORD dwSlotIndex);
 
+			DWORD GetSlotVnum(DWORD dwIndex);
+
 		protected:
 			void __Initialize();
 			void __CreateToggleSlotImage();

@@ -654,6 +654,10 @@ void CPythonNetworkStream::GamePhase()
 				ret = RecvWhisperDetails();
 				break;
 
+			case HEADER_GC_TRANSFER_STATUS:
+				ret = RecvTransferStatus();
+				break;
+
 			default:
 				ret = RecvDefaultPacket(header);
 				break;
@@ -4730,5 +4734,32 @@ bool CPythonNetworkStream::RecvWhisperDetails()
 		return false;
 
 	PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "BINARY_GetWhisperDetails", Py_BuildValue("(sii)", p.name, p.language, p.empire));
+	return true;
+}
+
+bool CPythonNetworkStream::SendTransferPacket(const char* targetName, const int64_t& gold, const TItemPos& pos)
+{
+	TPacketCGTransfer transferPacket;
+	strncpy(transferPacket.targetName, targetName, sizeof(transferPacket.targetName));
+	transferPacket.targetName[CHARACTER_NAME_MAX_LEN] = '\0';
+	transferPacket.gold = gold;
+	transferPacket.pos = pos;
+
+	if (!Send(sizeof(TPacketCGTransfer), &transferPacket))
+	{
+		Tracen("SendPetChangeNamePacket Error");
+		return false;
+	}
+
+	return SendSequence();
+}
+
+bool CPythonNetworkStream::RecvTransferStatus()
+{
+	TPacketGCTransferStatus transferStatusPacket;
+	if (!Recv(sizeof(transferStatusPacket), &transferStatusPacket))
+		return false;
+
+	PyCallClassMemberFunc(m_poTransferHandler, "BINARY_SetTransferStatus", Py_BuildValue("(b)", transferStatusPacket.status));
 	return true;
 }

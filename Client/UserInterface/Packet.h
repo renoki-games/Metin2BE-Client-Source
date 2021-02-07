@@ -162,6 +162,7 @@ enum
 	HEADER_CG_AUCTION_CMD							= 205,
 #endif
 	HEADER_CG_WHISPER_DETAILS = 220,
+	HEADER_CG_TRANSFER = 222,
 
 	HEADER_CG_KEY_AGREEMENT						= 0xfb, // _IMPROVED_PACKET_ENCRYPTION_
 	HEADER_CG_TIME_SYNC							= 0xfc,
@@ -378,6 +379,7 @@ enum
 	HEADER_GC_CHARACTER_DRAGON_POINT = 222,
 	HEADER_GC_CHARACTER_DRAGON_POINT_CHANGE = 223,
 	HEADER_GC_WHISPER_DETAILS = 225,
+	HEADER_GC_TRANSFER_STATUS = 229,
 
 	HEADER_GC_KEY_AGREEMENT_COMPLETED			= 0xfa, // _IMPROVED_PACKET_ENCRYPTION_
 	HEADER_GC_KEY_AGREEMENT						= 0xfb, // _IMPROVED_PACKET_ENCRYPTION_
@@ -2970,5 +2972,19 @@ typedef struct SPacketGCWhisperDetails
 	uint8_t language;
 	uint8_t empire;
 } TPacketGCWhisperDetails;
+
+struct TPacketCGTransfer
+{
+	uint8_t header = HEADER_CG_TRANSFER;
+	char targetName[CHARACTER_NAME_MAX_LEN + 1];
+	int64_t gold;
+	TItemPos pos;
+};
+
+struct TPacketGCTransferStatus
+{
+	uint8_t header = HEADER_GC_TRANSFER_STATUS;
+	bool status;
+};
 
 #pragma pack(pop)

@@ -193,6 +193,8 @@ class CMainPacketHeaderMap : public CNetworkPacketHeaderMap
 			Set(HEADER_GC_CHARACTER_DRAGON_POINT, CNetworkPacketHeaderMap::TPacketType (sizeof (TPacketGCDragonPoint), STATIC_SIZE_PACKET));
 			Set(HEADER_GC_CHARACTER_DRAGON_POINT_CHANGE, CNetworkPacketHeaderMap::TPacketType(sizeof(TPacketGCDragonPointChange), STATIC_SIZE_PACKET));
 			Set(HEADER_GC_WHISPER_DETAILS, CNetworkPacketHeaderMap::TPacketType(sizeof(TPacketGCWhisperDetails), STATIC_SIZE_PACKET));
+
+			Set(HEADER_GC_TRANSFER_STATUS, CNetworkPacketHeaderMap::TPacketType(sizeof(TPacketGCTransferStatus), STATIC_SIZE_PACKET));
 		}
 };
 
@@ -752,6 +754,11 @@ void CPythonNetworkStream::SetHandler(PyObject* poHandler)
 	m_poHandler = poHandler;
 }
 
+void CPythonNetworkStream::SetTransferHandler(PyObject* poTransfertHandler)
+{
+	m_poTransferHandler = poTransfertHandler;
+}
+
 // ETC
 DWORD CPythonNetworkStream::GetMainActorVID()
 {
@@ -881,6 +888,7 @@ CPythonNetworkStream::CPythonNetworkStream()
 	m_dwMainActorEmpire = 0;
 	m_dwMainActorSkillGroup = 0;
 	m_poHandler = NULL;
+	m_poTransferHandler = NULL;
 
 	m_dwLastGamePingTime = 0;
 

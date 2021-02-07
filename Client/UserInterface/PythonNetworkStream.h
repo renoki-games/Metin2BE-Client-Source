@@ -129,6 +129,7 @@ class CPythonNetworkStream : public CNetworkStream, public CSingleton<CPythonNet
 		void ClearLoginInfo( void );
 
 		void SetHandler(PyObject* poHandler);
+		void SetTransferHandler(PyObject* poHandler);
 		void SetPhaseWindow(UINT ePhaseWnd, PyObject* poPhaseWnd);
 		void ClearPhaseWindow(UINT ePhaseWnd, PyObject* poPhaseWnd);
 		void SetServerCommandParserWindow(PyObject* poPhaseWnd);
@@ -325,6 +326,8 @@ class CPythonNetworkStream : public CNetworkStream, public CSingleton<CPythonNet
 
 		// Whisper Details
 		bool SendGetWhisperDetails(const char* szName);
+
+		bool SendTransferPacket(const char* name, const int64_t& gold, const TItemPos& pos);
 
 	protected:
 		bool OnProcess();	// State들을 실제로 실행한다.
@@ -572,6 +575,9 @@ class CPythonNetworkStream : public CNetworkStream, public CSingleton<CPythonNet
 		bool RecvAffectAddPacket();
 		bool RecvAffectRemovePacket();
 
+		// Transfer
+		bool RecvTransferStatus();
+
 		// Channel
 		bool RecvChannelPacket();
 
@@ -674,6 +680,7 @@ class CPythonNetworkStream : public CNetworkStream, public CSingleton<CPythonNet
 		CFuncObject<CPythonNetworkStream>	m_phaseLeaveFunc;
 
 		PyObject*							m_poHandler;
+		PyObject* m_poTransferHandler;
 		PyObject*							m_apoPhaseWnd[PHASE_WINDOW_NUM];
 		PyObject*							m_poSerCommandParserWnd;
 

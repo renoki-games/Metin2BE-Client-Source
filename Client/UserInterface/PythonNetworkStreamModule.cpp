@@ -1789,6 +1789,36 @@ PyObject* netSendGetWhisperDetails(PyObject* poSelf, PyObject* poArgs)
 	return Py_BuildNone();
 }
 
+PyObject* netSetTransferHandler(PyObject* poSelf, PyObject* poArgs)
+{
+	PyObject* poSetTransferHandler;
+	if (!PyTuple_GetObject(poArgs, 0, &poSetTransferHandler))
+		return Py_BuildException();
+
+	CPythonNetworkStream& rkNetStream = CPythonNetworkStream::Instance();
+	rkNetStream.SetTransferHandler(poSetTransferHandler);
+	return Py_BuildNone();
+}
+
+PyObject* netSendTransferPacket(PyObject* poSelf, PyObject* poArgs)
+{
+	char* name;
+	if (!PyTuple_GetString(poArgs, 0, &name))
+		return Py_BadArgument();
+
+	long long gold;
+	if (!PyTuple_GetLongLong(poArgs, 1, &gold))
+		return Py_BadArgument();
+
+	TItemPos pos;
+	if (!PyTuple_GetInteger(poArgs, 2, &pos.cell))
+		return Py_BadArgument();
+
+	CPythonNetworkStream& rkNetStream = CPythonNetworkStream::Instance();
+	rkNetStream.SendTransferPacket(name, gold, pos);
+	return Py_BuildNone();
+}
+
 void initnet()
 {
 	static PyMethodDef s_methods[] =
@@ -1965,6 +1995,9 @@ void initnet()
 		{ "RegisterErrorLog",						netRegisterErrorLog,						METH_VARARGS },
 
 		{ "SendGetWhisperDetails", netSendGetWhisperDetails, METH_VARARGS },
+
+		{ "SetTransferHandler", netSetTransferHandler, METH_VARARGS },
+		{ "SendTransferPacket", netSendTransferPacket, METH_VARARGS },
 		{ NULL,										NULL,										NULL },
 	};
 

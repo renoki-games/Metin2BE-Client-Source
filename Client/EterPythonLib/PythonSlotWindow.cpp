@@ -1365,6 +1365,15 @@ void CSlotWindow::ReserveDestroyCoolTimeFinishEffect(DWORD dwSlotIndex)
 	m_ReserveDestroyEffectDeque.push_back(dwSlotIndex);
 }
 
+DWORD CSlotWindow::GetSlotVnum(DWORD dwIndex)
+{
+	TSlot* pSlot;
+	if (!GetSlotPointer(dwIndex, &pSlot))
+		return 0;
+
+	return pSlot->dwItemIndex;
+}
+
 DWORD CSlotWindow::Type()
 {
 	static int s_Type = GetCRC32("CSlotWindow", strlen("CSlotWindow"));
